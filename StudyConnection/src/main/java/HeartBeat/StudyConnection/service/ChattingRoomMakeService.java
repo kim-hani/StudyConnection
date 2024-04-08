@@ -1,7 +1,9 @@
 package HeartBeat.StudyConnection.service;
 
 import HeartBeat.StudyConnection.entity.ChatRoom;
+import HeartBeat.StudyConnection.entity.ChatRoomAndUser;
 import HeartBeat.StudyConnection.entity.User;
+import HeartBeat.StudyConnection.repository.ChatRoomAndUserRepository;
 import HeartBeat.StudyConnection.repository.ChatRoomRepository;
 import HeartBeat.StudyConnection.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class ChattingRoomMakeService {
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomAndUserRepository chatRoomAndUserRepository;
     private final UserRepository userRepository;
 
     public ChatRoom createChatRoom(String roomName, List<String> membersId){
@@ -32,9 +35,18 @@ public class ChattingRoomMakeService {
                     .orElseThrow(() -> new IllegalArgumentException(userId + "의 회원을 찾을 수 없습니다."));
             users.add(user);
         }
-
         // 채팅방 저장
         chatRoomRepository.save(chatRoom);
+        addParticipantsToChatRoom(chatRoom, users);
         return chatRoom;
+    }
+
+    public void addParticipantsToChatRoom(ChatRoom chatRoom, Set<User> users){
+        for(User user : users){
+            ChatRoomAndUser chatRoomAndUser = new ChatRoomAndUser();
+            chatRoomAndUser.setChatRoom(chatRoom);
+            chatRoomAndUser.setUser(user);
+            chatRoomAndUserRepository.save(chatRoomAndUser);
+        }
     }
 }

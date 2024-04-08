@@ -6,7 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,11 +22,4 @@ public class ChatRoom {
 
     @Column(name = "roomName")
     private String roomName;
-
-    //user 엔티티와 연결.
-    // ChatRoomAndUser가 연결 테이블
-    @ManyToMany(mappedBy = "chatRooms")
-    private Set<User> users = new HashSet<>();
-
-
 }

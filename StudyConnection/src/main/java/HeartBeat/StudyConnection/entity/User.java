@@ -3,15 +3,20 @@ package HeartBeat.StudyConnection.entity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@Table(name = "users")
 public class User {
     @Id
     private String userId; // 사용자의 전화번호
@@ -27,12 +32,6 @@ public class User {
 
     @Column(name = "email")
     private String email;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_chat_room",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "chat_room_id"))
-    private Set<ChatRoom> chatRooms = new HashSet<>();
 
     // 빌더 패턴
     @Builder
