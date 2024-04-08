@@ -1,0 +1,11 @@
+    글 목록(메인페이지)
+/studies
+    -> get: 전체 스터디 게시글 조회
+    -> post: 스터디 글 작성
+
+/studies/{id}
+    -> get: 스터디 게시글 상게 조회
+    -> put: 스터디 게시글 수정
+
+/study-create/{id}
+    -> post 게시글 마감(스터디 모집 완료)
