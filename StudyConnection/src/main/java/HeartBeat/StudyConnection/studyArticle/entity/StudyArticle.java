@@ -2,6 +2,7 @@ package HeartBeat.StudyConnection.studyArticle.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +11,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor
-@Table(name = "study")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "studyArticle")
 public class StudyArticle {
 
     @Id
@@ -50,6 +51,7 @@ public class StudyArticle {
         this.uploadDate = uploadDate;
         this.comment = comment;
     }
+
 
     public void update(String title,String content){
         this.title = title;
