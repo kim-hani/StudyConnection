@@ -1,3 +1,4 @@
+/*
 package HeartBeat.StudyConnection.configuration;
 
 import javax.sql.DataSource;
@@ -25,3 +26,4 @@ public class DatabaseConfiguration {
 
     }
 }
+*/
