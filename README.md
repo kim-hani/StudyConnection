@@ -17,8 +17,8 @@ Java Spring과 Vue.js로 만드는 스터디 그룹 매칭 사이트입니다.
 <br>
 
 ### 🧑‍🤝‍🧑멤버 구성
-- 김종빈 : BackEnd , DB 설계 , 
-- 김한이 : BackEnd , DB 설계
+- 김종빈 : BackEnd , DB 설계 , 게시글 CRUD , 댓글 CRUD
+- 김한이 : BackEnd , DB 설계 , 사용자 CRUD , 평가 CRUD
 - 조성현 : FrontEnd , UI/UX 설계 및 개발
 <br>
 
@@ -59,4 +59,4 @@ Java Spring과 Vue.js로 만드는 스터디 그룹 매칭 사이트입니다.
 
 **평가 CRUD**
 - 회원/스터디 평가 작성
-- 회원/스터디 평가 조
+- 회원/스터디 평가 조회
