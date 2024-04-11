@@ -1,28 +1,16 @@
-server:
-  port: 80 # 내장 톰캣 포트번호
-
+# 스프링 부트 서버가 실행되면 자동으로 로딩되는 파일
 spring:
-  # H2 Database 설정
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: 'jdbc:h2:mem:StudyConnection'   # H2 DB 연결 주소 (In-Memory Mode)
-    #url: 'jdbc:h2:tcp://localhost/~/StudyConnection'   # H2 DB 연결 주소 (Embedded Mode)
-    username: sa
-    password: rlagksdl99
-
-  # H2 Console 설정
-  h2:
-    console: # H2 DB를 웹에서 관리할 수 있는 기능
-      enabled: true           # H2 Console 사용 여부
-      path: /h2-console       # H2 Console 접속 주소
-
-  # JPA 설정
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: create        # DB 초기화 전략 (none, create, create-drop, update, validate)
+    # 전송 쿼리 확인
+    show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        format_sql: true      # 쿼리 로그 포맷 (정렬)
-        show_sql: true        # 쿼리 로그 출력
+        format_sql: true
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+
+  # 실제 데이터를 확인하기 위해 H2 콘솔을 활성화
+  h2:
+    console:
+      enabled: true
