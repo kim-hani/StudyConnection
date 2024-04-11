@@ -11,8 +11,8 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="StudyConnection.StudyConnection.main" target="17" />
-      <module name="StudyConnection.StudyConnection.test" target="17" />
+      <module name="StudyConnection.StudyConnection.main~1" target="17" />
+      <module name="StudyConnection.StudyConnection.test~1" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
