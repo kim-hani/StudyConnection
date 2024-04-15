@@ -4,7 +4,9 @@
       <Sidebar/><!--Sidebar-->
     </div>
     <div class="main-view-wrapper">
+      <div class="main-view-header">
         <router-view/>  <!-- 페이지 이동이 표시될 곳 -->
+      </div>
     </div>
   </div>
 </template>
@@ -81,6 +83,10 @@ button {
 
   .main-view-wrapper{
     width: 100%;
+  }
+
+  .main-view-header{
+    padding: 5rem;
   }
 
   main {
