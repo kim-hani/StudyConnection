@@ -9,6 +9,7 @@ class StudyConnectionApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }
