@@ -1,7 +1,7 @@
 package HeartBeat.StudyConnection.studyArticle.dto;
 
 import HeartBeat.StudyConnection.studyArticle.entity.StudyArticle;
-import jakarta.validation.constraints.NotEmpty;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,9 +10,7 @@ import lombok.Setter;
 @Setter
 public class AddStudyRequestDto {
 
-    @NotEmpty
     private String title;
-    @NotEmpty
     private String content;
     private String author;
 

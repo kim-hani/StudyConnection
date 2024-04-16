@@ -1,11 +1,11 @@
-package HeartBeat.StudyConnection.service;
+package HeartBeat.StudyConnection.chatRoomMake.service;
 
-import HeartBeat.StudyConnection.entity.ChatRoom;
-import HeartBeat.StudyConnection.entity.ChatRoomAndUser;
-import HeartBeat.StudyConnection.entity.User;
-import HeartBeat.StudyConnection.repository.ChatRoomAndUserRepository;
-import HeartBeat.StudyConnection.repository.ChatRoomRepository;
-import HeartBeat.StudyConnection.repository.UserRepository;
+import HeartBeat.StudyConnection.chatRoomMake.entity.ChatRoom;
+import HeartBeat.StudyConnection.chatRoomMake.entity.ChatRoomAndUser;
+import HeartBeat.StudyConnection.userInfo.entity.User;
+import HeartBeat.StudyConnection.chatRoomMake.repository.ChatRoomAndUserRepository;
+import HeartBeat.StudyConnection.chatRoomMake.repository.ChatRoomRepository;
+import HeartBeat.StudyConnection.chatRoomMake.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ public class ChattingRoomMakeService {
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.setRoomName(roomName);
 
-        // User 엔티티들을 찾아 채팅방에 추가
+        // 중복되는 회원이 없도록 방지
         Set<String> receivedUserIds = new HashSet<>(membersId);
 
         // 사용자 엔티티들을 찾아서 채팅방에 추가

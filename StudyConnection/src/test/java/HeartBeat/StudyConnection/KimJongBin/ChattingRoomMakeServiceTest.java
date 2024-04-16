@@ -1,10 +1,12 @@
 package HeartBeat.StudyConnection.KimJongBin;
 
-import HeartBeat.StudyConnection.entity.ChatRoom;
-import HeartBeat.StudyConnection.entity.User;
-import HeartBeat.StudyConnection.repository.ChatRoomRepository;
-import HeartBeat.StudyConnection.repository.UserRepository;
-import HeartBeat.StudyConnection.service.ChattingRoomMakeService;
+import HeartBeat.StudyConnection.chatRoomMake.entity.ChatRoom;
+import HeartBeat.StudyConnection.chatRoomMake.entity.ChatRoomAndUser;
+import HeartBeat.StudyConnection.userInfo.entity.User;
+import HeartBeat.StudyConnection.chatRoomMake.repository.ChatRoomAndUserRepository;
+import HeartBeat.StudyConnection.chatRoomMake.repository.ChatRoomRepository;
+import HeartBeat.StudyConnection.chatRoomMake.repository.UserRepository;
+import HeartBeat.StudyConnection.chatRoomMake.service.ChattingRoomMakeService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -24,12 +25,15 @@ public class ChattingRoomMakeServiceTest {
     // 원래 컨트롤러에서 시작해 쭉 테스트하는 것 같은데
     // 내가 한 것만 먼저 테스트 하겠음.
 
+    // Repository
     @Autowired
     UserRepository userRepository;
-
     @Autowired
     ChatRoomRepository chatRoomRepository;
+    @Autowired
+    ChatRoomAndUserRepository chatRoomAndUserRepository;
 
+    // Service
     @Autowired
     ChattingRoomMakeService chattingRoomMakeService;
 
@@ -37,6 +41,7 @@ public class ChattingRoomMakeServiceTest {
     void cleanRepository(){
         userRepository.deleteAll();
         chatRoomRepository.deleteAll();
+        chatRoomAndUserRepository.deleteAll();
     }
 
     @DisplayName("1+3=4")
@@ -83,11 +88,39 @@ public class ChattingRoomMakeServiceTest {
         // when
         ChatRoom newChatRoom = chattingRoomMakeService.createChatRoom(roomName, receivedUserIds);
 
-        // then
+        // then (결과)
         List<ChatRoom> searchRooms = chatRoomRepository.findAll();
-        System.out.println(searchRooms.size());
+        List<ChatRoomAndUser> chatRoomAndUsers = chatRoomAndUserRepository.findAll();
+        List<User> users = userRepository.findAll();
 
+        System.out.println(searchRooms.size());
+        System.out.println(chatRoomAndUsers.size());
+
+        // 새로 만든 톡방 잘 저장되었는지
        assertThat(searchRooms.get(0).getId()).isEqualTo(newChatRoom.getId());
+
+       // 유저 톡방에 잘 저장되었는지
+        List<String> chatRoomAndUserSide = new ArrayList<>();
+        chatRoomAndUserSide.add(chatRoomAndUsers.get(0).getUser().getUserId());
+        chatRoomAndUserSide.add(chatRoomAndUsers.get(1).getUser().getUserId());
+        chatRoomAndUserSide.add(chatRoomAndUsers.get(2).getUser().getUserId());
+
+        List<String> userSide = new ArrayList<>();
+        userSide.add(users.get(0).getUserId());
+        userSide.add(users.get(1).getUserId());
+        userSide.add(users.get(2).getUserId());
+
+        assertThat(chatRoomAndUserSide).containsExactlyInAnyOrderElementsOf(userSide);
+
+        // 새로 만든 톡방과 톡방-유저 테이블이 맞는지
+        assertThat(chatRoomAndUsers.get(0).getChatRoom().getId())
+                .isEqualTo(newChatRoom.getId());
+
+        assertThat(chatRoomAndUsers.get(1).getChatRoom().getId())
+                .isEqualTo(newChatRoom.getId());
+
+        assertThat(chatRoomAndUsers.get(2).getChatRoom().getId())
+                .isEqualTo(newChatRoom.getId());
 
 
     }

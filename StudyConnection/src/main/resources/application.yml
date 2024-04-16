@@ -14,3 +14,7 @@ spring:
   h2:
     console:
       enabled: true
+
+jwt:
+  issuer: Team_HeartBeat
+  secret_key: study-connection

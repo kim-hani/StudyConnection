@@ -1,6 +1,7 @@
 package HeartBeat.StudyConnection.studyArticle.entity;
 
 
+import HeartBeat.StudyConnection.userInfo.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -20,6 +21,7 @@ public class StudyArticle {
     @Column(name = "studyId")
     private int id;        // 게시글 아이디
 
+    @ManyToOne
     private String author;   // 작성자
 
     @Column(columnDefinition = "TEXT",nullable = false)
@@ -56,6 +58,11 @@ public class StudyArticle {
     public void update(String title,String content){
         this.title = title;
         this.content = content;
+    }
+
+    // 작성자 확인 메서드
+    public boolean isAuthor(User user){
+        return this.author.equals(user);
     }
 
 }

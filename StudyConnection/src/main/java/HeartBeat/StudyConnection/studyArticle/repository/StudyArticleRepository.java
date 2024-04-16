@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface StudyArticleRepository extends JpaRepository<StudyArticle,Integer> {
-    @Query("SELECT p FROM Posts p ORDER BY p.uploadDate DESC")
+    @Query("SELECT p FROM StudyArticle p ORDER BY p.uploadDate DESC")
     List<StudyArticle> findAllDesc();
 }
