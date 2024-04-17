@@ -21,7 +21,6 @@ public class StudyArticle {
     @Column(name = "studyId")
     private int id;        // 게시글 아이디
 
-    @ManyToOne
     private String author;   // 작성자
 
     @Column(columnDefinition = "TEXT",nullable = false)
@@ -62,7 +61,7 @@ public class StudyArticle {
 
     // 작성자 확인 메서드
     public boolean isAuthor(User user){
-        return this.author.equals(user);
+        return this.author.equals(user.getUserId());
     }
 
 }

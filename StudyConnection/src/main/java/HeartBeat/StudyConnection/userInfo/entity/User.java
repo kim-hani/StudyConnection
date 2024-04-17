@@ -12,6 +12,7 @@ import java.util.*;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "users")
 public class User implements UserDetails {
     @Id
     private String userId; // 사용자의 전화번호

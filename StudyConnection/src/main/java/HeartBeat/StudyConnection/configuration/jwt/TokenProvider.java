@@ -36,9 +36,10 @@ public class TokenProvider {
                 .setIssuer(jwtProperties.getIssuer())
                 .setIssuedAt(now)
                 .setExpiration(expiry)
-                .setSubject(user.getUserId())
+                .setSubject(user.getUsername() + "'s access token.")
                 .claim("email", user.getEmail()) // 클레임 id -> user id
                 .claim("username", user.getUsername())
+                .claim("userId", user.getUserId())
                 // 암호화
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
@@ -65,16 +66,21 @@ public class TokenProvider {
 
         return new UsernamePasswordAuthenticationToken(
                 new org.springframework.security.core.userdetails.User(
-                        claims.getSubject(), "", authorities),
+                        claims.get("username", String.class), "", authorities),
                 token,
                 authorities
         );
     }
 
     // 토큰 기반으로 유저 ID 가져오기
-    public Long getUserId(String token){
+    public String getUserId(String token){
         Claims claims = getClaims(token);
-        return claims.get("id", Long.class);
+        return claims.get("userId", String.class);
+    }
+
+    public String getUserName(String token){
+        Claims claims = getClaims(token);
+        return claims.get("username", String.class);
     }
 
     private Claims getClaims(String token){

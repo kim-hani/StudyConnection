@@ -12,20 +12,20 @@ public class AddStudyRequestDto {
 
     private String title;
     private String content;
-    private String author;
+    private String authorId;
 
     @Builder
     public AddStudyRequestDto(String title, String content, String author) {
         this.title = title;
         this.content = content;
-        this.author = author;
+        this.authorId = author;
     }
 
     public StudyArticle toEntity() {
         return StudyArticle.builder()
                 .title(title)
                 .content(content)
-                .author(author)
+                .author(authorId)
                 .build();
     }
 
