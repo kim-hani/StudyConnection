@@ -5,7 +5,7 @@ import HeartBeat.StudyConnection.chatRoomMake.entity.ChatRoomAndUser;
 import HeartBeat.StudyConnection.userInfo.entity.User;
 import HeartBeat.StudyConnection.chatRoomMake.repository.ChatRoomAndUserRepository;
 import HeartBeat.StudyConnection.chatRoomMake.repository.ChatRoomRepository;
-import HeartBeat.StudyConnection.chatRoomMake.repository.UserRepository;
+import HeartBeat.StudyConnection.userInfo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

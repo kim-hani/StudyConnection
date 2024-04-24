@@ -1,4 +1,4 @@
-package HeartBeat.StudyConnection.userInfo.entity;
+package HeartBeat.StudyConnection.configuration.jwt.entity;
 
 
 import jakarta.persistence.*;
@@ -17,12 +17,12 @@ public class RefreshToken {
     private Long id;
 
     @Column(name = "user_id",nullable = false, unique= true)
-    private Long userId;
+    private String userId;
 
     @Column(name = "refresh_token", nullable = false)
     private String refreshToken;
 
-    public RefreshToken(Long userId,String refreshToken){
+    public RefreshToken(String userId,String refreshToken){
         this.userId = userId;
         this.refreshToken = refreshToken;
     }

@@ -45,14 +45,14 @@ public class WebSecurityConfig{
     // 인증 관리자 관련 설정
     @Bean
     public AuthenticationManager authenticationManager
-    (AuthenticationManagerBuilder authBuilder, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailService userDetailService)
+    (HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailService userDetailService)
     throws Exception{
-       authBuilder
+        return http
                .getSharedObject(AuthenticationManagerBuilder.class)
                .userDetailsService(userService)
-               .passwordEncoder(bCryptPasswordEncoder);
+               .passwordEncoder(bCryptPasswordEncoder)
+                .and().build();
 
-       return authBuilder.build();
     }
 
     // password encoder

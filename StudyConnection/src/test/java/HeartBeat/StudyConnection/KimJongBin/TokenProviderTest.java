@@ -1,6 +1,6 @@
 package HeartBeat.StudyConnection.KimJongBin;
 
-import HeartBeat.StudyConnection.chatRoomMake.repository.UserRepository;
+import HeartBeat.StudyConnection.userInfo.repository.UserRepository;
 import HeartBeat.StudyConnection.configuration.jwt.JwtFactory;
 import HeartBeat.StudyConnection.configuration.jwt.JwtProperties;
 import HeartBeat.StudyConnection.configuration.jwt.TokenProvider;
