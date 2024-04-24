@@ -64,7 +64,7 @@ public class Comment {
         this.getChildComments().add(child);
     }
 
-    public void changePost(StudyArticle studyArticle) {
+    public void changeStudyArticle(StudyArticle studyArticle) {
         if (this.studyArticle != null) {
             this.studyArticle.getComments().remove(this);
         }
