@@ -1,6 +1,7 @@
 package HeartBeat.StudyConnection.studyArticle.entity;
 
 
+import HeartBeat.StudyConnection.comment.entity.Comment;
 import HeartBeat.StudyConnection.userInfo.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -9,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -37,7 +40,9 @@ public class StudyArticle {
 
     private LocalDateTime uploadDate;
 
-    private String comment;
+
+    @OneToMany(mappedBy = "studyArticle", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder
     public StudyArticle(int id, String author, String content, int limitOfParticipants, boolean available,
@@ -50,7 +55,7 @@ public class StudyArticle {
         this.title = title;
         this.online=online;
         this.uploadDate = uploadDate;
-        this.comment = comment;
+
     }
 
 
