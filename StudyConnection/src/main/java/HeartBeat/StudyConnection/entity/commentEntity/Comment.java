@@ -20,7 +20,7 @@ import static jakarta.persistence.FetchType.LAZY;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "commnet_id")
+    @Column(name = "comment_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
@@ -34,6 +34,7 @@ public class Comment {
     @Setter
     @Column(updatable = false)
     private Long parentCommentId;
+
 
     @ToString.Exclude
     @OrderBy("createdAt ASC")

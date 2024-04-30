@@ -18,3 +18,13 @@ spring:
 jwt:
   issuer: Team_HeartBeat
   secret_key: study-connection
+
+springdoc:
+  swagger-ui:
+    path: /api-test # swqgger-ui 접근 경로에 대한 별칭
+    groups-order: DESC # path, query, body, response 순으로 출력
+    tags-sorter : alpha
+    operations-sorter: method
+
+  paths-to-match:
+    - /api/**

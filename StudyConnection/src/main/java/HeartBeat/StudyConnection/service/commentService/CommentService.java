@@ -9,7 +9,7 @@ import HeartBeat.StudyConnection.exception.CommentNotFoundException;
 import HeartBeat.StudyConnection.exception.NotGrantedException;
 import HeartBeat.StudyConnection.exception.StudyArticleNotFoundException;
 import HeartBeat.StudyConnection.exception.UserNotFoundException;
-import HeartBeat.StudyConnection.repository.commentRepository.CommentRepositroy;
+import HeartBeat.StudyConnection.repository.commentRepository.CommentRepository;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyArticle;
 import HeartBeat.StudyConnection.repository.studyArticleRepository.StudyArticleRepository;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public class CommentService {
     private final StudyArticleRepository studyArticleRepository;
     private final UserRepository userRepository;
-    private final CommentRepositroy commentRepositroy;
+    private final CommentRepository commentRepositroy;
 
     @Transactional(readOnly = true)
     public List<SummarizedCommentDto> list(Long studyArticleId){

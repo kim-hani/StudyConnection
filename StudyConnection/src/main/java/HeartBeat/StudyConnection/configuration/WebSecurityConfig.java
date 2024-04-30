@@ -51,7 +51,6 @@ public class WebSecurityConfig{
                .userDetailsService(userService)
                .passwordEncoder(bCryptPasswordEncoder)
                 .and().build();
-
     }
 
     // password encoder
