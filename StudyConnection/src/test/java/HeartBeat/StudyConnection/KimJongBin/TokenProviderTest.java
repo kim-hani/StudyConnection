@@ -1,10 +1,10 @@
 package HeartBeat.StudyConnection.KimJongBin;
 
-import HeartBeat.StudyConnection.userInfo.repository.UserRepository;
+import HeartBeat.StudyConnection.repository.userInfoRepository.UserRepository;
 import HeartBeat.StudyConnection.configuration.jwt.JwtFactory;
 import HeartBeat.StudyConnection.configuration.jwt.JwtProperties;
 import HeartBeat.StudyConnection.configuration.jwt.TokenProvider;
-import HeartBeat.StudyConnection.userInfo.entity.User;
+import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,8 @@
 package HeartBeat.StudyConnection.configuration.jwt.service;
 
 import HeartBeat.StudyConnection.configuration.jwt.TokenProvider;
-import HeartBeat.StudyConnection.userInfo.entity.User;
-import HeartBeat.StudyConnection.userInfo.service.UserService;
+import HeartBeat.StudyConnection.entity.userInfoEntity.User;
+import HeartBeat.StudyConnection.service.userInfoService.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

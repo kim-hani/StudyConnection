@@ -1,12 +1,12 @@
 package HeartBeat.StudyConnection.KimJongBin;
 
-import HeartBeat.StudyConnection.chatRoomMake.entity.ChatRoom;
-import HeartBeat.StudyConnection.chatRoomMake.entity.ChatRoomAndUser;
-import HeartBeat.StudyConnection.userInfo.entity.User;
-import HeartBeat.StudyConnection.chatRoomMake.repository.ChatRoomAndUserRepository;
-import HeartBeat.StudyConnection.chatRoomMake.repository.ChatRoomRepository;
-import HeartBeat.StudyConnection.userInfo.repository.UserRepository;
-import HeartBeat.StudyConnection.chatRoomMake.service.ChattingRoomMakeService;
+import HeartBeat.StudyConnection.entity.chatRoomMakeEntity.ChatRoom;
+import HeartBeat.StudyConnection.entity.chatRoomMakeEntity.ChatRoomAndUser;
+import HeartBeat.StudyConnection.entity.userInfoEntity.User;
+import HeartBeat.StudyConnection.repository.chatRoomMakeRepository.ChatRoomAndUserRepository;
+import HeartBeat.StudyConnection.repository.chatRoomMakeRepository.ChatRoomRepository;
+import HeartBeat.StudyConnection.repository.userInfoRepository.UserRepository;
+import HeartBeat.StudyConnection.service.chatRoomMakeService.ChattingRoomMakeService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

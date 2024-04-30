@@ -1,6 +1,6 @@
 package HeartBeat.StudyConnection.configuration.jwt;
 
-import HeartBeat.StudyConnection.userInfo.entity.User;
+import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
