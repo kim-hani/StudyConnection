@@ -1,4 +1,4 @@
-package HeartBeat.StudyConnection.controller.dto.studyArticleDto;
+package HeartBeat.StudyConnection.dto.studyArticleDto;
 
 import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyArticle;
 

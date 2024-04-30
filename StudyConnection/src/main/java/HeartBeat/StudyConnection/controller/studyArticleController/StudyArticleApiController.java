@@ -1,9 +1,9 @@
 package HeartBeat.StudyConnection.controller.studyArticleController;
 
-import HeartBeat.StudyConnection.controller.dto.studyArticleDto.AddStudyListResponseDto;
-import HeartBeat.StudyConnection.controller.dto.studyArticleDto.AddStudyRequestDto;
-import HeartBeat.StudyConnection.controller.dto.studyArticleDto.StudyResponseDto;
-import HeartBeat.StudyConnection.controller.dto.studyArticleDto.UpdateStudyRequestDto;
+import HeartBeat.StudyConnection.dto.studyArticleDto.AddStudyListResponseDto;
+import HeartBeat.StudyConnection.dto.studyArticleDto.AddStudyRequestDto;
+import HeartBeat.StudyConnection.dto.studyArticleDto.StudyResponseDto;
+import HeartBeat.StudyConnection.dto.studyArticleDto.UpdateStudyRequestDto;
 import HeartBeat.StudyConnection.service.studyArticleService.StudyArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

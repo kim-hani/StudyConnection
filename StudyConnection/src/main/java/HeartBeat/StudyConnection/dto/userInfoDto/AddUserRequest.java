@@ -1,4 +1,4 @@
-package HeartBeat.StudyConnection.controller.dto.userInfoDto;
+package HeartBeat.StudyConnection.dto.userInfoDto;
 
 import lombok.Getter;
 

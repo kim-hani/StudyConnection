@@ -1,9 +1,9 @@
 package HeartBeat.StudyConnection.service.studyArticleService;
 
-import HeartBeat.StudyConnection.controller.dto.studyArticleDto.AddStudyListResponseDto;
-import HeartBeat.StudyConnection.controller.dto.studyArticleDto.AddStudyRequestDto;
-import HeartBeat.StudyConnection.controller.dto.studyArticleDto.StudyResponseDto;
-import HeartBeat.StudyConnection.controller.dto.studyArticleDto.UpdateStudyRequestDto;
+import HeartBeat.StudyConnection.dto.studyArticleDto.AddStudyListResponseDto;
+import HeartBeat.StudyConnection.dto.studyArticleDto.AddStudyRequestDto;
+import HeartBeat.StudyConnection.dto.studyArticleDto.StudyResponseDto;
+import HeartBeat.StudyConnection.dto.studyArticleDto.UpdateStudyRequestDto;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyArticle;
 import HeartBeat.StudyConnection.repository.studyArticleRepository.StudyArticleRepository;
 import org.springframework.transaction.annotation.Transactional;

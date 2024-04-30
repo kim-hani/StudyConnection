@@ -1,4 +1,4 @@
-package HeartBeat.StudyConnection.controller.dto.commentDto.request;
+package HeartBeat.StudyConnection.dto.commentDto.request;
 
 
 import jakarta.validation.constraints.NotBlank;

@@ -2,8 +2,8 @@ package HeartBeat.StudyConnection.service.commentService;
 
 
 import HeartBeat.StudyConnection.CommentStatus;
-import HeartBeat.StudyConnection.controller.dto.commentDto.response.SummarizedCommentDto;
-import HeartBeat.StudyConnection.controller.dto.commentDto.response.SummarizedReplyDto;
+import HeartBeat.StudyConnection.dto.commentDto.response.SummarizedCommentDto;
+import HeartBeat.StudyConnection.dto.commentDto.response.SummarizedReplyDto;
 import HeartBeat.StudyConnection.entity.commentEntity.Comment;
 import HeartBeat.StudyConnection.exception.CommentNotFoundException;
 import HeartBeat.StudyConnection.exception.NotGrantedException;
