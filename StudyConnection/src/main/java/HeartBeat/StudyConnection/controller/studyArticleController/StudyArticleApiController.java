@@ -52,13 +52,14 @@ public class StudyArticleApiController {
     }
 
     @DeleteMapping("/api/v1/posts/{id}")
-    @Operation(summary = "메인 페이지 스터디 모집글 조회", description = "메인 페이지에서 전체 스터디 모집글을 조회")
+    @Operation(summary = "스터디 모집글 삭제", description = "스터디 모집글 삭제 시 사용하는 API")
     public int delete(@PathVariable int id){
         studyArticleService.delete(id);
         return id;
     }
 
     @GetMapping("/api/v1/posts")
+    @Operation(summary = "메인 페이지 스터디 모집글 조회", description = "메인 페이지에서 전체 스터디 모집글을 조회")
     public List<AddStudyListResponseDto> findAllDesc() {
         return studyArticleService.findAllDesc();
     }

@@ -71,7 +71,7 @@ public class TokenProviderTest {
 
     @DisplayName("TokenProvider의 validToked() 유효한 토큰 테스트")
     @Test
-    void validToken_isㅍalid(){
+    void validToken_isValid(){
         // given
         String token = JwtFactory.withDefaultValues().createToken(jwtProperties);
 

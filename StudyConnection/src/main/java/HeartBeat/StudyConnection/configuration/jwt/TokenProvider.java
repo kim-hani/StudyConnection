@@ -44,6 +44,23 @@ public class TokenProvider {
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
     }
+
+    public String makeRefreshToken(User user){
+        Date now = new Date();
+
+        return Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                .setIssuer(jwtProperties.getIssuer())
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + 86400000))
+                .setSubject(user.getUsername() + "'s refresh token.")
+                .claim("email", user.getEmail()) // 클레임 id -> user id
+                .claim("username", user.getUsername())
+                .claim("userId", user.getUserId())
+                // 암호화
+                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
+                .compact();
+    }
     
     // JWT 토큰 유효성 검증
     public boolean validToken(String token){

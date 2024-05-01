@@ -3,10 +3,11 @@ package HeartBeat.StudyConnection.configuration.jwt.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
 @Entity
 public class RefreshToken {
@@ -22,6 +23,7 @@ public class RefreshToken {
     @Column(name = "refresh_token", nullable = false)
     private String refreshToken;
 
+    @Builder
     public RefreshToken(String userId,String refreshToken){
         this.userId = userId;
         this.refreshToken = refreshToken;

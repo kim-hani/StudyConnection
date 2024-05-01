@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class TokenApiController {
     private final TokenService tokenService;
 
-    @PostMapping("/api/token")
-    @Parameter(name = "Refresh Token", description = "Refresh Token을 이용해 Access Token을 발급")
+    @PostMapping("/api/access_token")
+    @Parameter(name = "Access Token", description = "Refresh Token을 이용해 Access Token을 발급")
     @Operation(summary = "Access Token 발급", description = "Access Token을 발급할 때 사용하는 API")
     public ResponseEntity<CreateAccessTokenResponse> createNewAccessToken(@RequestBody CreateAccessTokenRequest request){
         String newAccessToken = tokenService.createNewAccessToken(request.getRefreshToken());

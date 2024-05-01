@@ -1,11 +1,13 @@
 package HeartBeat.StudyConnection.service.userInfoService;
 
 import HeartBeat.StudyConnection.repository.userInfoRepository.UserRepository;
-import HeartBeat.StudyConnection.dto.userInfoDto.AddUserRequest;
+import HeartBeat.StudyConnection.dto.signUpDto.AddUserRequest;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
