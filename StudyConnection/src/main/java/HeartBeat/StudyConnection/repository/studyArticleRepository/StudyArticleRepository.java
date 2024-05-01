@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface StudyArticleRepository extends JpaRepository<StudyArticle,Integer> {
+public interface StudyArticleRepository extends JpaRepository<StudyArticle,Long> {
     @Query("SELECT p FROM StudyArticle p ORDER BY p.uploadDate DESC")
     List<StudyArticle> findAllDesc();
 }
