@@ -20,8 +20,8 @@ public class RefreshToken {
     @Column(name = "user_id",nullable = false, unique= true)
     private String userId;
 
-    @Column(name = "refresh_token", nullable = false)
-    private String refreshToken;
+    @Column(name = "refresh_token", nullable = false, length = 512)
+    private String refreshToken; // 토큰값
 
     @Builder
     public RefreshToken(String userId,String refreshToken){

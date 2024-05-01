@@ -11,20 +11,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
-    private final TokenProvider tokenProvider;
 
     public RefreshToken findByRefreshToken(String refreshToken){
-        return refreshTokenRepository.findByRefreshToken(refreshToken)
+        return refreshTokenRepository.refreshToken(refreshToken)
                 .orElseThrow(() -> new IllegalArgumentException("Unexpected Token"));
     }
 
-    public String createNewRefreshToken(User user){
-        String newRefreshToken = tokenProvider.makeRefreshToken(user);
-        String refreshTokenContent = "[" + user.getUserId() + "]" + user.getUsername();
-        refreshTokenRepository.save(new RefreshToken().builder()
-                .userId(user.getUserId())
-                .refreshToken(refreshTokenContent + "'s refresh token")
-                .build());
-        return newRefreshToken;
+    public RefreshToken save(String userId, String refreshToken){
+        return refreshTokenRepository.save(new RefreshToken(userId, refreshToken));
     }
 }

@@ -25,7 +25,8 @@ public class WebSecurityConfig{
     @Bean
     public WebSecurityCustomizer configure() {
         return ((web) -> web.ignoring()
-                .requestMatchers(toH2Console()));
+                .requestMatchers(toH2Console())
+                .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-test","/v3/api-docs/**"));
     }
 
     // 필터 구현
@@ -36,6 +37,7 @@ public class WebSecurityConfig{
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/api/login", "/api/signup").permitAll()
+                                .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-test","/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                         );
         return http.build();

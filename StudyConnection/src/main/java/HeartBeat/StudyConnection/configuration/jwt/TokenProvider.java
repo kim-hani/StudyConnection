@@ -1,5 +1,6 @@
 package HeartBeat.StudyConnection.configuration.jwt;
 
+import HeartBeat.StudyConnection.configuration.jwt.entity.RefreshToken;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
@@ -37,7 +38,6 @@ public class TokenProvider {
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .setSubject(user.getUsername() + "'s access token.")
-                .claim("email", user.getEmail()) // 클레임 id -> user id
                 .claim("username", user.getUsername())
                 .claim("userId", user.getUserId())
                 // 암호화
@@ -45,16 +45,21 @@ public class TokenProvider {
                 .compact();
     }
 
-    public String makeRefreshToken(User user){
+    public String createNewRefreshToken(User user){
+
+        return makeRefreshToken(user);
+    }
+
+    private String makeRefreshToken(User user){
         Date now = new Date();
+        Duration expiredAt = Duration.ofDays(7);
 
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setIssuer(jwtProperties.getIssuer())
                 .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + 86400000))
+                .setExpiration(new Date(now.getTime() + expiredAt.toMillis()))
                 .setSubject(user.getUsername() + "'s refresh token.")
-                .claim("email", user.getEmail()) // 클레임 id -> user id
                 .claim("username", user.getUsername())
                 .claim("userId", user.getUserId())
                 // 암호화

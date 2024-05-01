@@ -41,19 +41,19 @@ public class StudyArticleApiController {
             @Parameter(name = "author", description = "스터디 모집글 작성자의 이름", example = "김간단")
     })
     @Operation(summary = "스터디 모집글 수정", description = "스터디 모집글 수정 시 사용하는 API")
-    public int update(@PathVariable Integer id, @RequestBody UpdateStudyRequestDto requestDto){
+    public Long update(@PathVariable Long id, @RequestBody UpdateStudyRequestDto requestDto){
         return studyArticleService.update(id, requestDto);
     }
 
     @GetMapping("/api/v1/posts/{id}")
     @Operation(summary = "특정 스터디 모집글 조회", description = "특정 스터디 모집글 조회 시 사용하는 API")
-    public StudyResponseDto findById(@PathVariable int id){
+    public StudyResponseDto findById(@PathVariable Long id){
         return studyArticleService.findById(id);
     }
 
     @DeleteMapping("/api/v1/posts/{id}")
     @Operation(summary = "스터디 모집글 삭제", description = "스터디 모집글 삭제 시 사용하는 API")
-    public int delete(@PathVariable int id){
+    public Long delete(@PathVariable Long id){
         studyArticleService.delete(id);
         return id;
     }

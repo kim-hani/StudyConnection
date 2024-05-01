@@ -1,5 +1,7 @@
 package HeartBeat.StudyConnection.controller.user;
 
+import HeartBeat.StudyConnection.configuration.jwt.TokenProvider;
+import HeartBeat.StudyConnection.configuration.jwt.entity.RefreshToken;
 import HeartBeat.StudyConnection.configuration.jwt.service.RefreshTokenService;
 import HeartBeat.StudyConnection.configuration.jwt.service.TokenService;
 import HeartBeat.StudyConnection.dto.loginDto.UserLoginRequest;
@@ -34,7 +36,7 @@ public class UserApiController {
     private final UserService userService;
     private final TokenService tokenService;
     private final RefreshTokenService refreshTokenService;
-    private final AuthenticationManager authenticationManager;
+    private final TokenProvider tokenProvider;
 
     @PostMapping("/api/login")
     @Operation(summary = "사용자 로그인", description = "로그인 시 사용하는 API")
@@ -44,24 +46,20 @@ public class UserApiController {
     })
     public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest){
         User user = userService.findById(userLoginRequest.getId());
-        Authentication authentication = authenticate(userLoginRequest.getId(), userLoginRequest.getPassword());
 
         // 로그인 시 리프레시, 액세스 토큰 생성
-        String refreshToken = refreshTokenService.createNewRefreshToken(user);
-        String accessToken = tokenService.createNewAccessToken(refreshToken);
+        String refreshTokenValue = tokenProvider.createNewRefreshToken(user);
+        RefreshToken refreshToken = refreshTokenService.save(user.getUserId(), refreshTokenValue);
+        String accessToken = tokenService.createNewAccessToken(refreshTokenValue);
 
         return ResponseEntity.ok(new UserLoginResponse().builder()
                 .userId(user.getUserId())
                 .username(user.getUsername())
                 .accessToken(accessToken)
-                .refreshToken(refreshToken)
+                .refreshToken(refreshTokenValue)
                 .build());
     }
 
-    private Authentication authenticate(String userId, String password){
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userId, password);
-        return authenticationManager.authenticate(authentication);
-    }
 
     @PostMapping("/api/signup")
     @Operation(summary = "사용자 회원 가입", description = "회원 가입 시 사용하는 API")
@@ -73,9 +71,11 @@ public class UserApiController {
             @Parameter(name = "birth", description = "사용자의 생년월일", example = "1999-09-09")
     })
     public ResponseEntity<AddUserResponse> signup(@RequestBody AddUserRequest request){
-        userService.save(request);
+        User savedUser = userService.save(request);
+        String savesUserId = savedUser.getUserId();
+        String savedUserName = savedUser.getUsername();
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new AddUserResponse(request.toEntity()));
+                .body(new AddUserResponse(savesUserId, savedUserName));
     }
 }

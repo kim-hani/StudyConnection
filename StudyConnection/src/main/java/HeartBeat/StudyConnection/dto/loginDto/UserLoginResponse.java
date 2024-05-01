@@ -4,6 +4,7 @@ import lombok.*;
 
 @NoArgsConstructor
 @Setter
+@Getter
 public class UserLoginResponse {
     private String userId;
     private String username;

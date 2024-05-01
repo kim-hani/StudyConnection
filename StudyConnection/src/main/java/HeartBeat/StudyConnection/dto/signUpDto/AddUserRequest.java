@@ -1,8 +1,13 @@
 package HeartBeat.StudyConnection.dto.signUpDto;
 
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class AddUserRequest {
     private String userId;

@@ -15,14 +15,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public String save(AddUserRequest dto) {
+    public User save(AddUserRequest dto) {
         return userRepository.save(User.builder()
                 .email(dto.getEmail())
                 .userId(dto.getUserId())
                 .birth(dto.getBirth())
                 .username(dto.getUsername())
                 .password(bCryptPasswordEncoder.encode(dto.getPassword()))
-                .build()).getUserId();
+                .build());
     }
 
     public User findById(String userId) {
