@@ -24,7 +24,7 @@ public class StudyArticleService {
     }
 
     @Transactional
-    public int update(int id, UpdateStudyRequestDto requestDto){
+    public Long update(Long id, UpdateStudyRequestDto requestDto){
         StudyArticle studyArticle = studyArticleRepository.findById(id).orElseThrow
                 (() -> new IllegalArgumentException("해당 게시글이 없습니다. id =" + id));
         studyArticle.update(requestDto.getTitle(),requestDto.getContent());
@@ -33,14 +33,14 @@ public class StudyArticleService {
     }
 
     @Transactional
-    public void delete(int id){
+    public void delete(Long id){
         StudyArticle studyArticle = studyArticleRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("해당 게시글이 없습니다. id ="+ id));
         // 엔티티 조회 후 삭제
         studyArticleRepository.delete(studyArticle);
     }
 
-    public StudyResponseDto findById(int id) {
+    public StudyResponseDto findById(Long id) {
         StudyArticle entity = studyArticleRepository.findById(id).
                 orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id =" + id));
 
