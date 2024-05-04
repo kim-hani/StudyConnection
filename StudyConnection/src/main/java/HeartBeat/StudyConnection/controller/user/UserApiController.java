@@ -46,8 +46,6 @@ public class UserApiController {
     })
     public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest){
         User user = userService.findById(userLoginRequest.getId());
-        
-        // 저장된 회원 없을 시
 
         // 로그인 시 리프레시, 액세스 토큰 생성
         String refreshTokenValue = tokenProvider.createNewRefreshToken(user);
