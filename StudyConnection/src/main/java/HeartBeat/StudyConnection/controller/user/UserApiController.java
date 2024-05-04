@@ -73,15 +73,16 @@ public class UserApiController {
     public ResponseEntity<AddUserResponse> signup(@RequestBody AddUserRequest request){
         String newUserId = request.getUserId();
         String resultMessage;
+
         
-        // 중복된 아이디
+        // 중복된 아이디 처리
         if(userService.findById(newUserId) != null){
             resultMessage = "Error: ID duplicate";
             return  ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new AddUserResponse("Failed", "Failed", resultMessage));
         }
 
-        // 실제 저장
+        // 중복되지 않았을 때 회원 가입
         User savedUser = userService.save(request);
         String savesUserId = savedUser.getUserId();
         String savedUserName = savedUser.getUsername();
