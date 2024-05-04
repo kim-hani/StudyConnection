@@ -12,8 +12,11 @@ public class AddUserResponse {
     private String userId;
     private String username;
 
-    public AddUserResponse(String savesUserId, String savedUserName) {
+    private String result;
+
+    public AddUserResponse(String savesUserId, String savedUserName, String requestResult) {
         userId = savesUserId;
         username = savedUserName;
+        result = requestResult;
     }
 }

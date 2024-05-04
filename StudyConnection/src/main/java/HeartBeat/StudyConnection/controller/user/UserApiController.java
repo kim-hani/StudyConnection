@@ -46,6 +46,8 @@ public class UserApiController {
     })
     public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest){
         User user = userService.findById(userLoginRequest.getId());
+        
+        // 저장된 회원 없을 시
 
         // 로그인 시 리프레시, 액세스 토큰 생성
         String refreshTokenValue = tokenProvider.createNewRefreshToken(user);
@@ -71,11 +73,23 @@ public class UserApiController {
             @Parameter(name = "birth", description = "사용자의 생년월일", example = "1999-09-09")
     })
     public ResponseEntity<AddUserResponse> signup(@RequestBody AddUserRequest request){
+        String newUserId = request.getUserId();
+        String resultMessage;
+        
+        // 중복된 아이디
+        if(userService.findById(newUserId) != null){
+            resultMessage = "Error: ID duplicate";
+            return  ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new AddUserResponse("Failed", "Failed", resultMessage));
+        }
+
+        // 실제 저장
         User savedUser = userService.save(request);
         String savesUserId = savedUser.getUserId();
         String savedUserName = savedUser.getUsername();
+        resultMessage = "sign-up success";
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new AddUserResponse(savesUserId, savedUserName));
+                .body(new AddUserResponse(savesUserId, savedUserName, resultMessage));
     }
 }
