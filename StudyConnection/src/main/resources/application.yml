@@ -14,7 +14,10 @@ spring:
   h2:
     console:
       enabled: true
-    tcpServer: true # 보안 상의 이유로 나중에는 제거해야 함.
+      # 보안 상의 이유로 나중에는 제거해야 함.
+      settings:
+        web-allow-others: true
+
 
 jwt:
   issuer: Team_HeartBeat
