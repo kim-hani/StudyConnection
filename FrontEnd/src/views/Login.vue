@@ -2,20 +2,23 @@
   <body>
     <div class="container" :class="{ active: isActive }">
       <div class="form-container sign-up">
-        <form>
+        <form @submit.prevent="handleSignUp">
           <h1>Create Account</h1><br>
           <span>use your ID for registeration</span>
-          <input type="text" placeholder="Name">
-          <input placeholder="Email">
-          <input type="password" placeholder="Password">
-          <button @click="activateContainer">Sign Up</button>
+          <input type="tel" placeholder="PhoneNumber" v-model="signUpData.userId"> <!--전화번호 -->
+          <input type="text" placeholder="Name" v-model="signUpData.username">
+          <input type="email" placeholder="Email" v-model="signUpData.email">
+          <input type="date" placeholder="Birth 2000-01-01" v-model="signUpData.birth">
+          <input type="password" placeholder="Password" v-model="signUpData.password">
+          <input type="password" placeholder="Confirm Password" v-model="signUpData.confirmPassword">
+          <button type="submit" @click="activateContainer">Sign Up</button>
         </form>
       </div>
       <div class="form-container sign-in">
         <form @submit.prevent="fnLogin">
           <h1>Sign In</h1><br>
           <span>use your ID password</span>
-          <input name="vid" placeholder="Enter your ID" v-model="user_id">
+          <input name="vid" placeholder="Enter your PhoneNumber" v-model="user_id">
           <input name="password" placeholder="Password" v-model="user_pw" type="password">
 <!--          <a href="#">Forget Your Password?</a>-->
           <button type="submit" @click="deactivateContainer">Sign In</button>
@@ -40,17 +43,31 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex'   //vuex 추가
+import {mapActions, mapGetters, mapState} from 'vuex'
+import {SET_ERROR_STATE} from "@/Vuex/mutation_types";   //vuex 추가
 
 export default {
+  computed: {
+    ...mapState(['errorState'])
+  },
+
   data() {
     return {
       user_id: '',
-      user_pw: ''
+      user_pw: '',
+
+      signUpData: {
+        userId: '',
+        username: '',
+        email: '',
+        birth: '',
+        password: '',
+        confirmPassword: ''
+      },
     }
   },
   methods: {
-    ...mapActions(['login']),     //vuex/actions에 있는 login 함수
+    ...mapActions(['login', 'signUp']),     //vuex/actions에 있는 login 함수
 
     async fnLogin() {       //async 함수로 변경
       if (this.user_id === '') {
@@ -75,13 +92,29 @@ export default {
           window.location.reload();
         }
       }
+    },
+
+    async handleSignUp() {
+      if (this.signUpData.password !== this.signUpData.confirmPassword) {
+        alert('비밀번호가 일치하지 않습니다.');
+        return;
+      }
+      try {
+        const result = await this.signUp(this.signUpData);
+        console.log('회원가입 결과:', result);
+        if (result) {
+          alert('회원가입 성공!');
+        } else {
+          if(this.errorState === 409)
+            alert('이미 가입된 회원입니다.');
+          else
+            alert('회원가입 실패. 다시 시도해주세요.');
+        }
+      } catch (error) {
+        alert('회원가입 중 오류가 발생했습니다.');
+      }
     }
   },
-  computed: {
-    ...mapGetters({
-      errorState: 'getErrorState'
-    })
-  }
 }
 </script>
 
