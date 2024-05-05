@@ -21,7 +21,7 @@ public class StudyArticleApiController {
 
     private final StudyArticleService studyArticleService;
 
-    @PostMapping("/api/v1/posts")
+    @PostMapping("/api/study-articles")
     @Operation(summary = "스터디 모집글 작성", description = "스터디 모집글 작성 시 사용하는 API")
     @Parameters({
             @Parameter(name = "id", description = "스터디 모집글 id (Long 타입)", example = "1"),
@@ -33,7 +33,13 @@ public class StudyArticleApiController {
         return studyArticleService.save(requestDto);
     }
 
-    @PutMapping("/api/v1/posts/{id}")
+    @GetMapping("/api/study-articles")
+    @Operation(summary = "메인 페이지 스터디 모집글 조회", description = "메인 페이지에서 전체 스터디 모집글을 조회")
+    public List<AddStudyListResponseDto> findAllDesc() {
+        return studyArticleService.findAllDesc();
+    }
+
+    @PutMapping("/api/study-articles/{id}")
     @Parameters({
             @Parameter(name = "id", description = "스터디 모집글 id (Long 타입)", example = "1"),
             @Parameter(name = "title", description = "스터디 모집글 제목", example = "자바 꽉 잡아요"),
@@ -45,22 +51,17 @@ public class StudyArticleApiController {
         return studyArticleService.update(id, requestDto);
     }
 
-    @GetMapping("/api/v1/posts/{id}")
+    @GetMapping("/api/study-articles/{id}")
     @Operation(summary = "특정 스터디 모집글 조회", description = "특정 스터디 모집글 조회 시 사용하는 API")
     public StudyResponseDto findById(@PathVariable Long id){
         return studyArticleService.findById(id);
     }
 
-    @DeleteMapping("/api/v1/posts/{id}")
+    @DeleteMapping("/api/study-articles/{id}")
     @Operation(summary = "스터디 모집글 삭제", description = "스터디 모집글 삭제 시 사용하는 API")
     public Long delete(@PathVariable Long id){
         studyArticleService.delete(id);
         return id;
     }
 
-    @GetMapping("/api/v1/posts")
-    @Operation(summary = "메인 페이지 스터디 모집글 조회", description = "메인 페이지에서 전체 스터디 모집글을 조회")
-    public List<AddStudyListResponseDto> findAllDesc() {
-        return studyArticleService.findAllDesc();
-    }
 }
