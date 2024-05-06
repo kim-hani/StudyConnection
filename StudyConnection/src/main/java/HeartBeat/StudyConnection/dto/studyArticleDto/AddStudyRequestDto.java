@@ -22,7 +22,6 @@ public class AddStudyRequestDto {
         this.title = title;
         this.content = content;
         this.authorId = author;
-        this.available = true;
         this.limitOfParticpants = limitOfParticpants;
     }
 
@@ -31,7 +30,7 @@ public class AddStudyRequestDto {
                 .title(title)
                 .content(content)
                 .author(authorId)
-                .available(available)
+                .available(true)
                 .limitOfParticipants(limitOfParticpants)
                 .build();
     }

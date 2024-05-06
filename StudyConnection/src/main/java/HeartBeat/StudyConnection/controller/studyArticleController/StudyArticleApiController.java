@@ -23,6 +23,7 @@ public class StudyArticleApiController {
 
     @PostMapping("/api/v1/posts")
     @Operation(summary = "스터디 모집글 작성", description = "스터디 모집글 작성 시 사용하는 API")
+    /*
     @Parameters({
             @Parameter(name = "id", description = "스터디 모집글 id (Long 타입)", example = "1"),
             @Parameter(name = "title", description = "스터디 모집글 제목", example = "자바 꽉 잡아요"),
@@ -30,17 +31,20 @@ public class StudyArticleApiController {
             @Parameter(name = "author", description = "스터디 모집글 작성자의 이름", example = "김간단"),
             @Parameter(name= "limit Of Participant",description = "스터디 모집 정원", example = "10")
     })
+    */
     public Long save(@RequestBody AddStudyRequestDto requestDto){
         return studyArticleService.save(requestDto);
     }
 
     @PutMapping("/api/v1/posts/{id}")
+    /*
     @Parameters({
             @Parameter(name = "id", description = "스터디 모집글 id (Long 타입)", example = "1"),
             @Parameter(name = "title", description = "스터디 모집글 제목", example = "자바 꽉 잡아요"),
             @Parameter(name = "content", description = "스터디 모집글 내용", example = "자바 스터디 그룹~"),
             @Parameter(name = "author", description = "스터디 모집글 작성자의 이름", example = "김간단")
     })
+    */
     @Operation(summary = "스터디 모집글 수정", description = "스터디 모집글 수정 시 사용하는 API")
     public Long update(@PathVariable Long id, @RequestBody UpdateStudyRequestDto requestDto){
         return studyArticleService.update(id, requestDto);
@@ -58,6 +62,8 @@ public class StudyArticleApiController {
         studyArticleService.delete(id);
         return id;
     }
+
+
 
     @GetMapping("/api/v1/posts")
     @Operation(summary = "메인 페이지 스터디 모집글 조회", description = "메인 페이지에서 전체 스터디 모집글을 조회")
