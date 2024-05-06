@@ -14,11 +14,14 @@ public class AddStudyRequestDto {
     private String content;
     private String authorId;
 
+    private int limitOfParticpants;
+
     @Builder
-    public AddStudyRequestDto(String title, String content, String author) {
+    public AddStudyRequestDto(String title, String content, String author, int limitOfParticpants) {
         this.title = title;
         this.content = content;
         this.authorId = author;
+        this.limitOfParticpants = limitOfParticpants;
     }
 
     public StudyArticle toEntity() {
@@ -26,6 +29,7 @@ public class AddStudyRequestDto {
                 .title(title)
                 .content(content)
                 .author(authorId)
+                .limitOfParticipants(limitOfParticpants)
                 .build();
     }
 

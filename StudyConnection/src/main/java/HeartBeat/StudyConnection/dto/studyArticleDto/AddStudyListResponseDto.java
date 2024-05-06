@@ -19,9 +19,6 @@ public class AddStudyListResponseDto {
     private final boolean available;
 
     private final String title;
-
-    private final boolean online;
-
     private final LocalDateTime uploadDate;
 
     public AddStudyListResponseDto(StudyArticle studyArticle) {
@@ -30,7 +27,6 @@ public class AddStudyListResponseDto {
         this.limitOfParticipants = studyArticle.getLimitOfParticipants();
         this.available = studyArticle.isAvailable();
         this.title = studyArticle.getTitle();
-        this.online = studyArticle.isOnline();
         this.uploadDate = studyArticle.getUploadDate();
     }
 }

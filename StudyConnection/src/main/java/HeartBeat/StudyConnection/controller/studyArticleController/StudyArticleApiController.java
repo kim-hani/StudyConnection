@@ -27,7 +27,8 @@ public class StudyArticleApiController {
             @Parameter(name = "id", description = "스터디 모집글 id (Long 타입)", example = "1"),
             @Parameter(name = "title", description = "스터디 모집글 제목", example = "자바 꽉 잡아요"),
             @Parameter(name = "content", description = "스터디 모집글 내용", example = "자바 스터디 그룹~"),
-            @Parameter(name = "author", description = "스터디 모집글 작성자의 이름", example = "김간단")
+            @Parameter(name = "author", description = "스터디 모집글 작성자의 이름", example = "김간단"),
+            @Parameter(name= "limit Of Participant",description = "스터디 모집 정원", example = "10")
     })
     public Long save(@RequestBody AddStudyRequestDto requestDto){
         return studyArticleService.save(requestDto);
