@@ -14,6 +14,7 @@ public class AddStudyRequestDto {
     private String content;
     private String authorId;
 
+    private boolean available;
     private int limitOfParticpants;
 
     @Builder
@@ -21,6 +22,7 @@ public class AddStudyRequestDto {
         this.title = title;
         this.content = content;
         this.authorId = author;
+        this.available = true;
         this.limitOfParticpants = limitOfParticpants;
     }
 
@@ -32,6 +34,4 @@ public class AddStudyRequestDto {
                 .limitOfParticipants(limitOfParticpants)
                 .build();
     }
-
-
 }

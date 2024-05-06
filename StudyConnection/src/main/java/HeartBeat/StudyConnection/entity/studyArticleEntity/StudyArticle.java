@@ -50,7 +50,7 @@ public class StudyArticle extends BaseTimeEntity {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public StudyArticle(Long id, String author, String content, int limitOfParticipants, boolean available,
+    public StudyArticle(Long id, String author, String content, int limitOfParticipants,
                         String title, LocalDateTime uploadDate, String comment){
         this.id = id;
         this.author = author;
