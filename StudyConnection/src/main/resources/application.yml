@@ -1,6 +1,7 @@
 # 스프링 부트 서버가 실행되면 자동으로 로딩되는 파일
 spring:
   jpa:
+
     # 전송 쿼리 확인
     show-sql: true
     properties:

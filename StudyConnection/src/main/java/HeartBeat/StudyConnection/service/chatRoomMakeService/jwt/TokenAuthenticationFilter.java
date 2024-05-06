@@ -1,4 +1,4 @@
-package HeartBeat.StudyConnection.configuration.jwt;
+package HeartBeat.StudyConnection.service.chatRoomMakeService.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

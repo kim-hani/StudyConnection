@@ -1,4 +1,4 @@
-package HeartBeat.StudyConnection.configuration.jwt.entity;
+package HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.entity;
 
 
 import jakarta.persistence.*;

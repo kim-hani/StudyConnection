@@ -1,6 +1,5 @@
-package HeartBeat.StudyConnection.configuration.jwt;
+package HeartBeat.StudyConnection.service.chatRoomMakeService.jwt;
 
-import HeartBeat.StudyConnection.configuration.jwt.entity.RefreshToken;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;

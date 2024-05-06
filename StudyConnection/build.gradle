@@ -23,6 +23,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'junit:junit:4.13.1'
 
 	runtimeOnly 'com.h2database:h2' // 인메모리 데이터베이스
 

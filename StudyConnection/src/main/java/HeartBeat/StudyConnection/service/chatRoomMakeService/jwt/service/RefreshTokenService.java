@@ -1,9 +1,7 @@
-package HeartBeat.StudyConnection.configuration.jwt.service;
+package HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.service;
 
-import HeartBeat.StudyConnection.configuration.jwt.TokenProvider;
-import HeartBeat.StudyConnection.configuration.jwt.entity.RefreshToken;
-import HeartBeat.StudyConnection.configuration.jwt.repository.RefreshTokenRepository;
-import HeartBeat.StudyConnection.entity.userInfoEntity.User;
+import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.entity.RefreshToken;
+import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

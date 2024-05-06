@@ -1,8 +1,6 @@
 package HeartBeat.StudyConnection.KimJongBin;
 
-import HeartBeat.StudyConnection.configuration.WebSecurityConfig;
-import HeartBeat.StudyConnection.configuration.jwt.service.RefreshTokenService;
-import HeartBeat.StudyConnection.configuration.jwt.service.TokenService;
+import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.service.TokenService;
 import HeartBeat.StudyConnection.dto.loginDto.UserLoginRequest;
 import HeartBeat.StudyConnection.dto.signUpDto.AddUserRequest;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
@@ -16,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;

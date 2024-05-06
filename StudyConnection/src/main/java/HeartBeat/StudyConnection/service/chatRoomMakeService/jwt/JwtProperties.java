@@ -1,4 +1,4 @@
-package HeartBeat.StudyConnection.configuration.jwt;
+package HeartBeat.StudyConnection.service.chatRoomMakeService.jwt;
 
 import lombok.Getter;
 import lombok.Setter;

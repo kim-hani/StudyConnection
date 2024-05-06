@@ -1,9 +1,9 @@
 package HeartBeat.StudyConnection.controller.user;
 
-import HeartBeat.StudyConnection.configuration.jwt.TokenProvider;
-import HeartBeat.StudyConnection.configuration.jwt.entity.RefreshToken;
-import HeartBeat.StudyConnection.configuration.jwt.service.RefreshTokenService;
-import HeartBeat.StudyConnection.configuration.jwt.service.TokenService;
+import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.TokenProvider;
+import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.entity.RefreshToken;
+import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.service.RefreshTokenService;
+import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.service.TokenService;
 import HeartBeat.StudyConnection.dto.loginDto.UserLoginRequest;
 import HeartBeat.StudyConnection.dto.loginDto.UserLoginResponse;
 import HeartBeat.StudyConnection.dto.signUpDto.AddUserRequest;
@@ -17,16 +17,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor

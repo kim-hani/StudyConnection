@@ -1,9 +1,9 @@
 package HeartBeat.StudyConnection.KimJongBin;
 
 import HeartBeat.StudyConnection.repository.userInfoRepository.UserRepository;
-import HeartBeat.StudyConnection.configuration.jwt.JwtFactory;
-import HeartBeat.StudyConnection.configuration.jwt.JwtProperties;
-import HeartBeat.StudyConnection.configuration.jwt.TokenProvider;
+import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.JwtFactory;
+import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.JwtProperties;
+import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.TokenProvider;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.DisplayName;

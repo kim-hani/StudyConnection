@@ -2,6 +2,7 @@ package HeartBeat.StudyConnection.entity.commentEntity;
 
 
 import HeartBeat.StudyConnection.CommentStatus;
+import HeartBeat.StudyConnection.entity.BaseTimeEntity;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyArticle;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import jakarta.persistence.*;
@@ -20,7 +21,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment {
+public class Comment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
@@ -90,11 +91,4 @@ public class Comment {
             this.commentStatus = CommentStatus.DELETED;
         }
     }
-
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
-
 }

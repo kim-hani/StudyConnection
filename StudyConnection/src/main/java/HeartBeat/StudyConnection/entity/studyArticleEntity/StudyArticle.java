@@ -1,6 +1,7 @@
 package HeartBeat.StudyConnection.entity.studyArticleEntity;
 
 
+import HeartBeat.StudyConnection.entity.BaseTimeEntity;
 import HeartBeat.StudyConnection.entity.commentEntity.Comment;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import jakarta.persistence.*;
@@ -11,16 +12,20 @@ import lombok.NoArgsConstructor;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "studyArticle")
-public class StudyArticle {
+@EntityListeners(AuditingEntityListener.class)
+public class StudyArticle extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,11 +76,4 @@ public class StudyArticle {
     public boolean isAuthor(User user){
         return this.author.equals(user.getUserId());
     }
-
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
-
 }

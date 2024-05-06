@@ -1,4 +1,4 @@
-package HeartBeat.StudyConnection.configuration.jwt;
+package HeartBeat.StudyConnection.service.chatRoomMakeService.jwt;
 
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
