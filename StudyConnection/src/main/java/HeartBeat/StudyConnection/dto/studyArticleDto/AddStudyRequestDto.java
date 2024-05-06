@@ -31,6 +31,7 @@ public class AddStudyRequestDto {
                 .title(title)
                 .content(content)
                 .author(authorId)
+                .available(available)
                 .limitOfParticipants(limitOfParticpants)
                 .build();
     }
