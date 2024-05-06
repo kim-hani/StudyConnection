@@ -1,3 +1,3 @@
-export const USER_ID = "USER_ID"
-export const ERROR_STATE = "ERROR_STATE"
-export const IS_AUTH = "IS_AUTH"
+export const SET_USER = "SET_USER";
+export const SET_IS_AUTH = "SET_IS_AUTH";
+export const SET_ERROR_STATE = "SET_ERROR_STATE";

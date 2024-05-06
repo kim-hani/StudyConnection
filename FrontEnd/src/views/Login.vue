@@ -15,11 +15,11 @@
         </form>
       </div>
       <div class="form-container sign-in">
-        <form @submit.prevent="fnLogin">
+        <form @submit.prevent="handleLogin">
           <h1>Sign In</h1><br>
           <span>use your ID password</span>
-          <input name="vid" placeholder="Enter your PhoneNumber" v-model="user_id">
-          <input name="password" placeholder="Password" v-model="user_pw" type="password">
+          <input type="tel" placeholder="Enter your PhoneNumber" v-model="LoginData.userId">
+          <input type="password" placeholder="Password" v-model="LoginData.userPw">
 <!--          <a href="#">Forget Your Password?</a>-->
           <button type="submit" @click="deactivateContainer">Sign In</button>
         </form>
@@ -48,13 +48,15 @@ import {SET_ERROR_STATE} from "@/Vuex/mutation_types";   //vuex 추가
 
 export default {
   computed: {
-    ...mapState(['errorState'])
+    ...mapState(['errorState','userData']),   //vuex/state에 있는 errorState, userData
   },
 
   data() {
     return {
-      user_id: '',
-      user_pw: '',
+      LoginData: {
+        userId: '',
+        userPw: '',
+      },
 
       signUpData: {
         userId: '',
@@ -69,21 +71,24 @@ export default {
   methods: {
     ...mapActions(['login', 'signUp']),     //vuex/actions에 있는 login 함수
 
-    async fnLogin() {       //async 함수로 변경
-      if (this.user_id === '') {
+    async handleLogin() {       //async 함수로 변경
+      if (this.LoginData.userId === '') {
         alert('ID를 입력하세요.')
         return
       }
 
-      if (this.user_pw === '') {
+      if (this.LoginData.userPw === '') {
         alert('비밀번호를 입력하세요.')
         return
       }
 
       //로그인 API 호출
       try {
-        let loginResult = await this.login({user_id: this.user_id, user_pw: this.user_pw})
-        if (loginResult) alert('로그인 결과 : ' + loginResult)
+        const loginResult = await this.login(this.LoginData);
+        if (loginResult) {
+          alert('로그인 성공');
+          console.log('업데이트 된 데이터', this.userData);
+        }
       } catch (err) {
         if (err.message.indexOf('Network Error') > -1) {
           alert('서버에 접속할 수 없습니다. 상태를 확인해주세요.')

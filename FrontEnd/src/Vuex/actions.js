@@ -1,36 +1,43 @@
-import {USER_ID, IS_AUTH, ERROR_STATE} from './mutation_types'
+import {SET_USER, SET_IS_AUTH, SET_ERROR_STATE} from './mutation_types'
 import loginAPI from '../service/LoginAPI'
-
-let setUserId = ({commit}, data) => {
-    commit(USER_ID, data)
-}
-
-let setErrorState = ({commit}, data) => {
-    commit(ERROR_STATE, data)
-}
-
-let setIsAuth = ({commit}, data) => {
-    commit(IS_AUTH, data)
-}
-
-// 백엔드에서 반환한 결과값을 가지고 로그인 성공 실패 여부를 vuex에 넣어준다.
-let processResponse = (store, loginResponse) => {
-    switch (loginResponse) {
-        case 'notFound':
-            setErrorState(store, 'Wrong ID or Password')
-            setIsAuth(store, false)
-            break
-        default:
-            setUserId(store, loginResponse.user_id)
-            setErrorState(store, '')
-            setIsAuth(store, true)
-    }
-}
+import signUpAPI from '../service/SignUpAPI'
 
 export default {
-    async login (store, {user_id, user_pw}) {
-        let loginResponse = await loginAPI.doLogin(user_id, user_pw)
-        processResponse(store, loginResponse)
-        return store.getters.getIsAuth  // 로그인 결과를 리턴한다
+    async login({ commit }, LoginData) {
+        try {
+            const loginResponse = await loginAPI.doLogin(LoginData);
+            console.log('Response:', loginResponse);
+            console.log('Status:', typeof loginResponse.status, loginResponse.status);
+            // 로그인 응답의 상태 코드에 따라 처리
+            if (loginResponse.status === 200) {
+                // commit(SET_USER, loginResponse.data);
+                console.log('login success')
+                commit(SET_USER, loginResponse.data);
+                commit(SET_IS_AUTH, true);
+                sessionStorage.setItem('refreshToken', loginResponse.data.refreshToken);
+                sessionStorage.setItem('accessToken', loginResponse.data.accessToken);
+                return true;
+            } else {
+                console.log('Inside else block: Login failed with status', loginResponse.status);
+                commit(SET_ERROR_STATE, loginResponse.data.errorState || 'Login failed');
+                return false;
+            }
+        } catch (error) {
+            // 네트워크 에러 또는 예외 처리
+            commit('SET_ERROR_STATE', error.message || 'Network error');
+            return false;
+        }
+    },
+
+    async signUp({ commit }, userData) {
+        try {
+            const response = await signUpAPI.doSignUp(userData);
+                console.log(response);
+                return true;
+        } catch (error) {
+            console.log(error.response.status);
+            commit(SET_ERROR_STATE, error.response.status);
+            return false;
+        }
     }
 }

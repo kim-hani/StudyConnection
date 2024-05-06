@@ -1,33 +1,23 @@
 // src/service/loginAPI.js
-const getUserInfo = (userId, userPw) => {
-    const reqData = {
-        'user_id': userId,
-        'user_pw': userPw
-    }
+import axios from 'axios'
+import { mapState } from 'vuex'
+import store from "@/Vuex/store";
 
-    let serverUrl = '//localhost:8081'
+const loginAPI = {
+    async doLogin(LoginData) {
+        const reqData = {
+            'id': LoginData.userId,
+            'password': LoginData.userPw
+        };
+        const serverUrl = 'http://13.125.49.195:8080';
 
-    return axios.post(serverUrl + '/user/login', reqData, {
-        headers: {
-            'Content-type': 'application/json'
-        }
-    })
-}
-
-export default {
-    async doLogin(userId, userPw) {
-        try {
-            const getUserInfoPromise = getUserInfo(userId, userPw)
-            const [userInfoResponse] = await Promise.all([getUserInfoPromise])
-            if (userInfoResponse.data.length === 0) {
-                return 'notFound'
-            } else {
-                localStorage.setItem('user_token', userInfoResponse.data.user_token)
-                localStorage.setItem('user_role', userInfoResponse.data.user_role)
-                return userInfoResponse
+        return axios.post(serverUrl + '/api/login', reqData, {
+            headers: {
+                'Content-type': 'application/json'
             }
-        } catch (err) {
-            console.error(err)
-        }
+        });
     }
-}
+};
+
+export default loginAPI;
+
