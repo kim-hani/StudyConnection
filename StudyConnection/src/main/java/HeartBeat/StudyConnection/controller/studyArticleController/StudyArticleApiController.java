@@ -1,17 +1,14 @@
 package HeartBeat.StudyConnection.controller.studyArticleController;
 
-import HeartBeat.StudyConnection.dto.commentDto.response.SummarizedCommentDto;
 import HeartBeat.StudyConnection.dto.studyArticleDto.AddStudyListResponseDto;
 import HeartBeat.StudyConnection.dto.studyArticleDto.AddStudyRequestDto;
 import HeartBeat.StudyConnection.dto.studyArticleDto.StudyResponseDto;
 import HeartBeat.StudyConnection.dto.studyArticleDto.UpdateStudyRequestDto;
 import HeartBeat.StudyConnection.service.studyArticleService.StudyArticleService;
-import HeartBeat.StudyConnection.service.commentService.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,6 +63,4 @@ public class StudyArticleApiController {
     public List<AddStudyListResponseDto> findAllDesc() {
         return studyArticleService.findAllDesc();
     }
-
 }
-
