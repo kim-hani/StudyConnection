@@ -44,24 +44,20 @@ public class StudyArticle extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT",nullable = false)
     private String title;       // 스터디 이름
 
-    private boolean online;
-
     private LocalDateTime uploadDate;
-
 
     @OneToMany(mappedBy = "studyArticle", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
     public StudyArticle(Long id, String author, String content, int limitOfParticipants, boolean available,
-                        String title, boolean online, LocalDateTime uploadDate, String comment){
+                        String title, LocalDateTime uploadDate, String comment){
         this.id = id;
         this.author = author;
         this.content = content;
         this.limitOfParticipants = limitOfParticipants;
         this.available = available;
         this.title = title;
-        this.online=online;
         this.uploadDate = uploadDate;
 
     }

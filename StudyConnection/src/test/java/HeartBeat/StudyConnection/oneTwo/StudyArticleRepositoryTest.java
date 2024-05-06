@@ -69,6 +69,6 @@ public class StudyArticleRepositoryTest extends StudyArticle{
         System.out.println(">>>>>> createdDate = " + studyArticle.getCreatedAt()+ ", modifiedDate = " + studyArticle.getUpdatedAt());
 
         assertThat(studyArticle.getCreatedAt()).isAfter(now);
-        assertThat(studyArticle.getUpdatedAt()).isAfter(now);
+        assertThat(studyArticle.getUpdatedAt()).isAfter(now);   
     }
 }
