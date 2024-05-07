@@ -19,6 +19,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +38,7 @@ public class UserApiController {
     private final TokenService tokenService;
     private final RefreshTokenService refreshTokenService;
     private final TokenProvider tokenProvider;
+    private final AuthenticationManager authenticationManager;
 
     @PostMapping("/api/login")
     @Operation(summary = "사용자 로그인", description = "로그인 시 사용하는 API")
@@ -43,6 +47,14 @@ public class UserApiController {
             @Parameter(name = "password", description = "사용자의 Password", example = "test1234!"),
     })
     public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest){
+
+        // 로그인 인증 절차
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userLoginRequest.getId(), userLoginRequest.getPassword())
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // 절차 통과 후 객체 조회
         User user = userService.findById(userLoginRequest.getId());
 
         // 로그인 시 리프레시, 액세스 토큰 생성
