@@ -44,8 +44,6 @@ public class StudyArticle extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT",nullable = false)
     private String title;       // 스터디 이름
 
-    private LocalDateTime uploadDate;
-
     @OneToMany(mappedBy = "studyArticle", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 

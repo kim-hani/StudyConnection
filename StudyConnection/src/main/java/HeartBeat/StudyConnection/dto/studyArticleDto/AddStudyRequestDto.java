@@ -15,14 +15,14 @@ public class AddStudyRequestDto {
     private String authorId;
 
     private boolean available;
-    private int limitOfParticpants;
+    private int limitOfParticipants;
 
     @Builder
-    public AddStudyRequestDto(String title, String content, String author, int limitOfParticpants) {
+    public AddStudyRequestDto(String title, String content, String author, int limitOfParticipants) {
         this.title = title;
         this.content = content;
         this.authorId = author;
-        this.limitOfParticpants = limitOfParticpants;
+        this.limitOfParticipants = limitOfParticipants;
     }
 
     public StudyArticle toEntity() {
@@ -31,7 +31,7 @@ public class AddStudyRequestDto {
                 .content(content)
                 .author(authorId)
                 .available(true)
-                .limitOfParticipants(limitOfParticpants)
+                .limitOfParticipants(limitOfParticipants)
                 .build();
     }
 }
