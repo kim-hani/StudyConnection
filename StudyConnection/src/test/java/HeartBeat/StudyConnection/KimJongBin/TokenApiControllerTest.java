@@ -1,10 +1,10 @@
 package HeartBeat.StudyConnection.KimJongBin;
 
-import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.JwtFactory;
-import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.JwtProperties;
-import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.dto.CreateAccessTokenRequest;
-import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.entity.RefreshToken;
-import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.repository.RefreshTokenRepository;
+import HeartBeat.StudyConnection.configuration.jwt.JwtFactory;
+import HeartBeat.StudyConnection.configuration.jwt.JwtProperties;
+import HeartBeat.StudyConnection.configuration.jwt.dto.CreateAccessTokenRequest;
+import HeartBeat.StudyConnection.configuration.jwt.entity.RefreshToken;
+import HeartBeat.StudyConnection.configuration.jwt.repository.RefreshTokenRepository;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import HeartBeat.StudyConnection.repository.userInfoRepository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;

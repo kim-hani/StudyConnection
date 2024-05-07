@@ -1,9 +1,9 @@
 package HeartBeat.StudyConnection.controller.user;
 
-import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.TokenProvider;
-import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.entity.RefreshToken;
-import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.service.RefreshTokenService;
-import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.service.TokenService;
+import HeartBeat.StudyConnection.configuration.jwt.TokenProvider;
+import HeartBeat.StudyConnection.configuration.jwt.entity.RefreshToken;
+import HeartBeat.StudyConnection.configuration.jwt.service.RefreshTokenService;
+import HeartBeat.StudyConnection.configuration.jwt.service.TokenService;
 import HeartBeat.StudyConnection.dto.loginDto.UserLoginRequest;
 import HeartBeat.StudyConnection.dto.loginDto.UserLoginResponse;
 import HeartBeat.StudyConnection.dto.signUpDto.AddUserRequest;

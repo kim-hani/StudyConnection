@@ -1,4 +1,4 @@
-package HeartBeat.StudyConnection.service.chatRoomMakeService.jwt;
+package HeartBeat.StudyConnection.configuration.jwt;
 
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import io.jsonwebtoken.Claims;

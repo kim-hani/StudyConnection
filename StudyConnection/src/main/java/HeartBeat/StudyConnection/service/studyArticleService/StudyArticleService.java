@@ -49,7 +49,7 @@ public class StudyArticleService {
 
     @Transactional(readOnly = true) //트랜젝션 범위는 유지하나, 조회 기능만 남겨서 조회 속도를 개선함
     public List<AddStudyListResponseDto> findAllDesc() {
-        return studyArticleRepository.findAllDesc().stream()
+        return studyArticleRepository.findAllByOrderByCreatedAtDesc().stream()
                 .map(AddStudyListResponseDto::new)
                 .collect(Collectors.toList());
     }

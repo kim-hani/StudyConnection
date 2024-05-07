@@ -1,4 +1,4 @@
-package HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.dto;
+package HeartBeat.StudyConnection.configuration.jwt.dto;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,6 +1,6 @@
 package HeartBeat.StudyConnection.KimJongBin;
 
-import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.service.TokenService;
+import HeartBeat.StudyConnection.configuration.jwt.service.TokenService;
 import HeartBeat.StudyConnection.dto.loginDto.UserLoginRequest;
 import HeartBeat.StudyConnection.dto.signUpDto.AddUserRequest;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;

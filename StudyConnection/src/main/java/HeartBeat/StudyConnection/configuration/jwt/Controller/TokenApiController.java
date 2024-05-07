@@ -1,8 +1,8 @@
-package HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.Controller;
+package HeartBeat.StudyConnection.configuration.jwt.Controller;
 
-import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.dto.CreateAccessTokenRequest;
-import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.dto.CreateAccessTokenResponse;
-import HeartBeat.StudyConnection.service.chatRoomMakeService.jwt.service.TokenService;
+import HeartBeat.StudyConnection.configuration.jwt.dto.CreateAccessTokenRequest;
+import HeartBeat.StudyConnection.configuration.jwt.dto.CreateAccessTokenResponse;
+import HeartBeat.StudyConnection.configuration.jwt.service.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

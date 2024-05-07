@@ -30,7 +30,7 @@ public class User implements UserDetails {
     @Column(name = "email")
     private String email;
 
-    @OneToMany(mappedBy = "chatRoomAndUser.user")
+    @OneToMany(mappedBy = "user")
     private Set<ChatRoomAndUser> chatRooms = new HashSet<>();
 
     // 빌더 패턴

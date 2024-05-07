@@ -19,6 +19,6 @@ public class ChatRoom {
     @Column(name = "roomName")
     private String roomName;
 
-    @OneToMany(mappedBy = "chatRoomAndUser.chatRoom")
+    @OneToMany(mappedBy = "chatRoom")
     private Set<ChatRoomAndUser> users = new HashSet<>();
 }

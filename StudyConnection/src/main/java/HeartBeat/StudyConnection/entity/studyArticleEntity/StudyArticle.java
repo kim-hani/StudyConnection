@@ -47,6 +47,7 @@ public class StudyArticle {
     @Column(columnDefinition = "TEXT",nullable = false)
     private String title;       // 스터디 이름
 
+    @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
