@@ -2,21 +2,23 @@
   <body>
     <div class="container" :class="{ active: isActive }">
       <div class="form-container sign-up">
-        <form>
+        <form @submit.prevent="handleSignUp">
           <h1>Create Account</h1><br>
-          <span>use your ID for registeration</span>
-          <input type="text" placeholder="Name">
-          <input placeholder="Email">
-          <input type="password" placeholder="Password">
-          <button @click="activateContainer">Sign Up</button>
+          <input type="tel" placeholder="PhoneNumber" v-model="signUpData.userId"> <!--전화번호 -->
+          <input type="text" placeholder="Name" v-model="signUpData.username">
+          <input type="email" placeholder="Email" v-model="signUpData.email">
+          <input type="date" placeholder="Birth 2000-01-01" v-model="signUpData.birth">
+          <input type="password" placeholder="Password" v-model="signUpData.password">
+          <input type="password" placeholder="Confirm Password" v-model="signUpData.confirmPassword">
+          <button type="submit" @click="activateContainer">Sign Up</button>
         </form>
       </div>
       <div class="form-container sign-in">
-        <form @submit.prevent="fnLogin">
+        <form @submit.prevent="handleLogin">
           <h1>Sign In</h1><br>
           <span>use your ID password</span>
-          <input name="vid" placeholder="Enter your ID" v-model="user_id">
-          <input name="password" placeholder="Password" v-model="user_pw" type="password">
+          <input type="tel" placeholder="Enter your PhoneNumber" v-model="LoginData.userId">
+          <input type="password" placeholder="Password" v-model="LoginData.userPw">
 <!--          <a href="#">Forget Your Password?</a>-->
           <button type="submit" @click="deactivateContainer">Sign In</button>
         </form>
@@ -40,33 +42,55 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex'   //vuex 추가
+import {mapActions, mapGetters, mapState} from 'vuex'
+import {SET_ERROR_STATE} from "@/Vuex/mutation_types";
+import router from "@/router";   //vuex 추가
 
 export default {
+  computed: {
+    ...mapState(['errorState','userData']),   //vuex/state에 있는 errorState, userData
+  },
+
   data() {
     return {
-      user_id: '',
-      user_pw: ''
+      LoginData: {
+        userId: '',
+        userPw: '',
+      },
+
+      signUpData: {
+        userId: '',
+        username: '',
+        email: '',
+        birth: '',
+        password: '',
+        confirmPassword: ''
+      },
     }
   },
   methods: {
-    ...mapActions(['login']),     //vuex/actions에 있는 login 함수
+    ...mapActions(['login', 'signUp']),     //vuex/actions에 있는 login 함수
 
-    async fnLogin() {       //async 함수로 변경
-      if (this.user_id === '') {
+    async handleLogin() {       //async 함수로 변경
+      if (this.LoginData.userId === '') {
         alert('ID를 입력하세요.')
         return
       }
 
-      if (this.user_pw === '') {
+      if (this.LoginData.userPw === '') {
         alert('비밀번호를 입력하세요.')
         return
       }
 
       //로그인 API 호출
       try {
-        let loginResult = await this.login({user_id: this.user_id, user_pw: this.user_pw})
-        if (loginResult) alert('로그인 결과 : ' + loginResult)
+        const loginResult = await this.login(this.LoginData);
+        if (loginResult) {
+          alert(this.$store.state.userData.username + '님 환영합니다.');
+          this.$router.push('/');
+        } else {
+          alert('로그인 실패. 다시 시도해주세요.');
+        }
       } catch (err) {
         if (err.message.indexOf('Network Error') > -1) {
           alert('서버에 접속할 수 없습니다. 상태를 확인해주세요.')
@@ -75,13 +99,38 @@ export default {
           window.location.reload();
         }
       }
+    },
+
+    async handleSignUp() {
+      if (this.signUpData.userId === '' ||
+          this.signUpData.username === '' ||
+          this.signUpData.email === '' ||
+          this.signUpData.birth === '' ||
+          this.signUpData.password === ''){
+        alert('모든 정보를 입력하세요.');
+        return;
+      }
+
+      if (this.signUpData.password !== this.signUpData.confirmPassword) {
+        alert('비밀번호가 일치하지 않습니다.');
+        return;
+      }
+      try {
+        const result = await this.signUp(this.signUpData);
+        console.log('회원가입 결과:', result);
+        if (result) {
+          alert('회원가입 성공!');
+        } else {
+          if(this.errorState === 409)
+            alert('이미 가입된 회원입니다.');
+          else
+            alert('회원가입 실패. 다시 시도해주세요.');
+        }
+      } catch (error) {
+        alert('회원가입 중 오류가 발생했습니다.');
+      }
     }
   },
-  computed: {
-    ...mapGetters({
-      errorState: 'getErrorState'
-    })
-  }
 }
 </script>
 

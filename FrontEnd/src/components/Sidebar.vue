@@ -29,7 +29,7 @@
         <span class="material-symbols-outlined">chat</span>
         <span class="text">Chat</span>
       </router-link>
-      <router-link to="/about" class="button">
+      <router-link to="/MyPage" class="button">
         <span class="material-symbols-outlined">person</span>
         <span class="text">My Page</span>
       </router-link>
