@@ -7,14 +7,14 @@ import lombok.*;
 @Getter
 public class UserLoginResponse {
     private String userId;
-    private String username;
+    private String userName;
     private String refreshToken;
     private String accessToken;
 
     @Builder
     public UserLoginResponse(String userId, String username, String refreshToken, String accessToken){
         this.userId = userId;
-        this.username = username;
+        this.userName = username;
         this.refreshToken = refreshToken;
         this.accessToken = accessToken;
     }
