@@ -123,7 +123,7 @@ public class UserApiControllerTest {
         result
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userId").value(user.getUserId()))
-                .andExpect(jsonPath("$.username").value(user.getUsername()))
+                .andExpect(jsonPath("$.userName").value(user.getUsername()))
                 .andExpect(jsonPath("$.refreshToken").isNotEmpty())
                 .andExpect(jsonPath("$.accessToken").isNotEmpty());
 

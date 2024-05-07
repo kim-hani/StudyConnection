@@ -37,7 +37,7 @@ public class TokenProvider {
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .setSubject(user.getUsername() + "'s access token.")
-                .claim("username", user.getUsername())
+                .claim("userName", user.getUsername())
                 .claim("userId", user.getUserId())
                 // 암호화
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
@@ -59,7 +59,7 @@ public class TokenProvider {
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + expiredAt.toMillis()))
                 .setSubject(user.getUsername() + "'s refresh token.")
-                .claim("username", user.getUsername())
+                .claim("userName", user.getUsername())
                 .claim("userId", user.getUserId())
                 // 암호화
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
@@ -87,7 +87,7 @@ public class TokenProvider {
 
         return new UsernamePasswordAuthenticationToken(
                 new org.springframework.security.core.userdetails.User(
-                        claims.get("username", String.class), "", authorities),
+                        claims.get("userName", String.class), "", authorities),
                 token,
                 authorities
         );
@@ -101,7 +101,7 @@ public class TokenProvider {
 
     public String getUserName(String token){
         Claims claims = getClaims(token);
-        return claims.get("username", String.class);
+        return claims.get("userName", String.class);
     }
 
     private Claims getClaims(String token){
