@@ -49,15 +49,13 @@ public class StudyArticle extends BaseTimeEntity {
 
     @Builder
     public StudyArticle(Long id, String author, String content, int limitOfParticipants, boolean available,
-                        String title, LocalDateTime uploadDate, String comment){
+                        String title, String comment){
         this.id = id;
         this.author = author;
         this.content = content;
         this.limitOfParticipants = limitOfParticipants;
         this.available = available;
         this.title = title;
-        this.uploadDate = uploadDate;
-
     }
 
 
