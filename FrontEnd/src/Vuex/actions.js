@@ -10,12 +10,10 @@ export default {
             console.log('Status:', typeof loginResponse.status, loginResponse.status);
             // 로그인 응답의 상태 코드에 따라 처리
             if (loginResponse.status === 200) {
-                // commit(SET_USER, loginResponse.data);
                 console.log('login success')
-                commit(SET_USER, loginResponse.data);
                 commit(SET_IS_AUTH, true);
-                sessionStorage.setItem('refreshToken', loginResponse.data.refreshToken);
-                sessionStorage.setItem('accessToken', loginResponse.data.accessToken);
+                commit(SET_USER, loginResponse.data);
+                sessionStorage.setItem('userData', JSON.stringify(loginResponse.data));
                 return true;
             } else {
                 console.log('Inside else block: Login failed with status', loginResponse.status);

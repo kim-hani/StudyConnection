@@ -4,7 +4,6 @@
       <div class="form-container sign-up">
         <form @submit.prevent="handleSignUp">
           <h1>Create Account</h1><br>
-          <span>use your ID for registeration</span>
           <input type="tel" placeholder="PhoneNumber" v-model="signUpData.userId"> <!--전화번호 -->
           <input type="text" placeholder="Name" v-model="signUpData.username">
           <input type="email" placeholder="Email" v-model="signUpData.email">
@@ -44,7 +43,8 @@
 
 <script>
 import {mapActions, mapGetters, mapState} from 'vuex'
-import {SET_ERROR_STATE} from "@/Vuex/mutation_types";   //vuex 추가
+import {SET_ERROR_STATE} from "@/Vuex/mutation_types";
+import router from "@/router";   //vuex 추가
 
 export default {
   computed: {
@@ -86,8 +86,10 @@ export default {
       try {
         const loginResult = await this.login(this.LoginData);
         if (loginResult) {
-          alert('로그인 성공');
-          console.log('업데이트 된 데이터', this.userData);
+          alert(this.$store.state.userData.username + '님 환영합니다.');
+          this.$router.push('/');
+        } else {
+          alert('로그인 실패. 다시 시도해주세요.');
         }
       } catch (err) {
         if (err.message.indexOf('Network Error') > -1) {
@@ -100,6 +102,15 @@ export default {
     },
 
     async handleSignUp() {
+      if (this.signUpData.userId === '' ||
+          this.signUpData.username === '' ||
+          this.signUpData.email === '' ||
+          this.signUpData.birth === '' ||
+          this.signUpData.password === ''){
+        alert('모든 정보를 입력하세요.');
+        return;
+      }
+
       if (this.signUpData.password !== this.signUpData.confirmPassword) {
         alert('비밀번호가 일치하지 않습니다.');
         return;

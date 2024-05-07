@@ -2,8 +2,13 @@
 <template>
   <main>
  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+   <div>
+     <img class="main-image" alt="main-img" src="../assets/img.png">
+   </div>
+   <div>
+     <hr>
+     <HelloWorld msg="Welcome to StudyConnection"/>
+   </div>
   </div>
   </main>
 </template>
@@ -19,3 +24,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.main-image {
+  width: 50vw;
+  height: 30vh;
+  object-fit: cover;
+}
+</style>
