@@ -1,5 +1,6 @@
 package HeartBeat.StudyConnection.entity.userInfoEntity;
 
+import HeartBeat.StudyConnection.entity.chatRoomMakeEntity.ChatRoomAndUser;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,6 +29,9 @@ public class User implements UserDetails {
 
     @Column(name = "email")
     private String email;
+
+    @OneToMany(mappedBy = "chatRoomAndUser.user")
+    private Set<ChatRoomAndUser> chatRooms = new HashSet<>();
 
     // 빌더 패턴
     @Builder

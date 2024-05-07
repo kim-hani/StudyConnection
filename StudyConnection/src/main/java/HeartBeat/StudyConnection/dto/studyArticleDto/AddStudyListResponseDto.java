@@ -19,7 +19,7 @@ public class AddStudyListResponseDto {
     private final boolean available;
 
     private final String title;
-    private final LocalDateTime uploadDate;
+
 
     public AddStudyListResponseDto(StudyArticle studyArticle) {
         this.author = studyArticle.getAuthor();
@@ -27,6 +27,5 @@ public class AddStudyListResponseDto {
         this.limitOfParticipants = studyArticle.getLimitOfParticipants();
         this.available = studyArticle.isAvailable();
         this.title = studyArticle.getTitle();
-        this.uploadDate = studyArticle.getUploadDate();
     }
 }

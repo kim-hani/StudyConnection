@@ -25,24 +25,34 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "studyArticle")
 @EntityListeners(AuditingEntityListener.class)
-public class StudyArticle extends BaseTimeEntity {
+public class StudyArticle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "studyArticle_Id")
     private Long id;        // 게시글 아이디
 
+    @Column(name = "author_name")
     private String author;   // 작성자
 
     @Column(columnDefinition = "TEXT",nullable = false)
     private String content;
 
+    @Column(name = "limit_of_participants")
     private int limitOfParticipants;    // 스터디 정원
 
+    @Column(name = "available")
     private boolean available;      // 참여 가능 여부
 
     @Column(columnDefinition = "TEXT",nullable = false)
     private String title;       // 스터디 이름
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "studyArticle", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
