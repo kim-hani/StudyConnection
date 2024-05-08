@@ -81,7 +81,7 @@ public class UserApiController {
         return ResponseEntity.ok()
                 .body(UserLoginResponse.builder()
                         .userId(user.getUserId())
-                        .userName(user.getUsername())
+                        .username(user.getUsername())
                         .accessToken(accessToken)
                         .refreshToken(refreshToken.getRefreshToken())
                         .build());
@@ -93,7 +93,7 @@ public class UserApiController {
     @Parameters({
             @Parameter(name = "id", description = "사용자가 사용할 ID (전화번호)", example = "010-0000-0000"),
             @Parameter(name = "password", description = "사용자가 사용할 Password", example = "test1234!"),
-            @Parameter(name = "userName", description = "사용자의 이름", example = "테스터김"),
+            @Parameter(name = "username", description = "사용자의 이름", example = "테스터김"),
             @Parameter(name = "email", description = "사용자가 사용할 email", example = "test123@naver.com"),
             @Parameter(name = "birth", description = "사용자의 생년월일", example = "1999-09-09")
     })

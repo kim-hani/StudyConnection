@@ -17,16 +17,16 @@ public class StudyApply {
     @Id
     private String userId;
 
-    @Column(name = "userName")
-    private String userName;
+    @Column(name = "username")
+    private String username;
 
     @Column(name = "studyArticleId")
     private Long studyArticleId;
 
     @Builder
-    public StudyApply(String userId, String userName, Long studyArticleId){
+    public StudyApply(String userId, String username, Long studyArticleId){
         this.userId = userId;
-        this.userName = userName;
+        this.username = username;
         this.studyArticleId = studyArticleId;
     }
 }

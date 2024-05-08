@@ -15,7 +15,7 @@ public class StudyApplyService {
     public String saveApply(String userId, String userName, Long studyArticleId){
         StudyApply savedApply = studyApplyRepository.save(StudyApply.builder()
                 .userId(userId)
-                .userName(userName)
+                .username(userName)
                 .studyArticleId(studyArticleId)
                 .build());
 

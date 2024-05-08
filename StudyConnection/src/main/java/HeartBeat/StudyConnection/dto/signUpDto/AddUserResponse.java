@@ -10,13 +10,13 @@ import lombok.Setter;
 @Getter
 public class AddUserResponse {
     private String userId;
-    private String userName;
+    private String username;
 
     private String result;
 
     public AddUserResponse(String savesUserId, String savedUserName, String requestResult) {
         userId = savesUserId;
-        userName = savedUserName;
+        username = savedUserName;
         result = requestResult;
     }
 }
