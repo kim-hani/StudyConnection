@@ -21,7 +21,7 @@ public class UserService {
                 .email(dto.getEmail())
                 .userId(dto.getUserId())
                 .birth(dto.getBirth())
-                .username(dto.getUsername())
+                .username(dto.getUserName())
                 .password(bCryptPasswordEncoder.encode(dto.getPassword()))
                 .build());
     }
