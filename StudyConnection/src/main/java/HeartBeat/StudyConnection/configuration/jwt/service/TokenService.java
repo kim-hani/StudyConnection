@@ -21,7 +21,7 @@ public class TokenService {
             throw new IllegalArgumentException("Unexpected token: expired refresh token");
         }
 
-        String userId = refreshTokenService.findByRefreshToken(refreshToken).getUserId();
+        String userId = refreshTokenService.findByRefreshToken(refreshToken).get().getUserId();
         User user = userService.findById(userId);
 
         return tokenProvider.generateToken(user, Duration.ofHours(3));

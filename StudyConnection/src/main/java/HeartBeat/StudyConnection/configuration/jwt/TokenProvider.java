@@ -1,5 +1,6 @@
 package HeartBeat.StudyConnection.configuration.jwt;
 
+import HeartBeat.StudyConnection.configuration.jwt.service.RefreshTokenService;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
@@ -45,7 +46,6 @@ public class TokenProvider {
     }
 
     public String createNewRefreshToken(User user){
-
         return makeRefreshToken(user);
     }
 

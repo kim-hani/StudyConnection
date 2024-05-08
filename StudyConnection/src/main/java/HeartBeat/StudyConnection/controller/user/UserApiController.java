@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "User API", description = "User 기능 관련 API")
@@ -58,16 +60,30 @@ public class UserApiController {
         User user = userService.findById(userLoginRequest.getId());
 
         // 로그인 시 리프레시, 액세스 토큰 생성
-        String refreshTokenValue = tokenProvider.createNewRefreshToken(user);
-        RefreshToken refreshToken = refreshTokenService.save(user.getUserId(), refreshTokenValue);
-        String accessToken = tokenService.createNewAccessToken(refreshTokenValue);
+        Optional<RefreshToken> refreshTokenSearch = refreshTokenService.findByUserId(user.getUserId());
+
+        RefreshToken refreshToken;
+        String refreshTokenValue;
+        String accessToken;
+
+        // refreshTokenSearch 존재할 때 -> 해당 사용자의 refresh token 존재.
+        if (refreshTokenSearch.isPresent()) {
+            // 저장된 리프레시 토큰 사용
+            refreshToken = refreshTokenSearch.get();
+            accessToken = tokenService.createNewAccessToken(refreshToken.getRefreshToken());
+        } else {
+            // 새로운 리프레시 토큰 생성
+            refreshTokenValue = tokenProvider.createNewRefreshToken(user);
+            refreshToken = refreshTokenService.save(user.getUserId(), refreshTokenValue);
+            accessToken = tokenService.createNewAccessToken(refreshTokenValue);
+        }
 
         return ResponseEntity.ok()
                 .body(UserLoginResponse.builder()
                         .userId(user.getUserId())
                         .userName(user.getUsername())
                         .accessToken(accessToken)
-                        .refreshToken(refreshTokenValue)
+                        .refreshToken(refreshToken.getRefreshToken())
                         .build());
     }
 
@@ -104,9 +120,17 @@ public class UserApiController {
     }
 
     @PostMapping("/api/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
-        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+        // 현재 사용자의 인증 정보를 가져옴
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            // 현재 세션을 무효화하고 인증 정보를 삭제
+            new SecurityContextLogoutHandler().logout(request, null, authentication);
+            return ResponseEntity.ok()
+                    .body("Logged out successfully");
+        }
+
         return ResponseEntity.ok()
-                .build();
+                .body("Logged out failed");
     }
 }

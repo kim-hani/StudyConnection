@@ -5,17 +5,22 @@ import HeartBeat.StudyConnection.configuration.jwt.repository.RefreshTokenReposi
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public RefreshToken findByRefreshToken(String refreshToken){
-        return refreshTokenRepository.refreshToken(refreshToken)
-                .orElseThrow(() -> new IllegalArgumentException("Unexpected Token"));
+    public Optional<RefreshToken> findByRefreshToken(String refreshToken){
+        return refreshTokenRepository.refreshToken(refreshToken);
     }
 
     public RefreshToken save(String userId, String refreshToken){
         return refreshTokenRepository.save(new RefreshToken(userId, refreshToken));
+    }
+
+    public Optional<RefreshToken> findByUserId(String userId){
+        return refreshTokenRepository.findByUserId(userId);
     }
 }
