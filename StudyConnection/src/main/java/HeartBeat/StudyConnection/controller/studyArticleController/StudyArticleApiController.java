@@ -1,11 +1,11 @@
 package HeartBeat.StudyConnection.controller.studyArticleController;
 
-<<<<<<< HEAD
+
 import HeartBeat.StudyConnection.dto.studyArticleDto.*;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyApply;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import HeartBeat.StudyConnection.service.studyArticleService.StudyApplyService;
-=======
+
 import HeartBeat.StudyConnection.dto.commentDto.request.RequestCreateCommentDto;
 import HeartBeat.StudyConnection.dto.commentDto.response.SummarizedCommentDto;
 import HeartBeat.StudyConnection.dto.studyArticleDto.AddStudyListResponseDto;
@@ -13,7 +13,7 @@ import HeartBeat.StudyConnection.dto.studyArticleDto.AddStudyRequestDto;
 import HeartBeat.StudyConnection.dto.studyArticleDto.StudyResponseDto;
 import HeartBeat.StudyConnection.dto.studyArticleDto.UpdateStudyRequestDto;
 import HeartBeat.StudyConnection.service.commentService.CommentService;
->>>>>>> d9e71aa8564601f12863b053611a15c34b6648af
+
 import HeartBeat.StudyConnection.service.studyArticleService.StudyArticleService;
 import HeartBeat.StudyConnection.service.userInfoService.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,12 +34,12 @@ import java.util.List;
 public class StudyArticleApiController {
 
     private final StudyArticleService studyArticleService;
-<<<<<<< HEAD
+
     private final StudyApplyService studyApplyService;
     private final UserService userService;
-=======
+
     private final CommentService commentService;
->>>>>>> d9e71aa8564601f12863b053611a15c34b6648af
+
 
     // 스터디 모집글 생성
     @PostMapping("/api/study-articles")
@@ -103,7 +103,7 @@ public class StudyArticleApiController {
         return id;
     }
 
-<<<<<<< HEAD
+
     // [글 주인 외의 사용자] Apply 버튼으로 스터디 참여 신청 가능
     @PostMapping("/api/study-articles/{id}/apply")
     @Operation(summary = "스터디 가입 신청", description = "글 작성자 이외의 사용자가 스터디 가입 신청")
@@ -137,7 +137,7 @@ public class StudyArticleApiController {
         return ResponseEntity.ok()
                 .body(savedApplyUserId);
     }*/
-=======
+
     /**
      * 모든 댓글을 조회합니다.
      */
@@ -198,5 +198,5 @@ public class StudyArticleApiController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(result);
     }
->>>>>>> d9e71aa8564601f12863b053611a15c34b6648af
+
 }
