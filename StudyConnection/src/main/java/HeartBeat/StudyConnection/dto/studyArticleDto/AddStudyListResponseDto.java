@@ -3,6 +3,7 @@ package HeartBeat.StudyConnection.dto.studyArticleDto;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyArticle;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class AddStudyListResponseDto {
 
+    private Long id;
     private final String author;
 
     private final String content;
@@ -20,12 +22,18 @@ public class AddStudyListResponseDto {
 
     private final String title;
 
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
     public AddStudyListResponseDto(StudyArticle studyArticle) {
+        this.id = studyArticle.getId();
         this.author = studyArticle.getAuthor();
         this.content = studyArticle.getContent();
         this.limitOfParticipants = studyArticle.getLimitOfParticipants();
         this.available = studyArticle.isAvailable();
         this.title = studyArticle.getTitle();
+        this.createdAt = studyArticle.getCreatedAt();
+        this.updatedAt = studyArticle.getUpdatedAt();
     }
 }

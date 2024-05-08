@@ -91,4 +91,5 @@ public class Comment extends BaseTimeEntity {
             this.commentStatus = CommentStatus.DELETED;
         }
     }
+
 }

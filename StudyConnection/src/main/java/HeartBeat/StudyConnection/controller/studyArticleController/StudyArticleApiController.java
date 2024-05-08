@@ -1,15 +1,26 @@
 package HeartBeat.StudyConnection.controller.studyArticleController;
 
+<<<<<<< HEAD
 import HeartBeat.StudyConnection.dto.studyArticleDto.*;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyApply;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import HeartBeat.StudyConnection.service.studyArticleService.StudyApplyService;
+=======
+import HeartBeat.StudyConnection.dto.commentDto.request.RequestCreateCommentDto;
+import HeartBeat.StudyConnection.dto.commentDto.response.SummarizedCommentDto;
+import HeartBeat.StudyConnection.dto.studyArticleDto.AddStudyListResponseDto;
+import HeartBeat.StudyConnection.dto.studyArticleDto.AddStudyRequestDto;
+import HeartBeat.StudyConnection.dto.studyArticleDto.StudyResponseDto;
+import HeartBeat.StudyConnection.dto.studyArticleDto.UpdateStudyRequestDto;
+import HeartBeat.StudyConnection.service.commentService.CommentService;
+>>>>>>> d9e71aa8564601f12863b053611a15c34b6648af
 import HeartBeat.StudyConnection.service.studyArticleService.StudyArticleService;
 import HeartBeat.StudyConnection.service.userInfoService.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +34,12 @@ import java.util.List;
 public class StudyArticleApiController {
 
     private final StudyArticleService studyArticleService;
+<<<<<<< HEAD
     private final StudyApplyService studyApplyService;
     private final UserService userService;
+=======
+    private final CommentService commentService;
+>>>>>>> d9e71aa8564601f12863b053611a15c34b6648af
 
     // 스터디 모집글 생성
     @PostMapping("/api/study-articles")
@@ -88,6 +103,7 @@ public class StudyArticleApiController {
         return id;
     }
 
+<<<<<<< HEAD
     // [글 주인 외의 사용자] Apply 버튼으로 스터디 참여 신청 가능
     @PostMapping("/api/study-articles/{id}/apply")
     @Operation(summary = "스터디 가입 신청", description = "글 작성자 이외의 사용자가 스터디 가입 신청")
@@ -121,4 +137,66 @@ public class StudyArticleApiController {
         return ResponseEntity.ok()
                 .body(savedApplyUserId);
     }*/
+=======
+    /**
+     * 모든 댓글을 조회합니다.
+     */
+    @GetMapping("/api/comments/{studyArticle_id}")
+    @Operation(summary = "모든 댓글 조회", description = "댓글 조회 시 사용하는 API")
+    public List<SummarizedCommentDto> listComments(@PathVariable Long studyArticleId) {
+        return commentService.list(studyArticleId);
+    }
+
+    /**
+     * 게시글에 댓글을 생성합니다.
+     **/
+    @PostMapping("/api/comment/{studyArticle_id}")
+    @Operation(summary = "게시글 댓글 작성", description = "게시글 댓글 작성 시 사용하는 API")
+    public ResponseEntity createComment(@PathVariable Long studyArticleId,@PathVariable String userID,
+                                        @Valid @RequestBody RequestCreateCommentDto dto) {
+        Long result = commentService.create(studyArticleId, userID, dto.getContent());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(result);
+    }
+
+    /**
+     * 게시글에 대한 댓글을 수정합니다.
+     **/
+    @PatchMapping("/api/comment/{comment_id}")
+    @Operation(summary = "게시글 댓글 수정", description = "게시글 댓글 수정 시 사용하는 API")
+    public void editComment(@PathVariable Long commentId,
+                            @PathVariable String userId,
+                            @Valid @RequestBody RequestCreateCommentDto dto) {
+        commentService.edit(commentId, userId, dto.getContent());
+    }
+
+
+    /**
+     * 댓글을 삭제합니다.
+     * <p>대댓글도 삭제할 수 있습니다.</p>
+     */
+    @DeleteMapping("/api/comment/{comment_id}")
+    @Operation(summary = "게시글 댓글 삭제", description = "게시글 댓글 삭제 시 사용하는 API")
+    public void deleteComment(@PathVariable Long commentId,
+                              @PathVariable String userId) {
+        commentService.delete(commentId, userId);
+    }
+
+    /**
+     * 대댓글을 생성합니다.
+     *
+     * @param commentId   댓글 ID
+     */
+    @PostMapping("/api/reply/{comment_id}")
+    @Operation(summary = "게시글 댓글에 대한 대댓글 작성", description = "대댓글 작성 시 사용하는 API")
+    public ResponseEntity createReply(
+                                     @PathVariable Long commentId,
+                                     @PathVariable String userId,
+                                     @Valid @RequestBody RequestCreateCommentDto dto) {
+        Long result = commentService.createReply(commentId, userId, dto.getContent());
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(result);
+    }
+>>>>>>> d9e71aa8564601f12863b053611a15c34b6648af
 }
