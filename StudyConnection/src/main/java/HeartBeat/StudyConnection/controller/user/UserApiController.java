@@ -62,12 +62,13 @@ public class UserApiController {
         RefreshToken refreshToken = refreshTokenService.save(user.getUserId(), refreshTokenValue);
         String accessToken = tokenService.createNewAccessToken(refreshTokenValue);
 
-        return ResponseEntity.ok(new UserLoginResponse().builder()
-                .userId(user.getUserId())
-                .username(user.getUsername())
-                .accessToken(accessToken)
-                .refreshToken(refreshTokenValue)
-                .build());
+        return ResponseEntity.ok()
+                .body(UserLoginResponse.builder()
+                        .userId(user.getUserId())
+                        .userName(user.getUsername())
+                        .accessToken(accessToken)
+                        .refreshToken(refreshTokenValue)
+                        .build());
     }
 
 

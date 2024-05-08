@@ -12,9 +12,9 @@ public class UserLoginResponse {
     private String accessToken;
 
     @Builder
-    public UserLoginResponse(String userId, String username, String refreshToken, String accessToken){
+    public UserLoginResponse(String userId, String userName, String refreshToken, String accessToken){
         this.userId = userId;
-        this.userName = username;
+        this.userName = userName;
         this.refreshToken = refreshToken;
         this.accessToken = accessToken;
     }
