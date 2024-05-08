@@ -1,11 +1,11 @@
 package HeartBeat.StudyConnection.controller.studyArticleController;
 
-import HeartBeat.StudyConnection.dto.studyArticleDto.AddStudyListResponseDto;
-import HeartBeat.StudyConnection.dto.studyArticleDto.AddStudyRequestDto;
-import HeartBeat.StudyConnection.dto.studyArticleDto.StudyResponseDto;
-import HeartBeat.StudyConnection.dto.studyArticleDto.UpdateStudyRequestDto;
-import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyArticle;
+import HeartBeat.StudyConnection.dto.studyArticleDto.*;
+import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyApply;
+import HeartBeat.StudyConnection.entity.userInfoEntity.User;
+import HeartBeat.StudyConnection.service.studyArticleService.StudyApplyService;
 import HeartBeat.StudyConnection.service.studyArticleService.StudyArticleService;
+import HeartBeat.StudyConnection.service.userInfoService.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -23,6 +23,8 @@ import java.util.List;
 public class StudyArticleApiController {
 
     private final StudyArticleService studyArticleService;
+    private final StudyApplyService studyApplyService;
+    private final UserService userService;
 
     // 스터디 모집글 생성
     @PostMapping("/api/study-articles")
@@ -85,4 +87,38 @@ public class StudyArticleApiController {
         studyArticleService.delete(id);
         return id;
     }
+
+    // [글 주인 외의 사용자] Apply 버튼으로 스터디 참여 신청 가능
+    @PostMapping("/api/study-articles/{id}/apply")
+    @Operation(summary = "스터디 가입 신청", description = "글 작성자 이외의 사용자가 스터디 가입 신청")
+    public ResponseEntity<String> applyToStudy(@PathVariable Long id, StudyApplyRequestDto request){
+        User user = userService.findById(request.getUserId());
+        String savedApplyUserId = studyApplyService.saveApply(user.getUserId(), user.getUsername(), id);
+
+        return ResponseEntity.ok()
+                .body(savedApplyUserId);
+    }
+
+    // 글 작성자가 스터디에 신청한 신청자들을 확인
+    @GetMapping("/api/study-articles/{id}/apply")
+    @Operation(summary = "스터디 가입 신청자 확인", description = "글 작성자가 스터디에 신청한 신청자들의 Id, 이름을 조회")
+    public ResponseEntity<List<StudyApply>> applyToStudy(@PathVariable Long id){
+
+        return ResponseEntity.ok()
+                .body(studyApplyService.showAllApplicantsId(id));
+    }
+
+    // 글 작성자가 확정된 스터디 멤버들의 ID를 보내 스터디 개설을 완료한다.
+    /*@PostMapping("/api/study-articles/{id}/study-confirm")
+    @Operation(summary = "스터디 가입 신청", description = "글 작성자 이외의 사용자가 스터디 가입 신청")
+    public ResponseEntity<String> confirmStudy(@PathVariable Long id, ConfirmStudyRequestDto request){
+
+        // 확정된 멤버들의 ID
+        List<String> confirmedMemberId = request.getMembers();
+
+        //
+
+        return ResponseEntity.ok()
+                .body(savedApplyUserId);
+    }*/
 }

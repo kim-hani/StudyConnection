@@ -9,6 +9,7 @@ import HeartBeat.StudyConnection.repository.studyArticleRepository.StudyArticleR
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 import java.util.stream.Collectors;
