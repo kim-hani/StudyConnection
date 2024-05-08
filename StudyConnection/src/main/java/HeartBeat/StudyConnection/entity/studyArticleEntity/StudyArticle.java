@@ -23,7 +23,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "studyArticle")
+@Table(name = "STUDYARTICLE")
 @EntityListeners(AuditingEntityListener.class)
 public class StudyArticle {
 
