@@ -120,6 +120,7 @@ export default {
         console.log('회원가입 결과:', result);
         if (result) {
           alert('회원가입 성공!');
+          window.location.reload();
         } else {
           if(this.errorState === 409)
             alert('이미 가입된 회원입니다.');

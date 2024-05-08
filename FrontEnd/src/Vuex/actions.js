@@ -13,7 +13,8 @@ export default {
                 console.log('login success')
                 commit(SET_IS_AUTH, true);
                 commit(SET_USER, loginResponse.data);
-                sessionStorage.setItem('userData', JSON.stringify(loginResponse.data));
+                localStorage.setItem('userData', JSON.stringify(loginResponse.data));
+                localStorage.setItem('accessToken', loginResponse.data.accessToken);
                 return true;
             } else {
                 console.log('Inside else block: Login failed with status', loginResponse.status);

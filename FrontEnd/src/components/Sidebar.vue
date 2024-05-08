@@ -47,15 +47,31 @@
   </aside>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import logoURL from '../assets/images.png'
+<script>
+import { ref } from 'vue';
+import { mapState } from "vuex";
 
-const is_expanded = ref(localStorage.getItem("is_expanded") === "true")
+export default {
+  setup() {
+    // 로컬 스토리지에서 상태를 불러와 반응형 참조로 저장
+    const is_expanded = ref(localStorage.getItem("is_expanded") === "true");
 
-const ToggleMenu = () => {
-  is_expanded.value = !is_expanded.value
-  localStorage.setItem("is_expanded", is_expanded.value)
+    // 메뉴 토글 메서드
+    function ToggleMenu() {
+      is_expanded.value = !is_expanded.value;
+      localStorage.setItem("is_expanded", is_expanded.value.toString()); // Boolean 값을 문자열로 변환하여 저장
+    }
+
+    return {
+      is_expanded,
+      ToggleMenu
+    };
+  },
+  computed: {
+    ...mapState({
+      isAuth: state => state.isAuth
+    })
+  }
 }
 </script>
 
