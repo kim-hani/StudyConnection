@@ -88,7 +88,7 @@ public class TokenProviderTest {
         // given
         String userName = "test_user";
         String token = JwtFactory.builder()
-                .claims(Map.of("username", userName))
+                .claims(Map.of("userName", userName))
                 .build()
                 .createToken(jwtProperties);
 
@@ -107,7 +107,7 @@ public class TokenProviderTest {
         String userName = "test_user";
 
         String token = JwtFactory.builder()
-                .claims(Map.of("userId", userId, "username", userName))
+                .claims(Map.of("userId", userId, "userName", userName))
                 .build()
                 .createToken(jwtProperties);
 
