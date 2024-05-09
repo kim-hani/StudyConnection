@@ -18,10 +18,10 @@
         <span class="text">Main Page</span>
       </router-link>
       <router-link to="/login" class="button">
-        <span class="material-symbols-outlined">login</span>
-        <span class="text">Sign in</span>
+        <span class="material-symbols-outlined">{{ isAuth ? 'logout' : 'login' }}</span>
+        <span class="text">{{ isAuth ? 'Logout' : 'Sign in' }}</span>
       </router-link>
-      <router-link to="/board/list" class="button">
+      <router-link to="/board" class="button">
         <span class="material-symbols-outlined">description</span>
         <span class="text">Study Broad</span>
       </router-link>

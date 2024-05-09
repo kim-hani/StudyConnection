@@ -5,7 +5,7 @@ import actions from "./actions"
 
 const storedUserData = JSON.parse(localStorage.getItem('userData')) || {
     userId: '010-0000-0000',
-    userName: '홍길동',
+    username: '홍길동',
     refreshToken: '',
     accessToken: ''
 };

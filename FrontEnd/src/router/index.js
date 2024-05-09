@@ -5,6 +5,7 @@ import BoardDetail from '@/views/board/BoardDetail.vue'
 import BoardWrite from '@/views/board/BoardWrite.vue'
 import Login from '@/views/Login.vue'
 import store from "@/Vuex/store";
+import BoardEdit from "@/views/board/BoardEdit.vue";
 const routes = [
   {
     path: '/',
@@ -26,13 +27,13 @@ const routes = [
     meta: { requiresAuth: true } // 로그인이 필요한 페이지임을 명시
   },
   {
-    path: '/board/list',
+    path: '/board',
     name: 'BoardList',
     component: BoardList,
     meta: { requiresAuth: true } // 로그인이 필요한 페이지임을 명시
   },
   {
-    path: '/board/detail',
+    path: '/board/:id',
     name: 'BoardDetail',
     component: BoardDetail
   },
@@ -40,6 +41,11 @@ const routes = [
     path: '/board/write',
     name: 'BoardWrite',
     component: BoardWrite
+  },
+  {
+    path: '/board/:id/edit',
+    name: 'BoardEdit',
+    component: BoardEdit
   }
 ]
 
@@ -60,6 +66,26 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     next(); // 로그인이 필요 없는 페이지는 그대로 진행
+  }
+});
+
+router.beforeEach((to, from, next) => {
+ //경로에 접근하면 로그아웃 시키기
+  if (to.path === '/login') {
+    if (store.getters.getIsAuth) { // 로그인 상태 확인
+      if(confirm('로그아웃 하시겠습니까?')) {
+        store.dispatch('logout').then(() => { // 로그아웃 처리
+          alert('로그아웃 되었습니다.');
+        });
+      } else {
+        next(false); // 취소하면 로그인 페이지로 리디렉션 취소
+      }
+      next({ name: 'Login' }); // 로그아웃 후 로그인 페이지로 리디렉션}
+    } else {
+      next(); // 이미 로그아웃 상태라면 로그인 페이지로 리디렉션
+    }
+  } else {
+    next();
   }
 });
 
