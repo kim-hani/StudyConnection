@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RequestCreateCommentDto {
 
+
     @NotBlank
     private String content;
 

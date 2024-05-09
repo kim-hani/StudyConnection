@@ -12,6 +12,7 @@ public class StudyResponseDto {
     private final String content;
     private final String author;
 
+    private final int limitOfParticipants;
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
@@ -20,6 +21,7 @@ public class StudyResponseDto {
         this.title   = entity.getTitle();
         this.content = entity.getContent();
         this.author  = entity.getAuthor();
+        this.limitOfParticipants = entity.getLimitOfParticipants();
         this.createdAt = entity.getCreatedAt();
         this.updatedAt = entity.getUpdatedAt();
     }
