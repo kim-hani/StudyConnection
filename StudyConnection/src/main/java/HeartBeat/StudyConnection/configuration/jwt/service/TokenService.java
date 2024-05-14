@@ -22,7 +22,7 @@ public class TokenService {
         }
 
         String userId = refreshTokenService.findByRefreshToken(refreshToken).get().getUserId();
-        User user = userService.findById(userId);
+        User user = userService.findByUserId(userId);
 
         return tokenProvider.generateToken(user, Duration.ofHours(3));
     }

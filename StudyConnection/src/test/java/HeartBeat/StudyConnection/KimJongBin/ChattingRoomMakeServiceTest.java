@@ -58,35 +58,33 @@ public class ChattingRoomMakeServiceTest {
     public void ServiceTest(){
         // given
         String roomName = "테스트 채팅방";
-        List<String> receivedUserIds = new ArrayList<>();
-        receivedUserIds.add("010-1234-5678");
-        receivedUserIds.add("010-4321-5678");
-        receivedUserIds.add("010-1234-8765");
-
-        userRepository.save(User.builder()
+        List<User> receivedUser = new ArrayList<>();
+        receivedUser.add(userRepository.save(User.builder()
                 .userId("010-1234-5678")
                 .birth("1999-01-05")
                 .email("kkk1234@naver.com")
                 .username("강건고")
                 .password("0122")
-                .build());
-        userRepository.save(User.builder()
+                .build()));
+
+        receivedUser.add(userRepository.save(User.builder()
                 .userId("010-4321-5678")
                 .birth("2002-11-05")
                 .email("an1234@naver.com")
                 .username("김아나")
                 .password("0220")
-                .build());
-        userRepository.save(User.builder()
+                .build()));
+
+        receivedUser.add(userRepository.save(User.builder()
                 .userId("010-1234-8765")
                 .birth("2003")
                 .email("lle1234@naver.com")
                 .username("이련이")
                 .password("1234")
-                .build());
+                .build()));
 
         // when
-        ChatRoom newChatRoom = chattingRoomMakeService.createChatRoom(roomName, receivedUserIds);
+        ChatRoom newChatRoom = chattingRoomMakeService.createChatRoom(roomName, receivedUser);
 
         // then (결과)
         List<ChatRoom> searchRooms = chatRoomRepository.findAll();

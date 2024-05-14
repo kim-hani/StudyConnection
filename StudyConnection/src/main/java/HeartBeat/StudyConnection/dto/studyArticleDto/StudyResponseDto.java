@@ -1,6 +1,7 @@
 package HeartBeat.StudyConnection.dto.studyArticleDto;
 
 import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyArticle;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ public class StudyResponseDto {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
     public StudyResponseDto(StudyArticle entity) {
         this.id      = entity.getId();
         this.title   = entity.getTitle();

@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface StudyApplyRepository extends JpaRepository<StudyApply,String> {
+public interface StudyApplyRepository extends JpaRepository<StudyApply, Long> {
     List<StudyApply> findByStudyArticleId(Long studyArticleId);
 }

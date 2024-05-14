@@ -2,8 +2,11 @@ package HeartBeat.StudyConnection.controller.studyArticleController;
 
 
 import HeartBeat.StudyConnection.dto.studyArticleDto.*;
+import HeartBeat.StudyConnection.entity.studyArticleEntity.Study;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyApply;
+import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyArticle;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
+import HeartBeat.StudyConnection.service.chatRoomMakeService.ChattingRoomMakeService;
 import HeartBeat.StudyConnection.service.studyArticleService.StudyApplyService;
 
 import HeartBeat.StudyConnection.dto.commentDto.request.RequestCreateCommentDto;
@@ -15,6 +18,7 @@ import HeartBeat.StudyConnection.dto.studyArticleDto.UpdateStudyRequestDto;
 import HeartBeat.StudyConnection.service.commentService.CommentService;
 
 import HeartBeat.StudyConnection.service.studyArticleService.StudyArticleService;
+import HeartBeat.StudyConnection.service.studyArticleService.StudyService;
 import HeartBeat.StudyConnection.service.userInfoService.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -26,6 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -34,11 +39,11 @@ import java.util.List;
 public class StudyArticleApiController {
 
     private final StudyArticleService studyArticleService;
-
     private final StudyApplyService studyApplyService;
     private final UserService userService;
-
     private final CommentService commentService;
+    private final StudyService studyService;
+    private final ChattingRoomMakeService chattingRoomMakeService;
 
 
     // 스터디 모집글 생성
@@ -48,7 +53,7 @@ public class StudyArticleApiController {
             @Parameter(name = "id", description = "스터디 모집글 id (Long 타입)", example = "1"),
             @Parameter(name = "title", description = "스터디 모집글 제목", example = "자바 꽉 잡아요"),
             @Parameter(name = "content", description = "스터디 모집글 내용", example = "자바 스터디 그룹~"),
-            @Parameter(name = "author", description = "스터디 모집글 작성자의 이름", example = "김간단"),
+            @Parameter(name = "author", description = "스터디 모집글 작성자의 Id", example = "김간단"),
             @Parameter(name= "limit Of Participant",description = "스터디 모집 정원", example = "10")
     })
     public ResponseEntity<Long> save(@RequestBody AddStudyRequestDto requestDto){
@@ -89,10 +94,10 @@ public class StudyArticleApiController {
     @GetMapping("/api/study-articles/{id}")
     @Operation(summary = "특정 스터디 모집글 조회", description = "특정 스터디 모집글 조회 시 사용하는 API")
     public ResponseEntity<StudyResponseDto> findById(@PathVariable Long id){
-        StudyResponseDto studyArticle = studyArticleService.findById(id);
+        StudyArticle studyArticle = studyArticleService.findById(id);
 
         return ResponseEntity.ok()
-                .body(studyArticle);
+                .body(new StudyResponseDto(studyArticle));
     }
 
     // 특정 스터디 모집글 삭제
@@ -103,40 +108,62 @@ public class StudyArticleApiController {
         return id;
     }
 
-
+    //////////////////////////////////////////////////////
     // [글 주인 외의 사용자] Apply 버튼으로 스터디 참여 신청 가능
     @PostMapping("/api/study-articles/{id}/apply")
     @Operation(summary = "스터디 가입 신청", description = "글 작성자 이외의 사용자가 스터디 가입 신청")
-    public ResponseEntity<String> applyToStudy(@PathVariable Long id, StudyApplyRequestDto request){
-        User user = userService.findById(request.getUserId());
-        String savedApplyUserId = studyApplyService.saveApply(user.getUserId(), user.getUsername(), id);
+    public ResponseEntity<String> applyToStudy(@PathVariable Long id, @RequestBody StudyApplyRequestDto request){
+
+        StudyApply savedApplyUser= studyApplyService.saveApply(request.getUserId(), id);
 
         return ResponseEntity.ok()
-                .body(savedApplyUserId);
+                .body(savedApplyUser.getUserId());
     }
 
     // 글 작성자가 스터디에 신청한 신청자들을 확인
     @GetMapping("/api/study-articles/{id}/apply")
     @Operation(summary = "스터디 가입 신청자 확인", description = "글 작성자가 스터디에 신청한 신청자들의 Id, 이름을 조회")
-    public ResponseEntity<List<StudyApply>> applyToStudy(@PathVariable Long id){
+    public ResponseEntity<StudyApplicantsResponseDto> showAllApplies(@PathVariable Long id){
+        List<StudyApply> applies = studyApplyService.showAllApplicantsId(id);
 
         return ResponseEntity.ok()
-                .body(studyApplyService.showAllApplicantsId(id));
+                .body(new StudyApplicantsResponseDto(studyApplyService.toApplyDtoList(applies)));
     }
 
     // 글 작성자가 확정된 스터디 멤버들의 ID를 보내 스터디 개설을 완료한다.
-    /*@PostMapping("/api/study-articles/{id}/study-confirm")
+    @PostMapping("/api/study-articles/{id}/study-confirm")
     @Operation(summary = "스터디 가입 신청", description = "글 작성자 이외의 사용자가 스터디 가입 신청")
-    public ResponseEntity<String> confirmStudy(@PathVariable Long id, ConfirmStudyRequestDto request){
+    public ResponseEntity<ConfirmStudyResponseDto> confirmStudy(@PathVariable Long id, @RequestBody ConfirmStudyRequestDto request){
 
-        // 확정된 멤버들의 ID
-        List<String> confirmedMemberId = request.getMembers();
+        // 확정된 멤버들을 저장할 리스트
+        List<User> confirmedUser = new ArrayList<>();
 
-        //
+        // 해당 스터디 모집글 조회
+        StudyArticle studyArticle = studyArticleService.findById(id);
+
+        // 받은 멤버들의 ID로 User 객체 조회 후 리스트에 저장
+        for(String userId : request.getMembers()){
+            confirmedUser.add(userService.findByUserId(userId));
+        }
+
+        // 확정 스터디 저장
+        Study confirmedStudy = studyService.saveStudy(request.getStudyTitle(), confirmedUser, id);
+
+        // 스터디 모집 마감 -> available 수정
+        studyArticleService.setAvailableToFalse(studyArticle);
+
+        // 확정된 스터디 채팅방 생성
+        String chatRoomName = "[" + request.getStudyTitle() + "'s chat room]";
+        chattingRoomMakeService.createChatRoom(chatRoomName, confirmedUser);
 
         return ResponseEntity.ok()
-                .body(savedApplyUserId);
-    }*/
+                .body(ConfirmStudyResponseDto.builder()
+                        .studyName(request.getStudyTitle())
+                        .chattingRoomName(chatRoomName)
+                        .membersId(request.getMembers())
+                        .build());
+    }
+    //////////////////////////////////////////////////////
 
     /**
      * 모든 댓글을 조회합니다.

@@ -24,7 +24,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,6 +49,9 @@ public class UserApiController {
     })
     public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest){
 
+        User user = userService.findByUserId(userLoginRequest.getId());
+        System.out.println(user.getUserId() + " " + user.getPassword());
+
         // 로그인 인증 절차
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(userLoginRequest.getId(), userLoginRequest.getPassword())
@@ -57,7 +59,7 @@ public class UserApiController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // 절차 통과 후 객체 조회
-        User user = userService.findById(userLoginRequest.getId());
+
 
         // 로그인 시 리프레시, 액세스 토큰 생성
         Optional<RefreshToken> refreshTokenSearch = refreshTokenService.findByUserId(user.getUserId());
@@ -103,7 +105,7 @@ public class UserApiController {
 
         
         // 중복된 아이디 처리
-        if(userService.findById(newUserId) != null){
+        if(userService.findByUserId(newUserId) != null){
             resultMessage = "Error: ID duplicate";
             return  ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new AddUserResponse("Failed", "Failed", resultMessage));

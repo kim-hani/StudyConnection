@@ -1,6 +1,8 @@
 package HeartBeat.StudyConnection.entity.userInfoEntity;
 
 import HeartBeat.StudyConnection.entity.chatRoomMakeEntity.ChatRoomAndUser;
+import HeartBeat.StudyConnection.entity.studyArticleEntity.Study;
+import HeartBeat.StudyConnection.entity.studyArticleEntity.UserStudy;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,23 +17,33 @@ import java.util.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
 public class User implements UserDetails {
+    // 사용자의 전화번호가 ID
     @Id
-    private String userId; // 사용자의 전화번호
+    private String userId;
 
+    // 사용자의 패스워드
     @Column(name = "password")
     private String password;
 
+    // 사용자의 생년월일
     @Column(name = "birth")
     private String birth; // yyyy-MM-dd
 
+    // 사용자의 이름
     @Column(name = "username")
     private String username;
 
+    // 사용자의 이메일
     @Column(name = "email")
     private String email;
 
+    // 사용자의 채팅방
     @OneToMany(mappedBy = "user")
     private Set<ChatRoomAndUser> chatRooms = new HashSet<>();
+
+    // 사용자의 스터디
+    @OneToMany(mappedBy = "user")
+    private Set<UserStudy> userStudies = new HashSet<>();
 
     // 빌더 패턴
     @Builder

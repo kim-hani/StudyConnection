@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class AddUserRequest {
@@ -24,5 +23,14 @@ public class AddUserRequest {
                 .email(email)
                 .birth(birth)
                 .build();
+    }
+
+    @Builder
+    public AddUserRequest(String userId, String password, String email, String birth, String username){
+        this.userId = userId;
+        this.password = password;
+        this.email = email;
+        this.birth = birth;
+        this.username = username;
     }
 }

@@ -32,8 +32,8 @@ public class StudyArticle {
     @Column(name = "studyArticle_Id")
     private Long id;        // 게시글 아이디
 
-    @Column(name = "author_name")
-    private String author;   // 작성자
+    @Column(name = "author_id")
+    private String author;   // 작성자의 ID
 
     @Column(columnDefinition = "TEXT",nullable = false)
     private String content;
@@ -73,6 +73,10 @@ public class StudyArticle {
     public void update(String title,String content){
         this.title = title;
         this.content = content;
+    }
+
+    public void setAvailable(boolean bool){
+        this.available = bool;
     }
 
     // 작성자 확인 메서드

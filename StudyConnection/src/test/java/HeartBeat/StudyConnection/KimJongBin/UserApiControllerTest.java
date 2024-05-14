@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -31,10 +32,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserApiControllerTest {
     @Autowired
     protected MockMvc mockMvc;
-
     @Autowired
     protected ObjectMapper objectMapper;
-
     @Autowired
     private WebApplicationContext context;
     @Autowired
@@ -44,6 +43,10 @@ public class UserApiControllerTest {
 
     @Autowired
     protected UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
 
     @BeforeEach
     public void mockMvcSetUp() {
@@ -111,7 +114,8 @@ public class UserApiControllerTest {
                 .password(userPw)
                 .build());
 
-        final UserLoginRequest request = new UserLoginRequest(userId, userPw);
+        final UserLoginRequest request = new UserLoginRequest(user.getUserId(), user.getPassword());
+        System.out.println(user.getPassword());
         final String requestBody = objectMapper.writeValueAsString(request);
 
         // when
@@ -123,7 +127,7 @@ public class UserApiControllerTest {
         result
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userId").value(user.getUserId()))
-                .andExpect(jsonPath("$.userName").value(user.getUsername()))
+                .andExpect(jsonPath("$.username").value(user.getUsername()))
                 .andExpect(jsonPath("$.refreshToken").isNotEmpty())
                 .andExpect(jsonPath("$.accessToken").isNotEmpty());
 

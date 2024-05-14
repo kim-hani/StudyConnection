@@ -1,10 +1,7 @@
 package HeartBeat.StudyConnection.entity.studyArticleEntity;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,19 +11,30 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "studyApplicant")
 public class StudyApply {
-    @Id
-    private String userId;
 
-    @Column(name = "username")
-    private String username;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "studyApply_Id")
+    private Long id;
+
+    @Column(name = "user_id")
+    private String userId;
 
     @Column(name = "studyArticleId")
     private Long studyArticleId;
 
     @Builder
-    public StudyApply(String userId, String username, Long studyArticleId){
+    public StudyApply(Long id, String userId, Long studyArticleId){
+        this.id = id;
         this.userId = userId;
-        this.username = username;
         this.studyArticleId = studyArticleId;
+    }
+
+    @Override
+    public String toString(){
+        return "<< StudyApplicant's information >>\n"
+                + "study apply id: " + this.id + "\n"
+                + "userId: " + this.getUserId() + "\n"
+                + "study Id: " + this.studyArticleId;
     }
 }

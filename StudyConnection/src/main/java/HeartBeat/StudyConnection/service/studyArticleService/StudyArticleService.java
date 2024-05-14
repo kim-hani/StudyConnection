@@ -34,6 +34,11 @@ public class StudyArticleService {
     }
 
     @Transactional
+    public void setAvailableToFalse(StudyArticle article){
+        article.setAvailable(false);
+    }
+
+    @Transactional
     public void delete(Long id){
         StudyArticle studyArticle = studyArticleRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("해당 게시글이 없습니다. id ="+ id));
@@ -41,11 +46,11 @@ public class StudyArticleService {
         studyArticleRepository.delete(studyArticle);
     }
 
-    public StudyResponseDto findById(Long id) {
+    public StudyArticle findById(Long id) {
         StudyArticle entity = studyArticleRepository.findById(id).
                 orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id =" + id));
 
-        return new StudyResponseDto(entity);
+        return entity;
     }
 
     @Transactional(readOnly = true) //트랜젝션 범위는 유지하나, 조회 기능만 남겨서 조회 속도를 개선함

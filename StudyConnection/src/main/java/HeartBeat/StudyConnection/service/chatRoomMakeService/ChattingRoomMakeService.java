@@ -20,21 +20,15 @@ public class ChattingRoomMakeService {
     private final ChatRoomAndUserRepository chatRoomAndUserRepository;
     private final UserRepository userRepository;
 
-    public ChatRoom createChatRoom(String roomName, List<String> membersId){
+    public ChatRoom createChatRoom(String roomName, List<User> member){
         // 새로운 채팅방 생성
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.setRoomName(roomName);
 
-        // 중복되는 회원이 없도록 방지
-        Set<String> receivedUserIds = new HashSet<>(membersId);
 
         // 사용자 엔티티들을 찾아서 채팅방에 추가
-        Set<User> users = new HashSet<>();
-        for(String userId: receivedUserIds){
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new IllegalArgumentException(userId + "의 회원을 찾을 수 없습니다."));
-            users.add(user);
-        }
+        Set<User> users = new HashSet<>(member);
+
         // 채팅방 저장
         chatRoomRepository.save(chatRoom);
         addParticipantsToChatRoom(chatRoom, users);
