@@ -13,7 +13,11 @@ export default {
                 console.log('login success')
                 commit(SET_IS_AUTH, true);
                 commit(SET_USER, loginResponse.data);
-                sessionStorage.setItem('userData', JSON.stringify(loginResponse.data));
+                localStorage.setItem('userData', JSON.stringify(loginResponse.data));
+                localStorage.setItem('userId', loginResponse.data.userId);
+                localStorage.setItem('username', loginResponse.data.username);
+                localStorage.setItem('accessToken', loginResponse.data.accessToken);
+                localStorage.setItem('refreshToken', loginResponse.data.refreshToken);
                 return true;
             } else {
                 console.log('Inside else block: Login failed with status', loginResponse.status);
@@ -37,5 +41,14 @@ export default {
             commit(SET_ERROR_STATE, error.response.status);
             return false;
         }
+    },
+
+    async logout({ commit }) {
+        localStorage.removeItem('userId');
+        localStorage.removeItem('username');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        commit(SET_IS_AUTH, false);
+        console.log(await loginAPI.doLogout());
     }
 }
