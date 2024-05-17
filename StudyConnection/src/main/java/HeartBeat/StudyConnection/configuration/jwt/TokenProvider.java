@@ -21,6 +21,7 @@ import java.util.Set;
 @Service
 public class TokenProvider {
 
+    public static final String AUTHORIZATION = "Authorization";
     private final JwtProperties jwtProperties;
 
     public String generateToken(User user, Duration expiredAt){

@@ -2,18 +2,18 @@ package HeartBeat.StudyConnection.service.studyArticleService;
 
 import HeartBeat.StudyConnection.dto.studyArticleDto.AddStudyListResponseDto;
 import HeartBeat.StudyConnection.dto.studyArticleDto.AddStudyRequestDto;
-import HeartBeat.StudyConnection.dto.studyArticleDto.StudyResponseDto;
 import HeartBeat.StudyConnection.dto.studyArticleDto.UpdateStudyRequestDto;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyArticle;
 import HeartBeat.StudyConnection.repository.studyArticleRepository.StudyArticleRepository;
-import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 public class StudyArticleService {
@@ -58,5 +58,10 @@ public class StudyArticleService {
         return studyArticleRepository.findAllByOrderByCreatedAtDesc().stream()
                 .map(AddStudyListResponseDto::new)
                 .collect(Collectors.toList());
+    }
+
+    public Page<StudyArticle> getList(int page){
+        Pageable pageable = PageRequest.of(page,10);
+        return this.studyArticleRepository.findAll(pageable);
     }
 }
