@@ -1,29 +1,42 @@
 <template>
   <div class="board-detail">
     <div class="common-buttons">
+      <study-join-button v-if = !sameAuthor></study-join-button>
       <button v-if = sameAuthor type="button" class="w3-button w3-round w3-blue-gray" @click="BoardUpdate">수정</button>&nbsp;
       <button v-if = sameAuthor type="button" class="w3-button w3-round w3-red" @click="BoardDelete">삭제</button>&nbsp;
       <button type="button" class="w3-button w3-round w3-gray" @click="MoveBoardList">목록</button>
     </div>
-    <div class="board-contents">
-      <h3>제목: {{ title }}</h3>
-      <div>
-        <strong class="w3-large">작성자: {{ author }}</strong>
-        <br>
-        <span>작성일: {{ createdAt }}</span>
+    <div class="board-wrapper">
+      <div class="board-contents">
+        <h3>제목: {{ title }}</h3>
+        <div>
+          <strong class="w3-large">작성자: {{ author }}</strong>
+          <br>
+          <span>작성일: {{ createdAt }}</span>
+        </div>
+      </div>
+      <div class="board-contents">
+        <span>{{ content }}</span>
       </div>
     </div>
-    <div class="board-contents">
-      <span>본문: {{ content }}</span>
-    </div>
+    <br>
+    <comment/>
   </div>
+
 </template>
 
 <script>
 import axios from "axios";
 import { mapState } from "vuex";
+import comment from "@/components/Board/comment.vue";
+import studyJoinButton from "@/components/Board/studyJoinButton.vue";
+import StudyJoinButton from "@/components/Board/studyJoinButton.vue";
 
 export default {
+  components: {
+    StudyJoinButton,
+    comment
+  },
   data() {
     return {
       title: '',
@@ -93,6 +106,10 @@ export default {
 }
 </script>
 <style scoped>
+.board-wrapper {
 
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
 
 </style>
