@@ -1,4 +1,4 @@
-package HeartBeat.StudyConnection.entity.chatRoomMakeEntity;
+package HeartBeat.StudyConnection.entity.chatRoomEntity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,6 +18,9 @@ public class ChatRoom {
 
     @Column(name = "roomName")
     private String roomName;
+
+    @Column(name = "studyId")
+    private Long studyId;
 
     @OneToMany(mappedBy = "chatRoom")
     private Set<ChatRoomAndUser> users = new HashSet<>();

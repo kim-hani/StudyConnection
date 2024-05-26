@@ -6,7 +6,7 @@ import HeartBeat.StudyConnection.entity.studyArticleEntity.Study;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyApply;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyArticle;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
-import HeartBeat.StudyConnection.service.chatRoomMakeService.ChattingRoomMakeService;
+import HeartBeat.StudyConnection.service.chatRoomService.ChattingRoomService;
 import HeartBeat.StudyConnection.service.studyArticleService.StudyApplyService;
 
 import HeartBeat.StudyConnection.dto.commentDto.request.RequestCreateCommentDto;
@@ -43,7 +43,7 @@ public class StudyArticleApiController {
     private final UserService userService;
     private final CommentService commentService;
     private final StudyService studyService;
-    private final ChattingRoomMakeService chattingRoomMakeService;
+    private final ChattingRoomService chattingRoomMakeService;
 
 
     // 스터디 모집글 생성
@@ -111,8 +111,16 @@ public class StudyArticleApiController {
     //////////////////////////////////////////////////////
     // [글 주인 외의 사용자] Apply 버튼으로 스터디 참여 신청 가능
     @PostMapping("/api/study-articles/{id}/apply")
+    @Parameter(name = "userId", description = "스터디 신청자 본인의 id", example = "010-0000-0000")
     @Operation(summary = "스터디 가입 신청", description = "글 작성자 이외의 사용자가 스터디 가입 신청")
     public ResponseEntity<String> applyToStudy(@PathVariable Long id, @RequestBody StudyApplyRequestDto request){
+
+        StudyArticle searchedArticle = studyArticleService.findById(id);
+
+        if(searchedArticle == null){
+            return ResponseEntity.notFound()
+                    .build();
+        }
 
         StudyApply savedApplyUser= studyApplyService.saveApply(request.getUserId(), id);
 
@@ -124,6 +132,14 @@ public class StudyArticleApiController {
     @GetMapping("/api/study-articles/{id}/apply")
     @Operation(summary = "스터디 가입 신청자 확인", description = "글 작성자가 스터디에 신청한 신청자들의 Id, 이름을 조회")
     public ResponseEntity<StudyApplicantsResponseDto> showAllApplies(@PathVariable Long id){
+
+        StudyArticle searchedArticle = studyArticleService.findById(id);
+
+        if(searchedArticle == null){
+            return ResponseEntity.notFound()
+                    .build();
+        }
+
         List<StudyApply> applies = studyApplyService.showAllApplicantsId(id);
 
         return ResponseEntity.ok()
@@ -132,8 +148,19 @@ public class StudyArticleApiController {
 
     // 글 작성자가 확정된 스터디 멤버들의 ID를 보내 스터디 개설을 완료한다.
     @PostMapping("/api/study-articles/{id}/study-confirm")
-    @Operation(summary = "스터디 가입 신청", description = "글 작성자 이외의 사용자가 스터디 가입 신청")
+    @Parameters({
+            @Parameter(name = "members", description = "스터디 신청자 userId 목록"),
+            @Parameter(name = "studyTitle", description = "스터디 모집글 제목", example = "자바 꽉 잡아요"),
+    })
+    @Operation(summary = "스터디 모집 확정", description = "글 작성자 이외의 사용자가 스터디 가입 신청")
     public ResponseEntity<ConfirmStudyResponseDto> confirmStudy(@PathVariable Long id, @RequestBody ConfirmStudyRequestDto request){
+
+        StudyArticle searchedArticle = studyArticleService.findById(id);
+
+        if(searchedArticle == null){
+            return ResponseEntity.notFound()
+                    .build();
+        }
 
         // 확정된 멤버들을 저장할 리스트
         List<User> confirmedUser = new ArrayList<>();
@@ -154,7 +181,7 @@ public class StudyArticleApiController {
 
         // 확정된 스터디 채팅방 생성
         String chatRoomName = "[" + request.getStudyTitle() + "'s chat room]";
-        chattingRoomMakeService.createChatRoom(chatRoomName, confirmedUser);
+        chattingRoomMakeService.createChatRoom(chatRoomName, confirmedUser, id);
 
         return ResponseEntity.ok()
                 .body(ConfirmStudyResponseDto.builder()

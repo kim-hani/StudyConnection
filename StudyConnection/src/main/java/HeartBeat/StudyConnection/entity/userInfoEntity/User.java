@@ -1,7 +1,6 @@
 package HeartBeat.StudyConnection.entity.userInfoEntity;
 
-import HeartBeat.StudyConnection.entity.chatRoomMakeEntity.ChatRoomAndUser;
-import HeartBeat.StudyConnection.entity.studyArticleEntity.Study;
+import HeartBeat.StudyConnection.entity.chatRoomEntity.ChatRoomAndUser;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.UserStudy;
 import jakarta.persistence.*;
 import lombok.*;

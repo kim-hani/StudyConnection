@@ -1,6 +1,6 @@
-package HeartBeat.StudyConnection.repository.chatRoomMakeRepository;
+package HeartBeat.StudyConnection.repository.chatRoomRepository;
 
-import HeartBeat.StudyConnection.entity.chatRoomMakeEntity.ChatRoomAndUser;
+import HeartBeat.StudyConnection.entity.chatRoomEntity.ChatRoomAndUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

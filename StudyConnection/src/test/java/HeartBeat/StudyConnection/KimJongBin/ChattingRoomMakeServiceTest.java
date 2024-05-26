@@ -1,12 +1,12 @@
 package HeartBeat.StudyConnection.KimJongBin;
 
-import HeartBeat.StudyConnection.entity.chatRoomMakeEntity.ChatRoom;
-import HeartBeat.StudyConnection.entity.chatRoomMakeEntity.ChatRoomAndUser;
+import HeartBeat.StudyConnection.entity.chatRoomEntity.ChatRoom;
+import HeartBeat.StudyConnection.entity.chatRoomEntity.ChatRoomAndUser;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
-import HeartBeat.StudyConnection.repository.chatRoomMakeRepository.ChatRoomAndUserRepository;
-import HeartBeat.StudyConnection.repository.chatRoomMakeRepository.ChatRoomRepository;
+import HeartBeat.StudyConnection.repository.chatRoomRepository.ChatRoomAndUserRepository;
+import HeartBeat.StudyConnection.repository.chatRoomRepository.ChatRoomRepository;
 import HeartBeat.StudyConnection.repository.userInfoRepository.UserRepository;
-import HeartBeat.StudyConnection.service.chatRoomMakeService.ChattingRoomMakeService;
+import HeartBeat.StudyConnection.service.chatRoomService.ChattingRoomService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,7 +35,7 @@ public class ChattingRoomMakeServiceTest {
 
     // Service
     @Autowired
-    ChattingRoomMakeService chattingRoomMakeService;
+    ChattingRoomService chattingRoomMakeService;
 
     @BeforeEach
     void cleanRepository(){
@@ -84,7 +84,7 @@ public class ChattingRoomMakeServiceTest {
                 .build()));
 
         // when
-        ChatRoom newChatRoom = chattingRoomMakeService.createChatRoom(roomName, receivedUser);
+        ChatRoom newChatRoom = chattingRoomMakeService.createChatRoom(roomName, receivedUser, Long.valueOf(1));
 
         // then (결과)
         List<ChatRoom> searchRooms = chatRoomRepository.findAll();

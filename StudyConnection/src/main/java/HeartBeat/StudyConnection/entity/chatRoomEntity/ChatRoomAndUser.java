@@ -1,4 +1,4 @@
-package HeartBeat.StudyConnection.entity.chatRoomMakeEntity;
+package HeartBeat.StudyConnection.entity.chatRoomEntity;
 
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import jakarta.persistence.*;
