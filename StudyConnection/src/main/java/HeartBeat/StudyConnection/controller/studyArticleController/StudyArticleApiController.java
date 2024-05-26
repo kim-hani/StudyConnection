@@ -1,6 +1,8 @@
 package HeartBeat.StudyConnection.controller.studyArticleController;
 
 
+import HeartBeat.StudyConnection.configuration.jwt.AppAuthentication;
+import HeartBeat.StudyConnection.dto.ResponseIdDto;
 import HeartBeat.StudyConnection.dto.studyArticleDto.*;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.Study;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyApply;
@@ -8,6 +10,7 @@ import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyArticle;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import HeartBeat.StudyConnection.service.chatRoomService.ChattingRoomService;
 import HeartBeat.StudyConnection.service.studyArticleService.StudyApplyService;
+import HeartBeat.StudyConnection.role.UserAuth;
 
 import HeartBeat.StudyConnection.dto.commentDto.request.RequestCreateCommentDto;
 import HeartBeat.StudyConnection.dto.commentDto.response.SummarizedCommentDto;
@@ -29,6 +32,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.data.domain.Page;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +77,7 @@ public class StudyArticleApiController {
         return ResponseEntity.ok()
                 .body(studyList);
     }
+
 
 
     // 특정 스터디 모집글 수정
@@ -196,44 +202,47 @@ public class StudyArticleApiController {
      * 모든 댓글을 조회합니다.
      */
     @GetMapping("/api/comments/{studyArticle_id}")
-    @Operation(summary = "모든 댓글 조회", description = "댓글 조회 시 사용하는 API")
-    public List<SummarizedCommentDto> listComments(@PathVariable Long studyArticleId) {
-        return commentService.list(studyArticleId);
+    @Operation(summary = "모든 댓글 조회", description = "모든 댓글 조회 시 사용하는 API")
+    public List<SummarizedCommentDto> listComments(@PathVariable Long postId) {
+        return commentService.list(postId);
     }
 
     /**
      * 게시글에 댓글을 생성합니다.
      **/
     @PostMapping("/api/comment/{studyArticle_id}")
-    @Operation(summary = "게시글 댓글 작성", description = "게시글 댓글 작성 시 사용하는 API")
-    public ResponseEntity createComment(@PathVariable Long studyArticleId,@PathVariable String userID,
-                                        @Valid @RequestBody RequestCreateCommentDto dto) {
-        Long result = commentService.create(studyArticleId, userID, dto.getContent());
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(result);
+    @Operation(summary = "게시글에 댓글 생성", description = "게시글에 댓글 생성 시 사용하는 API")
+    @UserAuth
+    public ResponseIdDto createComment(AppAuthentication auth,
+                                       @PathVariable Long postId,
+                                       @Valid @RequestBody RequestCreateCommentDto dto) {
+        Long result = commentService.create(postId, auth.getUserId(), dto.getContent());
+        return new ResponseIdDto(result);
     }
 
     /**
-     * 게시글에 대한 댓글을 수정합니다.
-     **/
-    @PatchMapping("/api/comment/{comment_id}")
-    @Operation(summary = "게시글 댓글 수정", description = "게시글 댓글 수정 시 사용하는 API")
-    public void editComment(@PathVariable Long commentId,
-                            @PathVariable String userId,
+     * 댓글을 수정합니다.
+     * <p>대댓글도 수정할 수 있습니다.</p>
+     */
+    @PatchMapping("/api/comment/{commentId}")
+    @UserAuth
+    @Operation(summary = "댓글,대댓글 수정", description = "게시글의 댓글 수정 시 사용하는 API")
+    public void editComment(AppAuthentication auth,
+                            @PathVariable Long commentId,
                             @Valid @RequestBody RequestCreateCommentDto dto) {
-        commentService.edit(commentId, userId, dto.getContent());
+        commentService.edit(commentId, auth.getUserId(), dto.getContent());
     }
-
 
     /**
      * 댓글을 삭제합니다.
      * <p>대댓글도 삭제할 수 있습니다.</p>
      */
-    @DeleteMapping("/api/comment/{comment_id}")
-    @Operation(summary = "게시글 댓글 삭제", description = "게시글 댓글 삭제 시 사용하는 API")
-    public void deleteComment(@PathVariable Long commentId,
-                              @PathVariable String userId) {
-        commentService.delete(commentId, userId);
+    @DeleteMapping("/api/comment/{commentId}")
+    @UserAuth
+    @Operation(summary = "댓글,대댓글 삭제", description = "댓글 삭제 시 사용하는 API")
+    public void deleteComment(AppAuthentication auth,
+                              @PathVariable Long commentId) {
+        commentService.delete(commentId, auth.getUserId());
     }
 
     /**
@@ -241,16 +250,13 @@ public class StudyArticleApiController {
      *
      * @param commentId   댓글 ID
      */
-    @PostMapping("/api/reply/{comment_id}")
-    @Operation(summary = "게시글 댓글에 대한 대댓글 작성", description = "대댓글 작성 시 사용하는 API")
-    public ResponseEntity createReply(
+    @PostMapping("/api/reply/{commentId}")
+    @UserAuth
+    @Operation(summary = "대댓글 생성", description = "대댓글 생성 시 사용하는 API")
+    public ResponseIdDto createReply(AppAuthentication auth,
                                      @PathVariable Long commentId,
-                                     @PathVariable String userId,
                                      @Valid @RequestBody RequestCreateCommentDto dto) {
-        Long result = commentService.createReply(commentId, userId, dto.getContent());
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(result);
+        Long result = commentService.createReply(commentId, auth.getUserId(), dto.getContent());
+        return new ResponseIdDto(result);
     }
-
 }
