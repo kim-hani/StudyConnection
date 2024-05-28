@@ -1,6 +1,5 @@
 package HeartBeat.StudyConnection.entity.userInfoEntity;
 
-import HeartBeat.StudyConnection.entity.chatRoomEntity.ChatRoomAndUser;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.UserStudy;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,10 +34,6 @@ public class User implements UserDetails {
     // 사용자의 이메일
     @Column(name = "email")
     private String email;
-
-    // 사용자의 채팅방
-    @OneToMany(mappedBy = "user")
-    private Set<ChatRoomAndUser> chatRooms = new HashSet<>();
 
     // 사용자의 스터디
     @OneToMany(mappedBy = "user")

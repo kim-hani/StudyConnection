@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
+@Component
 public class ChatWebSocketHandler extends TextWebSocketHandler {
     private final Map<String, List<WebSocketSession>> chatRooms = new HashMap<>();
     private final Map<WebSocketSession, Long> sessionRoomMap = new HashMap<>();

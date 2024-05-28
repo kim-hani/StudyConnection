@@ -11,7 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatMessageService {
 
-    final ChatMessageRepository chatMessageRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
     // 메세지 저장
     public void saveAllChatMessage(List<ChatMessage> chats){
@@ -20,7 +20,7 @@ public class ChatMessageService {
 
     // 메세지 내용 불러오기 (studyId + dateTime 오래된 순)
     public List<ChatMessage> loadChatMessagesByStudyId(Long studyId){
-        return chatMessageRepository.findByStudyIdOrderByTimestampAsc(studyId);
+        return chatMessageRepository.findByStudyIdOrderByDateTimeAsc(studyId);
     }
 
 }

@@ -1,9 +1,7 @@
 package HeartBeat.StudyConnection.KimJongBin;
 
 import HeartBeat.StudyConnection.entity.chatRoomEntity.ChatRoom;
-import HeartBeat.StudyConnection.entity.chatRoomEntity.ChatRoomAndUser;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
-import HeartBeat.StudyConnection.repository.chatRoomRepository.ChatRoomAndUserRepository;
 import HeartBeat.StudyConnection.repository.chatRoomRepository.ChatRoomRepository;
 import HeartBeat.StudyConnection.repository.userInfoRepository.UserRepository;
 import HeartBeat.StudyConnection.service.chatRoomService.ChattingRoomService;
@@ -16,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,8 +29,6 @@ public class ChattingRoomMakeServiceTest {
     UserRepository userRepository;
     @Autowired
     ChatRoomRepository chatRoomRepository;
-    @Autowired
-    ChatRoomAndUserRepository chatRoomAndUserRepository;
 
     // Service
     @Autowired
@@ -41,7 +38,6 @@ public class ChattingRoomMakeServiceTest {
     void cleanRepository(){
         userRepository.deleteAll();
         chatRoomRepository.deleteAll();
-        chatRoomAndUserRepository.deleteAll();
     }
 
     @DisplayName("1+3=4")
@@ -58,6 +54,8 @@ public class ChattingRoomMakeServiceTest {
     public void ServiceTest(){
         // given
         String roomName = "테스트 채팅방";
+
+        // 유저 저장
         List<User> receivedUser = new ArrayList<>();
         receivedUser.add(userRepository.save(User.builder()
                 .userId("010-1234-5678")
@@ -83,42 +81,35 @@ public class ChattingRoomMakeServiceTest {
                 .password("1234")
                 .build()));
 
+        List<String> userIdToCheck = List.of("010-1234-5678", "010-4321-5678", "010-1234-8765");
+
         // when
-        ChatRoom newChatRoom = chattingRoomMakeService.createChatRoom(roomName, receivedUser, Long.valueOf(1));
+        chattingRoomMakeService.createChatRoom(roomName, receivedUser, Long.valueOf(1));
 
         // then (결과)
         List<ChatRoom> searchRooms = chatRoomRepository.findAll();
-        List<ChatRoomAndUser> chatRoomAndUsers = chatRoomAndUserRepository.findAll();
+        List<ChatRoom> searchRoomsByStudyId = chatRoomRepository.findByStudyId(Long.valueOf(1));
+        List<ChatRoom> searchRoomsByUserId = chatRoomRepository.findByUserId("010-1234-8765");
         List<User> users = userRepository.findAll();
 
-        System.out.println(searchRooms.size());
-        System.out.println(chatRoomAndUsers.size());
+        List<String> userIdsInChatRooms = searchRooms.stream()
+                .map(ChatRoom::getUserId)
+                .collect(Collectors.toList());
 
         // 새로 만든 톡방 잘 저장되었는지
-       assertThat(searchRooms.get(0).getId()).isEqualTo(newChatRoom.getId());
-
-       // 유저 톡방에 잘 저장되었는지
-        List<String> chatRoomAndUserSide = new ArrayList<>();
-        chatRoomAndUserSide.add(chatRoomAndUsers.get(0).getUser().getUserId());
-        chatRoomAndUserSide.add(chatRoomAndUsers.get(1).getUser().getUserId());
-        chatRoomAndUserSide.add(chatRoomAndUsers.get(2).getUser().getUserId());
-
-        List<String> userSide = new ArrayList<>();
-        userSide.add(users.get(0).getUserId());
-        userSide.add(users.get(1).getUserId());
-        userSide.add(users.get(2).getUserId());
-
-        assertThat(chatRoomAndUserSide).containsExactlyInAnyOrderElementsOf(userSide);
+       assertThat(searchRooms.size()).isEqualTo(3);
 
         // 새로 만든 톡방과 톡방-유저 테이블이 맞는지
-        assertThat(chatRoomAndUsers.get(0).getChatRoom().getId())
-                .isEqualTo(newChatRoom.getId());
+        assertThat(searchRoomsByUserId.get(0).getRoomName())
+                .isEqualTo(roomName);
 
-        assertThat(chatRoomAndUsers.get(1).getChatRoom().getId())
-                .isEqualTo(newChatRoom.getId());
+        assertThat(searchRoomsByUserId.get(0).getUserId())
+                .isEqualTo("010-1234-8765");
 
-        assertThat(chatRoomAndUsers.get(2).getChatRoom().getId())
-                .isEqualTo(newChatRoom.getId());
+        assertThat(searchRoomsByStudyId.get(0).getStudyId())
+                .isEqualTo(Long.valueOf(1));
+
+        assertThat(userIdsInChatRooms).containsAll(userIdToCheck);
 
 
     }

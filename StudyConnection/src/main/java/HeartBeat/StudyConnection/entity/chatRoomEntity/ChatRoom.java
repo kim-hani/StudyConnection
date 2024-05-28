@@ -1,7 +1,9 @@
 package HeartBeat.StudyConnection.entity.chatRoomEntity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashSet;
@@ -10,6 +12,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class ChatRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +25,13 @@ public class ChatRoom {
     @Column(name = "studyId")
     private Long studyId;
 
-    @OneToMany(mappedBy = "chatRoom")
-    private Set<ChatRoomAndUser> users = new HashSet<>();
+    @Column(name = "participant")
+    private String userId;
+
+    @Builder
+    public ChatRoom(String roomName, Long studyId, String userId){
+        this.roomName = roomName;
+        this.studyId = studyId;
+        this.userId = userId;
+    }
 }
