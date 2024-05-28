@@ -4,7 +4,6 @@ import HeartBeat.StudyConnection.dto.studyArticleDto.StudyApplicantDto;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyApply;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import HeartBeat.StudyConnection.repository.studyArticleRepository.StudyApplyRepository;
-import HeartBeat.StudyConnection.repository.userInfoRepository.UserRepository;
 import HeartBeat.StudyConnection.service.userInfoService.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
