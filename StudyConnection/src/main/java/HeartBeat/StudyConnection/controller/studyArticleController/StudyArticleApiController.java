@@ -2,24 +2,17 @@ package HeartBeat.StudyConnection.controller.studyArticleController;
 
 
 import HeartBeat.StudyConnection.configuration.jwt.AppAuthentication;
-import HeartBeat.StudyConnection.dto.ResponseIdDto;
 import HeartBeat.StudyConnection.dto.studyArticleDto.*;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.Study;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyApply;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyArticle;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
-import HeartBeat.StudyConnection.service.chatRoomService.ChattingRoomService;
-import HeartBeat.StudyConnection.service.studyArticleService.StudyApplyService;
-import HeartBeat.StudyConnection.role.UserAuth;
-
+import HeartBeat.StudyConnection.dto.ResponseIdDto;
 import HeartBeat.StudyConnection.dto.commentDto.request.RequestCreateCommentDto;
 import HeartBeat.StudyConnection.dto.commentDto.response.SummarizedCommentDto;
-import HeartBeat.StudyConnection.dto.studyArticleDto.AddStudyListResponseDto;
-import HeartBeat.StudyConnection.dto.studyArticleDto.AddStudyRequestDto;
-import HeartBeat.StudyConnection.dto.studyArticleDto.StudyResponseDto;
-import HeartBeat.StudyConnection.dto.studyArticleDto.UpdateStudyRequestDto;
+import HeartBeat.StudyConnection.role.UserAuth;
 import HeartBeat.StudyConnection.service.commentService.CommentService;
-
+import HeartBeat.StudyConnection.service.studyArticleService.StudyApplyService;
 import HeartBeat.StudyConnection.service.studyArticleService.StudyArticleService;
 import HeartBeat.StudyConnection.service.studyArticleService.StudyService;
 import HeartBeat.StudyConnection.service.userInfoService.UserService;
@@ -32,8 +25,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.data.domain.Page;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +39,7 @@ public class StudyArticleApiController {
     private final UserService userService;
     private final CommentService commentService;
     private final StudyService studyService;
-    private final ChattingRoomService chattingRoomMakeService;
+    // private final ChattingRoomService chattingRoomMakeService;
 
 
     // 스터디 모집글 생성
@@ -187,7 +178,7 @@ public class StudyArticleApiController {
 
         // 확정된 스터디 채팅방 생성
         String chatRoomName = "[" + request.getStudyTitle() + "'s chat room]";
-        chattingRoomMakeService.createChatRoom(chatRoomName, confirmedUser, id);
+        // chattingRoomMakeService.createChatRoom(chatRoomName, confirmedUser, id);
 
         return ResponseEntity.ok()
                 .body(ConfirmStudyResponseDto.builder()
@@ -201,22 +192,22 @@ public class StudyArticleApiController {
     /**
      * 모든 댓글을 조회합니다.
      */
-    @GetMapping("/api/comments/{studyArticle_id}")
+    @GetMapping("/api/comments/{studyArticleId}")
     @Operation(summary = "모든 댓글 조회", description = "모든 댓글 조회 시 사용하는 API")
-    public List<SummarizedCommentDto> listComments(@PathVariable Long postId) {
-        return commentService.list(postId);
+    public List<SummarizedCommentDto> listComments(@PathVariable Long studyArticleId) {
+        return commentService.list(studyArticleId);
     }
 
     /**
      * 게시글에 댓글을 생성합니다.
      **/
-    @PostMapping("/api/comment/{studyArticle_id}")
+    @PostMapping("/api/comment/{studyArticleId}")
     @Operation(summary = "게시글에 댓글 생성", description = "게시글에 댓글 생성 시 사용하는 API")
     @UserAuth
     public ResponseIdDto createComment(AppAuthentication auth,
-                                       @PathVariable Long postId,
+                                       @PathVariable Long studyArticleId,
                                        @Valid @RequestBody RequestCreateCommentDto dto) {
-        Long result = commentService.create(postId, auth.getUserId(), dto.getContent());
+        Long result = commentService.create(studyArticleId, auth.getUserId(), dto.getContent());
         return new ResponseIdDto(result);
     }
 

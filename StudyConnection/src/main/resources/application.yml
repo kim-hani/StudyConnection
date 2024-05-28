@@ -1,8 +1,11 @@
 # 스프링 부트 서버가 실행되면 자동으로 로딩되는 파일
 spring:
   jpa:
-    # 전송 쿼리 확인
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
     show-sql: true
+    hibernate:
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -10,7 +13,10 @@ spring:
     # defer-datasource-initialization: true
 
   datasource:
-    url: jdbc:h2:mem:testdb
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://ls-e34214e971d6c965bdfcf24e184f58fb033c186a.cx86a8i0yuvz.ap-northeast-2.rds.amazonaws.com:3306/StudyConnection?serverTimezone=Asia/Seoul
+    username: admin
+    password: stdy0519
 
   # 실제 데이터를 확인하기 위해 H2 콘솔을 활성화
   h2:
