@@ -4,6 +4,7 @@ import HeartBeat.StudyConnection.configuration.jwt.TokenProvider;
 import HeartBeat.StudyConnection.configuration.jwt.entity.RefreshToken;
 import HeartBeat.StudyConnection.configuration.jwt.service.RefreshTokenService;
 import HeartBeat.StudyConnection.configuration.jwt.service.TokenService;
+import HeartBeat.StudyConnection.dto.UserInformationResponse;
 import HeartBeat.StudyConnection.dto.loginDto.UserLoginRequest;
 import HeartBeat.StudyConnection.dto.loginDto.UserLoginResponse;
 import HeartBeat.StudyConnection.dto.signUpDto.AddUserRequest;
@@ -24,10 +25,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Optional;
 
 @RestController
@@ -134,5 +135,29 @@ public class UserApiController {
 
         return ResponseEntity.ok()
                 .body("Logged out failed");
+    }
+
+    // 사용자의 정보를 전달
+    @GetMapping("/api/userinfo/{userId}")
+    @Parameter(name = "userId", description = "조회하려는 사용자의 id", example = "010-0000-0000")
+    @Operation(summary = "사용자의 정보를 조회", description = "사용자의 정보를 조회한다. 본인의 정보도 조회할 수 있다.")
+    public ResponseEntity<UserInformationResponse> showUserInfo(@PathVariable String userId){
+        User searchUser = userService.findByUserId(userId);
+        LocalDate date = LocalDate.now();
+        int thisYear = Integer.parseInt(String.valueOf(date.getYear())) - Integer.parseInt(searchUser.getBirth().split("-")[0]) + 1;
+
+        // 사용자 없을 때
+        if(userId == null){
+            return ResponseEntity.notFound()
+                    .build();
+        }
+
+        return ResponseEntity.ok()
+                .body(UserInformationResponse.builder()
+                        .username(searchUser.getUsername())
+                        .age(String.valueOf(thisYear))
+                        .email(searchUser.getEmail())
+                        .userId(searchUser.getUserId())
+                        .build());
     }
 }

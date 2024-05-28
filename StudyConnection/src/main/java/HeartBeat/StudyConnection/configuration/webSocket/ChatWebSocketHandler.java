@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
-@AllArgsConstructor
 public class ChatWebSocketHandler extends TextWebSocketHandler {
     private final Map<String, List<WebSocketSession>> chatRooms = new HashMap<>();
     private final Map<WebSocketSession, Long> sessionRoomMap = new HashMap<>();
