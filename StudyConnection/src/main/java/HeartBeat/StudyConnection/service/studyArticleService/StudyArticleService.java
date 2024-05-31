@@ -6,9 +6,7 @@ import HeartBeat.StudyConnection.dto.studyArticleDto.UpdateStudyRequestDto;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyArticle;
 import HeartBeat.StudyConnection.repository.studyArticleRepository.StudyArticleRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,6 +56,19 @@ public class StudyArticleService {
         return studyArticleRepository.findAllByOrderByCreatedAtDesc().stream()
                 .map(AddStudyListResponseDto::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public Page<AddStudyListResponseDto> findAllPaging(int pageNo, String criteria, String sort) {
+        final int PAGE_SIZE = 10;
+
+        Pageable pageable = (sort.equals("ASC")) ?
+                PageRequest.of(pageNo, PAGE_SIZE, Sort.by(Sort.Direction.ASC, criteria)) :
+                PageRequest.of(pageNo, PAGE_SIZE, Sort.by(Sort.Direction.DESC, criteria));
+
+        Page<StudyArticle> page =  studyArticleRepository.findAll(pageable);
+        Page<AddStudyListResponseDto> dtoPage = page.map(AddStudyListResponseDto::new);
+        return dtoPage;
     }
 
     public Page<StudyArticle> getList(int page){
