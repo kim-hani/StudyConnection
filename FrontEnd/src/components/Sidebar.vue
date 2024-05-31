@@ -29,7 +29,7 @@
         <span class="material-symbols-outlined">chat</span>
         <span class="text">Chat</span>
       </router-link>
-      <router-link to="/MyPage" class="button">
+      <router-link :to="`/MyPage/${userId}`" class="button">
         <span class="material-symbols-outlined">person</span>
         <span class="text">My Page</span>
       </router-link>
@@ -49,7 +49,7 @@
 
 <script>
 import { ref } from 'vue';
-import { mapState } from "vuex";
+import {mapGetters, mapState} from "vuex";
 
 export default {
   setup() {
@@ -68,8 +68,9 @@ export default {
     };
   },
   computed: {
-    ...mapState({
-      isAuth: state => state.isAuth
+    ...mapGetters({
+      isAuth: 'getIsAuth',
+      userId: 'getUserId'
     })
   }
 }
