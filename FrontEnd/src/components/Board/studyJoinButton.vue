@@ -16,9 +16,10 @@ export default {
   methods: {
     fnJoin() {
       if (confirm('참가신청 하시겠습니까?')) {
+        const userId = {userId: this.userData.userId}
         const id = this.$route.params.id;
         this.$axios.post(this.$serverUrl + `/api/study-articles/${id}/apply`,
-            this.userData.userId).then((res) => {
+            userId).then((res) => {
           alert('참가신청 되었습니다.')
         }).catch((err) => {
           console.log(err)

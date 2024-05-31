@@ -2,6 +2,7 @@
   <div class="board-detail">
     <div class="common-buttons">
       <study-join-button v-if = !sameAuthor></study-join-button>
+      <study-apply-button v-if= sameAuthor></study-apply-button>
       <button v-if = sameAuthor type="button" class="w3-button w3-round w3-blue-gray" @click="BoardUpdate">수정</button>&nbsp;
       <button v-if = sameAuthor type="button" class="w3-button w3-round w3-red" @click="BoardDelete">삭제</button>&nbsp;
       <button type="button" class="w3-button w3-round w3-gray" @click="MoveBoardList">목록</button>
@@ -29,11 +30,12 @@
 import axios from "axios";
 import { mapState } from "vuex";
 import comment from "@/components/Board/comment.vue";
-import studyJoinButton from "@/components/Board/studyJoinButton.vue";
 import StudyJoinButton from "@/components/Board/studyJoinButton.vue";
+import StudyApplyButton from "@/components/Board/studyApplyButton.vue";
 
 export default {
   components: {
+    StudyApplyButton,
     StudyJoinButton,
     comment
   },

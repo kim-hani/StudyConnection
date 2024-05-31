@@ -1,3 +1,4 @@
 export default {
-    getIsAuth: state => state.isAuth
+    getIsAuth: state => state.isAuth,
+    getUserId: state => state.userData.userId,
 };
