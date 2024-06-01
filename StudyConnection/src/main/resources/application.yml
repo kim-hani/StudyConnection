@@ -1,16 +1,49 @@
 # 스프링 부트 서버가 실행되면 자동으로 로딩되는 파일
 spring:
+  # auto reload
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+
   jpa:
-    # 전송 쿼리 확인
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
     show-sql: true
+    hibernate:
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
 
+    # defer-datasource-initialization: true
+
   datasource:
-    url: jdbc:h2:mem:testdb
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://ls-e34214e971d6c965bdfcf24e184f58fb033c186a.cx86a8i0yuvz.ap-northeast-2.rds.amazonaws.com:3306/StudyConnection?serverTimezone=Asia/Seoul
+    username: admin
+    password: stdy0519
 
   # 실제 데이터를 확인하기 위해 H2 콘솔을 활성화
   h2:
     console:
       enabled: true
+      # 보안 상의 이유로 나중에는 제거해야 함.
+      settings:
+        web-allow-others: true
+
+
+jwt:
+  issuer: Team_HeartBeat
+  secret_key: study-connection
+
+springdoc:
+  swagger-ui:
+    path: /api-test # swqgger-ui 접근 경로에 대한 별칭
+    groups-order: DESC # path, query, body, response 순으로 출력
+    tags-sorter : alpha
+    operations-sorter: method
+
+  paths-to-match:
+    - /api/**

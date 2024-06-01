@@ -1,10 +1,10 @@
 package HeartBeat.StudyConnection.KimJongBin;
 
-import HeartBeat.StudyConnection.entity.ChatRoom;
-import HeartBeat.StudyConnection.entity.User;
-import HeartBeat.StudyConnection.repository.ChatRoomRepository;
-import HeartBeat.StudyConnection.repository.UserRepository;
-import HeartBeat.StudyConnection.service.ChattingRoomMakeService;
+import HeartBeat.StudyConnection.entity.chatRoomEntity.ChatRoom;
+import HeartBeat.StudyConnection.entity.userInfoEntity.User;
+import HeartBeat.StudyConnection.repository.chatRoomRepository.ChatRoomRepository;
+import HeartBeat.StudyConnection.repository.userInfoRepository.UserRepository;
+import HeartBeat.StudyConnection.service.chatRoomService.ChattingRoomService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,8 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -24,14 +24,15 @@ public class ChattingRoomMakeServiceTest {
     // 원래 컨트롤러에서 시작해 쭉 테스트하는 것 같은데
     // 내가 한 것만 먼저 테스트 하겠음.
 
+    // Repository
     @Autowired
     UserRepository userRepository;
-
     @Autowired
     ChatRoomRepository chatRoomRepository;
 
+    // Service
     @Autowired
-    ChattingRoomMakeService chattingRoomMakeService;
+    ChattingRoomService chattingRoomMakeService;
 
     @BeforeEach
     void cleanRepository(){
@@ -53,41 +54,62 @@ public class ChattingRoomMakeServiceTest {
     public void ServiceTest(){
         // given
         String roomName = "테스트 채팅방";
-        List<String> receivedUserIds = new ArrayList<>();
-        receivedUserIds.add("010-1234-5678");
-        receivedUserIds.add("010-4321-5678");
-        receivedUserIds.add("010-1234-8765");
 
-        userRepository.save(User.builder()
+        // 유저 저장
+        List<User> receivedUser = new ArrayList<>();
+        receivedUser.add(userRepository.save(User.builder()
                 .userId("010-1234-5678")
                 .birth("1999-01-05")
                 .email("kkk1234@naver.com")
                 .username("강건고")
                 .password("0122")
-                .build());
-        userRepository.save(User.builder()
+                .build()));
+
+        receivedUser.add(userRepository.save(User.builder()
                 .userId("010-4321-5678")
                 .birth("2002-11-05")
                 .email("an1234@naver.com")
                 .username("김아나")
                 .password("0220")
-                .build());
-        userRepository.save(User.builder()
+                .build()));
+
+        receivedUser.add(userRepository.save(User.builder()
                 .userId("010-1234-8765")
                 .birth("2003")
                 .email("lle1234@naver.com")
                 .username("이련이")
                 .password("1234")
-                .build());
+                .build()));
+
+        List<String> userIdToCheck = List.of("010-1234-5678", "010-4321-5678", "010-1234-8765");
 
         // when
-        ChatRoom newChatRoom = chattingRoomMakeService.createChatRoom(roomName, receivedUserIds);
+        chattingRoomMakeService.createChatRoom(roomName, receivedUser, Long.valueOf(1));
 
-        // then
+        // then (결과)
         List<ChatRoom> searchRooms = chatRoomRepository.findAll();
-        System.out.println(searchRooms.size());
+        List<ChatRoom> searchRoomsByStudyId = chatRoomRepository.findByStudyId(Long.valueOf(1));
+        List<ChatRoom> searchRoomsByUserId = chatRoomRepository.findByUserId("010-1234-8765");
+        List<User> users = userRepository.findAll();
 
-       assertThat(searchRooms.get(0).getId()).isEqualTo(newChatRoom.getId());
+        List<String> userIdsInChatRooms = searchRooms.stream()
+                .map(ChatRoom::getUserId)
+                .collect(Collectors.toList());
+
+        // 새로 만든 톡방 잘 저장되었는지
+       assertThat(searchRooms.size()).isEqualTo(3);
+
+        // 새로 만든 톡방과 톡방-유저 테이블이 맞는지
+        assertThat(searchRoomsByUserId.get(0).getRoomName())
+                .isEqualTo(roomName);
+
+        assertThat(searchRoomsByUserId.get(0).getUserId())
+                .isEqualTo("010-1234-8765");
+
+        assertThat(searchRoomsByStudyId.get(0).getStudyId())
+                .isEqualTo(Long.valueOf(1));
+
+        assertThat(userIdsInChatRooms).containsAll(userIdToCheck);
 
 
     }
