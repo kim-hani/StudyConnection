@@ -1,5 +1,12 @@
 # 스프링 부트 서버가 실행되면 자동으로 로딩되는 파일
 spring:
+  # auto reload
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect

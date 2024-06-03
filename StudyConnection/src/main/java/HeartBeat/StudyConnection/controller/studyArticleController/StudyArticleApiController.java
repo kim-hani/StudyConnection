@@ -22,8 +22,11 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -67,6 +70,18 @@ public class StudyArticleApiController {
 
         return ResponseEntity.ok()
                 .body(studyList);
+    }
+
+    // 스터디 모집글 전체 조회
+    @GetMapping("/api/study-articles-paging")
+    @Operation(summary = "메인 페이지 스터디 모집글 조회(페이징)", description = "메인 페이지에서 전체 스터디 모집글을 조회(페이징)")
+    public ResponseEntity<Page<AddStudyListResponseDto>> findAllPaging(
+            @RequestParam(required = false, defaultValue = "0", value = "page") int pageNo,
+            @RequestParam(required = false, defaultValue = "createdAt", value = "orderby") String criteria,
+            @RequestParam(required = false, defaultValue = "DESC", value = "sort") String sort) {
+        Page<AddStudyListResponseDto> studyPage = studyArticleService.findAllPaging(pageNo, criteria, sort);
+
+        return ResponseEntity.ok().body(studyPage);
     }
 
 
@@ -203,11 +218,17 @@ public class StudyArticleApiController {
      **/
     @PostMapping("/api/comment/{studyArticleId}")
     @Operation(summary = "게시글에 댓글 생성", description = "게시글에 댓글 생성 시 사용하는 API")
-    @UserAuth
+    /*@UserAuth
     public ResponseIdDto createComment(AppAuthentication auth,
                                        @PathVariable Long studyArticleId,
                                        @Valid @RequestBody RequestCreateCommentDto dto) {
         Long result = commentService.create(studyArticleId, auth.getUserId(), dto.getContent());
+        return new ResponseIdDto(result);
+    }*/
+    public ResponseIdDto createComment(@AuthenticationPrincipal UserDetails userDetails,
+                                       @PathVariable(name="studyArticleId", required = true) Long studyArticleId,
+                                       @Valid @RequestBody RequestCreateCommentDto dto) {
+        Long result = commentService.create(studyArticleId, userDetails.getUsername(), dto.getContent());
         return new ResponseIdDto(result);
     }
 
@@ -216,12 +237,17 @@ public class StudyArticleApiController {
      * <p>대댓글도 수정할 수 있습니다.</p>
      */
     @PatchMapping("/api/comment/{commentId}")
-    @UserAuth
     @Operation(summary = "댓글,대댓글 수정", description = "게시글의 댓글 수정 시 사용하는 API")
+    /*@UserAuth
     public void editComment(AppAuthentication auth,
                             @PathVariable Long commentId,
                             @Valid @RequestBody RequestCreateCommentDto dto) {
         commentService.edit(commentId, auth.getUserId(), dto.getContent());
+    }*/
+    public void editComment(@AuthenticationPrincipal UserDetails userDetails,
+                            @PathVariable(name="commentId", required = true) Long commentId,
+                            @Valid @RequestBody RequestCreateCommentDto dto) {
+        commentService.edit(commentId, userDetails.getUsername(), dto.getContent());
     }
 
     /**
@@ -229,11 +255,15 @@ public class StudyArticleApiController {
      * <p>대댓글도 삭제할 수 있습니다.</p>
      */
     @DeleteMapping("/api/comment/{commentId}")
-    @UserAuth
     @Operation(summary = "댓글,대댓글 삭제", description = "댓글 삭제 시 사용하는 API")
+    /*@UserAuth
     public void deleteComment(AppAuthentication auth,
                               @PathVariable Long commentId) {
         commentService.delete(commentId, auth.getUserId());
+    }*/
+    public void deleteComment(@AuthenticationPrincipal UserDetails userDetails,
+                              @PathVariable(name="commentId", required = true) Long commentId) {
+        commentService.delete(commentId, userDetails.getUsername());
     }
 
     /**
@@ -242,12 +272,18 @@ public class StudyArticleApiController {
      * @param commentId   댓글 ID
      */
     @PostMapping("/api/reply/{commentId}")
-    @UserAuth
     @Operation(summary = "대댓글 생성", description = "대댓글 생성 시 사용하는 API")
+    /*@UserAuth
     public ResponseIdDto createReply(AppAuthentication auth,
                                      @PathVariable Long commentId,
                                      @Valid @RequestBody RequestCreateCommentDto dto) {
         Long result = commentService.createReply(commentId, auth.getUserId(), dto.getContent());
+        return new ResponseIdDto(result);
+    }*/
+    public ResponseIdDto createReply(@AuthenticationPrincipal UserDetails userDetails,
+                                     @PathVariable(name="commentId", required = true) Long commentId,
+                                     @Valid @RequestBody RequestCreateCommentDto dto) {
+        Long result = commentService.createReply(commentId, userDetails.getUsername(), dto.getContent());
         return new ResponseIdDto(result);
     }
 }

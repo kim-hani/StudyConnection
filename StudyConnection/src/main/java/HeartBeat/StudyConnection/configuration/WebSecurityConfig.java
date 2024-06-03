@@ -1,6 +1,7 @@
 package HeartBeat.StudyConnection.configuration;
 
 
+import HeartBeat.StudyConnection.configuration.jwt.TokenAuthenticationFilter;
 import HeartBeat.StudyConnection.service.userInfoService.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -8,10 +9,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -22,9 +26,11 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 
 @RequiredArgsConstructor
 @Configuration
+@EnableWebSecurity
 public class WebSecurityConfig{
 
     private final UserDetailService userService;
+    private final TokenAuthenticationFilter tokenAuthenticationFilter;
 
     // 스프링 시큐리티 기능 비활성화
     @Bean
@@ -39,25 +45,34 @@ public class WebSecurityConfig{
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors().and()
-                .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/api/login", "/api/signup", "/api/**").permitAll()
+                .csrf(c -> c.disable())
+                .cors(c -> c.disable())
+                .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .formLogin(c -> c.disable())
+                .httpBasic((httpBasic) -> httpBasic.disable())
+                .headers(headers -> headers.frameOptions(frameOptionsConfig -> frameOptionsConfig.disable())); // X-Frame-Options 비활성화;
+
+        http
+                .authorizeHttpRequests((auth) ->
+                        auth
+                                .requestMatchers("/api/login", "/api/signup", "/api/**").permitAll()
                                 .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-test","/v3/api-docs/**").permitAll()
-                        .anyRequest().authenticated()
-                        );
+                                .anyRequest().authenticated()
+                );
+
+        http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // JWT 필터 추가;
+
         return http.build();
     }
 
     // 인증 관리자 관련 설정
     @Bean
-    public AuthenticationManager authenticationManager
-    (HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailService userDetailService)
-    throws Exception{
+    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailService userDetailService)
+            throws Exception{
         return http
-               .getSharedObject(AuthenticationManagerBuilder.class)
-               .userDetailsService(userService)
-               .passwordEncoder(bCryptPasswordEncoder)
+                .getSharedObject(AuthenticationManagerBuilder.class)
+                .userDetailsService(userService)
+                .passwordEncoder(bCryptPasswordEncoder)
                 .and().build();
     }
 
