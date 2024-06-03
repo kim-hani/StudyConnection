@@ -32,7 +32,7 @@ public class User implements UserDetails {
     private String username;
 
     // 사용자의 이메일
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     // 사용자의 스터디

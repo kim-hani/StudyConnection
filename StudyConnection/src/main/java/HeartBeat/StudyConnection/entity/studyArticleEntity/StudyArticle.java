@@ -79,6 +79,10 @@ public class StudyArticle {
         this.available = bool;
     }
 
+    public boolean getAvailable(){
+       return this.available;
+    }
+
     // 작성자 확인 메서드
     public boolean isAuthor(User user){
         return this.author.equals(user.getUserId());
