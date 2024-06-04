@@ -10,6 +10,7 @@ import HeartBeat.StudyConnection.dto.loginDto.UserLoginResponse;
 import HeartBeat.StudyConnection.dto.signUpDto.AddUserRequest;
 import HeartBeat.StudyConnection.dto.signUpDto.AddUserResponse;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
+import HeartBeat.StudyConnection.service.studyArticleService.StudyService;
 import HeartBeat.StudyConnection.service.userInfoService.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,6 +41,7 @@ public class UserApiController {
     private final RefreshTokenService refreshTokenService;
     private final TokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
+    private final StudyService studyService;
 
     @PostMapping("/api/login")
     @Operation(summary = "사용자 로그인", description = "로그인 시 사용하는 API")
@@ -157,6 +159,7 @@ public class UserApiController {
                         .age(String.valueOf(thisYear))
                         .email(searchUser.getEmail())
                         .userId(searchUser.getUserId())
+                        .studyList(studyService.loadUserStudies(userId))
                         .build());
     }
 }

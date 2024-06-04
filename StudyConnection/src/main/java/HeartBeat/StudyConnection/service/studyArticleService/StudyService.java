@@ -5,6 +5,7 @@ import HeartBeat.StudyConnection.entity.studyArticleEntity.UserStudy;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import HeartBeat.StudyConnection.repository.studyArticleRepository.StudyRepository;
 import HeartBeat.StudyConnection.repository.studyArticleRepository.UserStudyRepository;
+import HeartBeat.StudyConnection.service.userInfoService.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.Set;
 public class StudyService {
     private final StudyRepository studyRepository;
     private final UserStudyRepository userStudyRepository;
+    private final UserService userService;
 
     public Study saveStudy(String studyTitle, List<User> users, Long studyId){
         // 새로운 Study 확정
@@ -42,5 +44,17 @@ public class StudyService {
         System.out.println(savedStudy);
 
         return savedStudy;
+    }
+
+    public List<Study> loadUserStudies(String userId){
+        User user = userService.findByUserId(userId);
+        List<UserStudy> userStudyList = user.getUserStudies().stream().toList();
+        List<Study> studyList = new ArrayList<>();
+
+        for(UserStudy userStudy : userStudyList){
+            studyList.add(userStudy.getStudy());
+        }
+
+        return studyList;
     }
 }
