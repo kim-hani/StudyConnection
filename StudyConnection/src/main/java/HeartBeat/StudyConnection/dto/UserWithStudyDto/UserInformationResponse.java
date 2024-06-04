@@ -1,4 +1,4 @@
-package HeartBeat.StudyConnection.dto;
+package HeartBeat.StudyConnection.dto.UserWithStudyDto;
 
 import HeartBeat.StudyConnection.entity.studyArticleEntity.Study;
 import lombok.Builder;
@@ -19,10 +19,10 @@ public class UserInformationResponse {
     // 평가 기능 완료되면 별점 등 추가
 
     // 참여중인 스터디 목록
-    private List<Study> studyList;
+    private List<UserStudiesResponse> studyList;
 
     @Builder
-    public UserInformationResponse(String username, String userId, String age, String email, List<Study> studyList){
+    public UserInformationResponse(String username, String userId, String age, String email, List<UserStudiesResponse> studyList){
         this.username = username;
         this.userId = userId;
         this.age = age;

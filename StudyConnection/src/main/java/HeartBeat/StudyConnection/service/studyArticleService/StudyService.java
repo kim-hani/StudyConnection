@@ -1,5 +1,7 @@
 package HeartBeat.StudyConnection.service.studyArticleService;
 
+import HeartBeat.StudyConnection.dto.UserWithStudyDto.UserNameIdResponse;
+import HeartBeat.StudyConnection.dto.UserWithStudyDto.UserStudiesResponse;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.Study;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.UserStudy;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,15 +49,46 @@ public class StudyService {
         return savedStudy;
     }
 
-    public List<Study> loadUserStudies(String userId){
+    public List<UserStudiesResponse> loadUserStudies(String userId){
         User user = userService.findByUserId(userId);
-        List<UserStudy> userStudyList = user.getUserStudies().stream().toList();
-        List<Study> studyList = new ArrayList<>();
+        List<UserStudiesResponse> userStudiesResponses = new ArrayList<>();
 
-        for(UserStudy userStudy : userStudyList){
-            studyList.add(userStudy.getStudy());
+        // 해당 사용자의 스터디 조회
+        List<UserStudy> userStudyList = user.getUserStudies().stream().toList();
+
+        // 해당 사용자가 참여하고 있는 스터디의 아이디
+        List<Long> studiesId = user.getUserStudies().stream()
+                .map(userStudy -> userStudy.getStudy().getStudyId())
+                .collect(Collectors.toList());
+
+
+        // 해당 스터디 참가자 조회
+        for(Long studyId : studiesId){
+            Study study = studyRepository.findByStudyId(studyId);
+
+            // 해당 스터디에 참여하고 있는 사용자들을 조회
+            List<User> users = userStudyRepository.findByStudyId(studyId).stream()
+                    .map(userStudy -> userStudy.getUser())
+                    .collect(Collectors.toList());
+
+            // 추가
+            userStudiesResponses.add(UserStudiesResponse.builder()
+                    .studyName(study.getStudyName())
+                    .studyId(studyId)
+                    .participants(toListFromUsers(users))
+                    .build());
+
+
         }
 
-        return studyList;
+        return userStudiesResponses;
+    }
+
+    public List<UserNameIdResponse> toListFromUsers(List<User> users){
+        List<UserNameIdResponse> userNameIdResponses = new ArrayList<>();
+        for(User user : users){
+            userNameIdResponses.add(new UserNameIdResponse(user.getUserId(), user.getUsername()));
+        }
+        return userNameIdResponses;
     }
 }
