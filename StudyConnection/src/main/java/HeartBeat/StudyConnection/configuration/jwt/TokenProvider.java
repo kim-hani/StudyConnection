@@ -86,9 +86,15 @@ public class TokenProvider {
         Set<SimpleGrantedAuthority> authorities = Collections.singleton(new
                 SimpleGrantedAuthority("ROLE_USER"));
 
-        return new UsernamePasswordAuthenticationToken(
+        /*return new UsernamePasswordAuthenticationToken(
                 new org.springframework.security.core.userdetails.User(
                         claims.get("username", String.class), "", authorities),
+                token,
+                authorities
+        );*/
+        return new UsernamePasswordAuthenticationToken(
+                new org.springframework.security.core.userdetails.User(
+                        claims.get("userId", String.class), "", authorities),
                 token,
                 authorities
         );

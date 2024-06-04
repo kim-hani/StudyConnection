@@ -47,7 +47,7 @@ public class UserRatingController {
 
     // 특정 평가글 삭제
     @DeleteMapping("/api/user-ratings/{id}")
-    @Operation(summary = "특정 평가글 삭제", description = "특정 평가글 삭제 시 사용하는 API" +
+    @Operation(summary = "특정 평가글 삭제", description = "특정 평가글 삭제 시 사용하는 API\n" +
             "해당 평가id를 통해 평가 삭제 가능")
     public ResponseEntity<ResponseIdDto> delete(
             @Parameter(description = "삭제할 평가글id", example = "2")
