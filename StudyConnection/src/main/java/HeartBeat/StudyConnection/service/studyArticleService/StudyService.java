@@ -11,10 +11,7 @@ import HeartBeat.StudyConnection.service.userInfoService.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,9 +47,12 @@ public class StudyService {
         return savedStudy;
     }
 
-    public List<UserStudiesResponse> loadUserStudies(String userId){
+    public Map<String, List<UserStudiesResponse>> loadUserStudies(String userId){
         User user = userService.findByUserId(userId);
-        List<UserStudiesResponse> userStudiesResponses = new ArrayList<>();
+        List<UserStudiesResponse> availableStudyList = new ArrayList<>();
+        List<UserStudiesResponse> unavailableStudyList = new ArrayList<>();
+
+        Map<String, List<UserStudiesResponse>> studyListMap = new HashMap<>();
 
         // 해당 사용자가 참여하고 있는 스터디의 아이디
         List<Long> studiesId = user.getUserStudies().stream()
@@ -70,19 +70,29 @@ public class StudyService {
                     .collect(Collectors.toList());
 
             // 추가
-            userStudiesResponses.add(UserStudiesResponse.builder()
-                    .studyName(study.getStudyName())
-                    .studyId(studyId)
-                    .participants(toListFromUsers(users))
-                    .available(study.getAvailable())
-                    .build());
+            if(study.getAvailable()) {
+                availableStudyList.add(UserStudiesResponse.builder()
+                        .studyName(study.getStudyName())
+                        .studyId(studyId)
+                        .participants(toListFromUsers(users))
+                        .available(study.getAvailable())
+                        .build());
+            }
+            else{
+                unavailableStudyList.add(UserStudiesResponse.builder()
+                        .studyName(study.getStudyName())
+                        .studyId(studyId)
+                        .participants(toListFromUsers(users))
+                        .available(study.getAvailable())
+                        .build());
+            }
 
+            studyListMap.put("available", availableStudyList);
+            studyListMap.put("unavailable", unavailableStudyList);
 
         }
 
-        userStudiesResponses.sort((o1, o2) -> Boolean.compare(o2.getAvailable(), o1.getAvailable()));
-
-        return userStudiesResponses;
+        return studyListMap;
     }
 
     public List<UserNameIdResponse> toListFromUsers(List<User> users){

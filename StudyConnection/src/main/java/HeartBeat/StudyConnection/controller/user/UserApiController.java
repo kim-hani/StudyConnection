@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -157,7 +158,7 @@ public class UserApiController {
         }
 
         // 사용자의 스터디 찾기
-        List<UserStudiesResponse> studyList = studyService.loadUserStudies(userId);
+        Map<String, List<UserStudiesResponse>> studyListMap = studyService.loadUserStudies(userId);
 
         return ResponseEntity.ok()
                 .body(UserInformationResponse.builder()
@@ -165,7 +166,8 @@ public class UserApiController {
                         .age(String.valueOf(thisYear))
                         .email(searchUser.getEmail())
                         .userId(searchUser.getUserId())
-                        .studyList(studyList)
+                        .availableStudyList(studyListMap.get("available"))
+                        .unavailableStudyList(studyListMap.get("unavailable"))
                         .build());
     }
 }

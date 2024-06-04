@@ -19,14 +19,17 @@ public class UserInformationResponse {
     // 평가 기능 완료되면 별점 등 추가
 
     // 참여중인 스터디 목록
-    private List<UserStudiesResponse> studyList;
+    private List<UserStudiesResponse> availableStudyList;
+    private List<UserStudiesResponse> unavailableStudyList;
 
     @Builder
-    public UserInformationResponse(String username, String userId, String age, String email, List<UserStudiesResponse> studyList){
+    public UserInformationResponse(String username, String userId, String age, String email,
+                                   List<UserStudiesResponse> availableStudyList, List<UserStudiesResponse> unavailableStudyList){
         this.username = username;
         this.userId = userId;
         this.age = age;
         this.email = email;
-        this.studyList = studyList;
+        this.availableStudyList = availableStudyList;
+        this.unavailableStudyList = unavailableStudyList;
     }
 }
