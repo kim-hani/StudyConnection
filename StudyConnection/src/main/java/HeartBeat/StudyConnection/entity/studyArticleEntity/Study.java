@@ -20,8 +20,14 @@ public class Study {
     @Column(name = "study_name")
     private String studyName;
 
+    @Column(name = "available")
+    private boolean available;
+
     @OneToMany(mappedBy = "study")
     private Set<UserStudy> userStudies = new HashSet<>();
 
 
+    public boolean getAvailable() {
+        return this.available;
+    }
 }

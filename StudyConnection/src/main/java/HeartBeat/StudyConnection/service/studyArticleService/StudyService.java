@@ -31,6 +31,7 @@ public class StudyService {
 
         study.setStudyName(studyTitle);
         study.setStudyId(studyId);
+        study.setAvailable(true);
 
         // Study 엔티티 저장
         Study savedStudy = studyRepository.save(study);
@@ -53,9 +54,6 @@ public class StudyService {
         User user = userService.findByUserId(userId);
         List<UserStudiesResponse> userStudiesResponses = new ArrayList<>();
 
-        // 해당 사용자의 스터디 조회
-        List<UserStudy> userStudyList = user.getUserStudies().stream().toList();
-
         // 해당 사용자가 참여하고 있는 스터디의 아이디
         List<Long> studiesId = user.getUserStudies().stream()
                 .map(userStudy -> userStudy.getStudy().getStudyId())
@@ -76,10 +74,13 @@ public class StudyService {
                     .studyName(study.getStudyName())
                     .studyId(studyId)
                     .participants(toListFromUsers(users))
+                    .available(study.getAvailable())
                     .build());
 
 
         }
+
+        userStudiesResponses.sort((o1, o2) -> Boolean.compare(o2.getAvailable(), o1.getAvailable()));
 
         return userStudiesResponses;
     }
