@@ -53,8 +53,8 @@ export default {
           id: 2,
           name: '스터디 B',
           members: [
-            { id: 3, name: '박지성', rating: 4.9 },
-            { id: 4, name: '손흥민', rating: 4.7 },
+            { id: 3, name: '박지성'},
+            { id: 4, name: '손흥민'},
           ],
         },
       ],
@@ -63,8 +63,8 @@ export default {
           id: 4,
           name: '스터디 C',
           members: [
-            { id: 5, name: '김영수', rating: 3.2 },
-            { id: 6, name: '이정희', rating: 4.1 },
+            { id: 5, name: '김영수'},
+            { id: 6, name: '이정희'},
           ],
         },
       ],
@@ -72,6 +72,10 @@ export default {
       selectedMember: null,
     };
   },
+  mounted(){
+    this.getUserStudyInfo();
+  },
+
   methods: {
     selectStudy(study) {
       this.selectedStudy = study;
@@ -83,6 +87,19 @@ export default {
     goToStudy(studyId) {
       this.$router.push({ path: `/board/${studyId}` });
     },
+
+    getUserStudyInfo(){ // 유저가 참여하고, 참여했던 스터디 정보 가져오기.
+      const userId = this.$route.params.userId;
+      this.$axios.get(this.$serverUrl + `/api/userinfo/${userId}`)
+          .then((res) => {
+            console.log(res);
+            this.activeStudies = res.data.availableStudyList;
+            this.email = res.data.email;
+          }).catch((err) => {
+        console.log(err)
+      },)
+    }
+
   },
 };
 </script>

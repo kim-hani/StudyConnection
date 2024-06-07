@@ -6,6 +6,7 @@ import BoardWrite from '@/views/board/BoardWrite.vue'
 import Login from '@/views/Login.vue'
 import store from "@/Vuex/store";
 import BoardEdit from "@/views/board/BoardEdit.vue";
+import Chat from "@/views/Chat/Chat.vue";
 const routes = [
   {
     path: '/',
@@ -46,6 +47,11 @@ const routes = [
     path: '/board/:id/edit',
     name: 'BoardEdit',
     component: BoardEdit
+  },
+  {
+    path: '/Chat',
+    name: 'Chat',
+    component: Chat
   }
 ]
 

@@ -44,7 +44,7 @@ export default {
   methods: {
     showModal() {
       const articleId = this.$route.params.id;
-      this.$axios.get(this.$serverUrl + `/api/study-articles/7/apply`)
+      this.$axios.get(this.$serverUrl + `/api/study-articles/${articleId}/apply`)
         .then((res) => {
           this.applicants = res.data.applicants;
           console.log(res);

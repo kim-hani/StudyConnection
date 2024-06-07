@@ -1,6 +1,6 @@
 <template>
   <div class="study-list section">
-    <h2>{{ title }}</h2>
+    <h4>{{ title }}</h4>
     <ul>
       <li v-for="study in studies" :key="study.id" class="study-item" :class="{ selected: study.id === selectedStudy?.id }">
         <div @click="selectStudy(study)">
