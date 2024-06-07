@@ -97,6 +97,7 @@ export default {
       const articleId = this.$route.params.id;
       axios.get(`${this.$serverUrl}/api/comments/${articleId}`).then((response) => {
         console.log(response);
+        this.comments = response.data;
       }).catch((err) => {
         console.error('에러 발생:', err);
       });
@@ -104,12 +105,23 @@ export default {
 
     submitComment() {
       const articleId = this.$route.params.id;
-      const newComment = {
+      const comment = {
         authorId: this.userData.userId, // 로그인한 사용자의 ID
         content: this.content
       };
+
+      const accessToken = localStorage.getItem('accessToken'); // 로컬스토리지에서 토큰 가져오기
+
       // 서버에 댓글을 저장하는 로직
-      axios.post(`${this.$serverUrl}/api/comments/${articleId}`, newComment).then((response) => {
+      axios.post(
+          `${this.$serverUrl}/api/comment/${articleId}`,
+          comment,
+          {
+            headers: {
+              'Authorization': `Bearer ${accessToken}` // Authorization 헤더에 토큰 추가
+            }
+          }
+      ).then((response) => {
         console.log(response);
         this.content = ''; // 댓글 작성란 초기화
         this.fetchComments(); // 댓글 목록 다시 불러오기
@@ -117,6 +129,7 @@ export default {
         console.error('댓글 저장 에러 발생:', err);
       });
     },
+
 
     editComment(commentId) {
       const newContent = prompt("Enter new content:");
@@ -132,8 +145,14 @@ export default {
     },
     deleteComment(commentId) {
       if (confirm("정말 삭제하시겠습니까?")) {
-        axios.delete(`${this.$serverUrl}/api/comments/${commentId}`)
-            .then(response => {
+        const accessToken = localStorage.getItem('accessToken');
+        axios.delete(`${this.$serverUrl}/api/comments/${commentId}`,
+            {
+              headers: {
+                'Authorization': `Bearer ${accessToken}` // Authorization 헤더에 토큰 추가
+              }
+            }
+        ).then(response => {
               this.fetchComments();
             })
             .catch(err => {

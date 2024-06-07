@@ -45,8 +45,8 @@ export default {
           id: 3,
           name: '프로그래밍 언어 스터디',
           members: [
-            { id: 1, name: '조성현', rating: 4.2 },
-            { id: 2, name: '김한이', rating: 3.8 },
+            { id: 1, name: '조성현'},
+            { id: 2, name: '김한이'},
           ],
         },
         {
