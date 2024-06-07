@@ -65,7 +65,7 @@ public class StudyService {
             Study study = studyRepository.findByStudyId(studyId);
 
             // 해당 스터디에 참여하고 있는 사용자들을 조회
-            List<User> users = userStudyRepository.findByStudyId(studyId).stream()
+            List<User> users = userStudyRepository.findByStudy_StudyId(studyId).stream()
                     .map(userStudy -> userStudy.getUser())
                     .collect(Collectors.toList());
 

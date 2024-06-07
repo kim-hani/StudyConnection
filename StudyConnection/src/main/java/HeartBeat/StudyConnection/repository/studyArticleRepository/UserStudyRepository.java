@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserStudyRepository extends JpaRepository<UserStudy,String> {
-    List<UserStudy> findByStudyId(Long studyId);
-    List<UserStudy> findByUserId(Long userId);
+public interface UserStudyRepository extends JpaRepository<UserStudy,Long> {
+    List<UserStudy> findByStudy_StudyId(Long studyId);
+    List<UserStudy> findByUser_UserId(String userId);
 }
