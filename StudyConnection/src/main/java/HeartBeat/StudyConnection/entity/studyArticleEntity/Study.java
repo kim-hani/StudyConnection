@@ -21,7 +21,8 @@ public class Study {
     private String studyName;
 
     @Column(name = "available")
-    private boolean available;
+    private boolean available; // 스터디 진행 중인지 완료되었는지.
+
 
     @OneToMany(mappedBy = "study")
     private Set<UserStudy> userStudies = new HashSet<>();

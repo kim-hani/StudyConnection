@@ -32,8 +32,8 @@ public class StudyArticleService {
     }
 
     @Transactional
-    public void setAvailableToFalse(StudyArticle article){
-        article.setAvailable(false);
+    public void setRecruitmentToFalse(StudyArticle article){
+        article.setRecruitment(false);
         studyArticleRepository.save(article);
     }
 

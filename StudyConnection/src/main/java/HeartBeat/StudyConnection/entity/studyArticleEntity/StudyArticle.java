@@ -41,8 +41,8 @@ public class StudyArticle {
     @Column(name = "limit_of_participants")
     private int limitOfParticipants;    // 스터디 정원
 
-    @Column(name = "available")
-    private boolean available;      // 참여 가능 여부
+    @Column(name = "recruitment")
+    private boolean recruitment;      // 참여 가능 여부
 
     @Column(columnDefinition = "TEXT",nullable = false)
     private String title;       // 스터디 이름
@@ -59,13 +59,13 @@ public class StudyArticle {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public StudyArticle(Long id, String author, String content, int limitOfParticipants, boolean available,
+    public StudyArticle(Long id, String author, String content, int limitOfParticipants, boolean recruitment,
                         String title, String comment){
         this.id = id;
         this.author = author;
         this.content = content;
         this.limitOfParticipants = limitOfParticipants;
-        this.available = available;
+        this.recruitment = recruitment;
         this.title = title;
     }
 
@@ -75,12 +75,12 @@ public class StudyArticle {
         this.content = content;
     }
 
-    public void setAvailable(boolean bool){
-        this.available = bool;
+    public void setRecruitment(boolean bool){
+        this.recruitment = bool;
     }
 
-    public boolean getAvailable(){
-       return this.available;
+    public boolean getRecruitment(){
+       return this.recruitment;
     }
 
     // 작성자 확인 메서드

@@ -31,7 +31,7 @@ public class AddStudyListResponseDto {
         this.author = studyArticle.getAuthor();
         this.content = studyArticle.getContent();
         this.limitOfParticipants = studyArticle.getLimitOfParticipants();
-        this.available = studyArticle.getAvailable();
+        this.available = studyArticle.getRecruitment();
         this.title = studyArticle.getTitle();
         this.createdAt = studyArticle.getCreatedAt();
         this.updatedAt = studyArticle.getUpdatedAt();

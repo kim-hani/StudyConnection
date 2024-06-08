@@ -11,6 +11,7 @@ import HeartBeat.StudyConnection.dto.ResponseIdDto;
 import HeartBeat.StudyConnection.dto.commentDto.request.RequestCreateCommentDto;
 import HeartBeat.StudyConnection.dto.commentDto.response.SummarizedCommentDto;
 import HeartBeat.StudyConnection.role.UserAuth;
+import HeartBeat.StudyConnection.service.chatRoomService.ChattingRoomService;
 import HeartBeat.StudyConnection.service.commentService.CommentService;
 import HeartBeat.StudyConnection.service.studyArticleService.StudyApplyService;
 import HeartBeat.StudyConnection.service.studyArticleService.StudyArticleService;
@@ -42,7 +43,7 @@ public class StudyArticleApiController {
     private final UserService userService;
     private final CommentService commentService;
     private final StudyService studyService;
-    // private final ChattingRoomService chattingRoomMakeService;
+    private final ChattingRoomService chattingRoomMakeService;
 
 
     // 스터디 모집글 생성
@@ -167,6 +168,7 @@ public class StudyArticleApiController {
     @Operation(summary = "스터디 모집 확정", description = "글 작성자 이외의 사용자가 스터디 가입 신청")
     public ResponseEntity<ConfirmStudyResponseDto> confirmStudy(@PathVariable Long id, @RequestBody ConfirmStudyRequestDto request){
 
+        // 해당 스터디 모집글 조회
         StudyArticle searchedArticle = studyArticleService.findById(id);
 
         if(searchedArticle == null){
@@ -177,9 +179,6 @@ public class StudyArticleApiController {
         // 확정된 멤버들을 저장할 리스트
         List<User> confirmedUser = new ArrayList<>();
 
-        // 해당 스터디 모집글 조회
-        StudyArticle studyArticle = studyArticleService.findById(id);
-
         // 받은 멤버들의 ID로 User 객체 조회 후 리스트에 저장
         for(String userId : request.getMembers()){
             confirmedUser.add(userService.findByUserId(userId));
@@ -189,11 +188,11 @@ public class StudyArticleApiController {
         Study confirmedStudy = studyService.saveStudy(request.getStudyTitle(), confirmedUser, id);
 
         // 스터디 모집 마감 -> available 수정
-        studyArticleService.setAvailableToFalse(studyArticle);
+        studyArticleService.setRecruitmentToFalse(searchedArticle);
 
         // 확정된 스터디 채팅방 생성
         String chatRoomName = "[" + request.getStudyTitle() + "'s chat room]";
-        // chattingRoomMakeService.createChatRoom(chatRoomName, confirmedUser, id);
+        chattingRoomMakeService.createChatRoom(chatRoomName, confirmedUser, id);
 
         return ResponseEntity.ok()
                 .body(ConfirmStudyResponseDto.builder()

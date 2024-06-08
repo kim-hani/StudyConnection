@@ -30,7 +30,7 @@ public class AddStudyRequestDto {
                 .title(title)
                 .content(content)
                 .author(authorId)
-                .available(true)
+                .recruitment(true)
                 .limitOfParticipants(limitOfParticipants)
                 .build();
     }
