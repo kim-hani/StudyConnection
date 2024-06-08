@@ -201,6 +201,25 @@ public class StudyArticleApiController {
                         .membersId(request.getMembers())
                         .build());
     }
+
+    // 스터디 종료
+    @PutMapping("/api/study-end/{id}")
+    @Parameters({
+            @Parameter(name = "study Id", description = "종료하려는 스터디의 아이디")
+    })
+    @Operation(summary = "스터디 모집 확정", description = "글 작성자 이외의 사용자가 스터디 가입 신청")
+    public ResponseEntity<Void> endStudy(@PathVariable Long id){
+        Study searchedStudy = studyService.findByStudyId(id);
+
+        if(searchedStudy == null){
+            return ResponseEntity.notFound()
+                    .build();
+        }
+
+        studyService.setAvailableToFalse(searchedStudy);
+
+        return ResponseEntity.ok().build();
+    }
     //////////////////////////////////////////////////////
 
     /**

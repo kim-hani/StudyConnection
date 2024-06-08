@@ -49,6 +49,16 @@ public class StudyService {
         return savedStudy;
     }
 
+    @Transactional
+    public void setAvailableToFalse(Study endStudy){
+        endStudy.setAvailable(false);
+        studyRepository.save(endStudy);
+    }
+
+    public Study findByStudyId(Long studyId){
+        return studyRepository.findByStudyId(studyId);
+    }
+
     public Map<String, List<UserStudiesResponse>> loadUserStudies(String userId){
         User user = userService.findByUserId(userId);
         List<UserStudiesResponse> availableStudyList = new ArrayList<>();
