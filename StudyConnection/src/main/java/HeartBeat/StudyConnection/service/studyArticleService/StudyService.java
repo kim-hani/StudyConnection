@@ -8,6 +8,7 @@ import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import HeartBeat.StudyConnection.repository.studyArticleRepository.StudyRepository;
 import HeartBeat.StudyConnection.repository.studyArticleRepository.UserStudyRepository;
 import HeartBeat.StudyConnection.service.userInfoService.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class StudyService {
     private final UserStudyRepository userStudyRepository;
     private final UserService userService;
 
+    @Transactional
     public Study saveStudy(String studyTitle, List<User> users, Long studyId){
         // 새로운 Study 확정
         Study study = new Study();
