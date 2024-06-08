@@ -34,6 +34,7 @@ public class StudyArticleService {
     @Transactional
     public void setAvailableToFalse(StudyArticle article){
         article.setAvailable(false);
+        studyArticleRepository.save(article);
     }
 
     @Transactional
