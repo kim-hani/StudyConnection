@@ -40,7 +40,7 @@ public class StudyArticle {
     private int limitOfParticipants;    // 스터디 정원
 
     @Column(name = "recruitment")
-    private boolean recruitment;      // 참여 가능 여부
+    private boolean recruitment = true;      // 참여 가능 여부
 
     @Column(columnDefinition = "TEXT",nullable = false)
     private String title;       // 스터디 이름
