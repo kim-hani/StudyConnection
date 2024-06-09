@@ -18,7 +18,7 @@ public class AddStudyListResponseDto {
 
     private final int limitOfParticipants;
 
-    private final boolean available;
+    private final boolean recruitment;
 
     private final String title;
 
@@ -31,7 +31,7 @@ public class AddStudyListResponseDto {
         this.author = studyArticle.getAuthor();
         this.content = studyArticle.getContent();
         this.limitOfParticipants = studyArticle.getLimitOfParticipants();
-        this.available = studyArticle.getRecruitment();
+        this.recruitment = studyArticle.getRecruitment();
         this.title = studyArticle.getTitle();
         this.createdAt = studyArticle.getCreatedAt();
         this.updatedAt = studyArticle.getUpdatedAt();
