@@ -13,7 +13,7 @@ public class StudyResponseDto {
     private final String content;
     private final String author;
 
-    private final boolean available;
+    private final Boolean recruitment;
 
     private final int limitOfParticipants;
     private LocalDateTime createdAt;
@@ -28,6 +28,6 @@ public class StudyResponseDto {
         this.limitOfParticipants = entity.getLimitOfParticipants();
         this.createdAt = entity.getCreatedAt();
         this.updatedAt = entity.getUpdatedAt();
-        this.available = entity.getRecruitment();
+        this.recruitment = entity.getRecruitment();
     }
 }

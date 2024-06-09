@@ -14,7 +14,7 @@ public class AddStudyRequestDto {
     private String content;
     private String authorId;
 
-    private boolean available;
+    private Boolean recruitment;
     private int limitOfParticipants;
 
     @Builder
