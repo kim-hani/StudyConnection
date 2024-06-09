@@ -40,7 +40,7 @@ public class StudyArticle {
     private int limitOfParticipants;    // 스터디 정원
 
     @Column(name = "recruitment")
-    private boolean recruitment = true;      // 참여 가능 여부
+    private Boolean recruitment = true;      // 참여 가능 여부
 
     @Column(columnDefinition = "TEXT",nullable = false)
     private String title;       // 스터디 이름
@@ -57,7 +57,7 @@ public class StudyArticle {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public StudyArticle(Long id, String author, String content, int limitOfParticipants, boolean recruitment,
+    public StudyArticle(Long id, String author, String content, int limitOfParticipants, Boolean recruitment,
                         String title, String comment){
         this.id = id;
         this.author = author;
