@@ -1,7 +1,7 @@
 package HeartBeat.StudyConnection.oneTwo;
 
 import HeartBeat.StudyConnection.configuration.jwt.JwtAuthentication;
-import HeartBeat.StudyConnection.dto.reviewDto.role.UserRole;
+import HeartBeat.StudyConnection.role.UserRole;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class UserAuth {
