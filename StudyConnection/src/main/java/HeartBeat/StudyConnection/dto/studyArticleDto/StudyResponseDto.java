@@ -28,6 +28,6 @@ public class StudyResponseDto {
         this.limitOfParticipants = entity.getLimitOfParticipants();
         this.createdAt = entity.getCreatedAt();
         this.updatedAt = entity.getUpdatedAt();
-        this.available = entity.getRecruitment();
+        this.available = entity.isRecruitment();
     }
 }

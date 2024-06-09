@@ -5,10 +5,7 @@ import HeartBeat.StudyConnection.entity.BaseTimeEntity;
 import HeartBeat.StudyConnection.entity.commentEntity.Comment;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -22,6 +19,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "STUDYARTICLE")
 @EntityListeners(AuditingEntityListener.class)
@@ -73,14 +71,6 @@ public class StudyArticle {
     public void update(String title,String content){
         this.title = title;
         this.content = content;
-    }
-
-    public void setRecruitment(boolean bool){
-        this.recruitment = bool;
-    }
-
-    public boolean getRecruitment(){
-       return this.recruitment;
     }
 
     // 작성자 확인 메서드
