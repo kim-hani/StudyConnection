@@ -45,15 +45,20 @@ export default {
     showModal() {
       const articleId = this.$route.params.id;
       this.$axios.get(this.$serverUrl + `/api/study-articles/${articleId}/apply`)
-        .then((res) => {
-          this.applicants = res.data.applicants;
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      this.isModalVisible = true;
+          .then((res) => {
+            this.applicants = res.data.applicants;
+            console.log(res);
+            this.isModalVisible = true;
+          })
+          .catch((err) => {
+            if (err.response && err.response.status === 403) {
+              alert("이미 확정된 스터디 입니다. error 403");
+            } else {
+              console.log(err);
+            }
+          });
     },
+
     hideModal() {
       this.isModalVisible = false;
     },
