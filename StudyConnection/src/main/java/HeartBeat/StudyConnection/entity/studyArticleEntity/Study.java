@@ -1,5 +1,6 @@
 package HeartBeat.StudyConnection.entity.studyArticleEntity;
 
+import HeartBeat.StudyConnection.entity.rating.UserRating;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,6 +27,9 @@ public class Study {
 
     @OneToMany(mappedBy = "study")
     private Set<UserStudy> userStudies = new HashSet<>();
+
+    @OneToMany(mappedBy = "study" ,cascade = CascadeType.REMOVE,orphanRemoval = true)
+    private Set<UserRating> userRatings = new HashSet<>();
 
 
     public Boolean getAvailable() {

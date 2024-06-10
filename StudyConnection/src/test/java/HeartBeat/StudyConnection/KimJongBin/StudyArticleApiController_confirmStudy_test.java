@@ -81,7 +81,7 @@ public class StudyArticleApiController_confirmStudy_test {
         final StudyArticle newArticle = studyArticleRepository.save(StudyArticle.builder()
                 .author("010-0000-0000")
                 .content("test content")
-                .available(true)
+                .recruitment(true)
                 .limitOfParticipants(5)
                 .title("자바 테스트")
                 .build());
@@ -133,7 +133,7 @@ public class StudyArticleApiController_confirmStudy_test {
         final StudyArticle newArticle = studyArticleRepository.save(StudyArticle.builder()
                 .author("010-0000-0000")
                 .content("test content")
-                .available(true)
+                .recruitment(true)
                 .limitOfParticipants(5)
                 .title("자바 테스트")
                 .build());
@@ -218,7 +218,7 @@ public class StudyArticleApiController_confirmStudy_test {
         final StudyArticle newArticle = studyArticleRepository.save(StudyArticle.builder()
                 .author("010-0000-0000")
                 .content("test content")
-                .available(true)
+                .recruitment(true)
                 .limitOfParticipants(5)
                 .title("자바 테스트")
                 .build());
