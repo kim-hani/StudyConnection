@@ -128,6 +128,7 @@ public class StudyArticleApiController {
     @Operation(summary = "스터디 가입 신청", description = "글 작성자 이외의 사용자가 스터디 가입 신청")
     public ResponseEntity<String> applyToStudy(@PathVariable Long id, @RequestBody StudyApplyRequestDto request){
 
+        // 스터디 모집글 조회 -> 있는지 유무 확인
         StudyArticle searchedArticle = studyArticleService.findById(id);
 
         if(searchedArticle == null){
@@ -153,13 +154,24 @@ public class StudyArticleApiController {
                     .build();
         }
 
+        // 문제
         List<StudyApply> applies = studyApplyService.showAllApplicantsId(id);
+
+        System.out.println();
+        System.out.println("==========================");
+        for(StudyApply studyApply : applies){
+            System.out.println();
+            System.out.println(studyApply.toString());
+            System.out.println();
+        }
+        System.out.println("==========================");
+        System.out.println();
 
         return ResponseEntity.ok()
                 .body(new StudyApplicantsResponseDto(studyApplyService.toApplyDtoList(applies)));
     }
 
-    // 글 작성자가 확정된 스터디 멤버들의 ID를 보내 스터디 개설을 완료한다.
+    // [확정버튼] 글 작성자가 확정된 스터디 멤버들의 ID를 보내 스터디 개설을 완료한다.
     @PostMapping("/api/study-articles/{id}/study-confirm")
     @Parameters({
             @Parameter(name = "members", description = "스터디 신청자 userId 목록"),
@@ -170,11 +182,27 @@ public class StudyArticleApiController {
 
         // 해당 스터디 모집글 조회
         StudyArticle searchedArticle = studyArticleService.findById(id);
-
         if(searchedArticle == null){
             return ResponseEntity.notFound()
                     .build();
         }
+
+        System.out.println();
+        System.out.println("==========================");
+        System.out.println("<<<<<<" + searchedArticle.getTitle() + ">>>>>");
+        System.out.println("<<<<<<" + searchedArticle.getId() + ">>>>>");
+        System.out.println("<<<<<<" + searchedArticle.getAuthor() + ">>>>>");
+        System.out.println("==========================");
+        System.out.println();
+
+        System.out.println();
+        System.out.println("==========================");
+        System.out.println("<<<<<<" + request.getStudyTitle() + ">>>>>");
+        for(String userId : request.getMembers()){
+            System.out.println(userId);
+        }
+        System.out.println("==========================");
+        System.out.println();
 
         // 확정된 멤버들을 저장할 리스트
         List<User> confirmedUser = new ArrayList<>();
@@ -188,7 +216,7 @@ public class StudyArticleApiController {
         Study confirmedStudy = studyService.saveStudy(request.getStudyTitle(), confirmedUser, id);
 
         // 스터디 모집 마감 -> available 수정
-        studyArticleService.setRecruitmentToFalse(searchedArticle);
+        studyArticleService.updateRecruitmentToFalse(searchedArticle.getId());
 
         // 확정된 스터디 채팅방 생성
         String chatRoomName = "[" + request.getStudyTitle() + "'s chat room]";
@@ -207,7 +235,7 @@ public class StudyArticleApiController {
     @Parameters({
             @Parameter(name = "study Id", description = "종료하려는 스터디의 아이디")
     })
-    @Operation(summary = "스터디 모집 확정", description = "글 작성자 이외의 사용자가 스터디 가입 신청")
+    @Operation(summary = "스터디 진행이 모두 완료", description = "스터디가 끝남")
     public ResponseEntity<Void> endStudy(@PathVariable Long id){
         Study searchedStudy = studyService.findByStudyId(id);
 
@@ -219,6 +247,21 @@ public class StudyArticleApiController {
         studyService.setAvailableToFalse(searchedStudy);
 
         return ResponseEntity.ok().build();
+    }
+    // 확정된 스터디 검색
+    @GetMapping("/api/study/{id}")
+    @Operation(summary = "확정된 스터디 확인", description = "확정된 스터디 확인")
+    public ResponseEntity<TesStudyRequestDto> showConfirmedStudy(@PathVariable Long id){
+
+        StudyArticle searchedArticle = studyArticleService.findById(id);
+
+        if(searchedArticle == null){
+            return ResponseEntity.notFound()
+                    .build();
+        }
+        Study study = studyService.findByStudyId(id);
+        return ResponseEntity.ok()
+                .body(new TesStudyRequestDto(study));
     }
     //////////////////////////////////////////////////////
 

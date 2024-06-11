@@ -34,7 +34,7 @@ public class UserService {
             return user;
         } else {
             // 사용자가 존재하지 않을 때 처리
-            System.out.println("없어요!!!!!!!!!!");
+            System.out.println(userId+"없어요!!!!!!!!!!");
             return null;
         }
     }

@@ -4,6 +4,7 @@ import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,14 +22,10 @@ public class Study {
     private String studyName;
 
     @Column(name = "available")
-    private boolean available; // 스터디 진행 중인지 완료되었는지.
-
+    private Boolean available; // 스터디 진행 중인지 완료되었는지.
 
     @OneToMany(mappedBy = "study")
     private Set<UserStudy> userStudies = new HashSet<>();
 
 
-    public boolean getAvailable() {
-        return this.available;
-    }
 }
