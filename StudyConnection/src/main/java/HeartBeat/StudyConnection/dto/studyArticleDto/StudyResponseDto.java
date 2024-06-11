@@ -13,14 +13,16 @@ public class StudyResponseDto {
     private final String content;
     private final String author;
 
-    private final Boolean recruitment;
+    private final Boolean recruitment; // 모집중인지 여부
+
+    private final Boolean available; // 스터디 완전 끝났는지 여부
 
     private final int limitOfParticipants;
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
-    public StudyResponseDto(StudyArticle entity) {
+    public StudyResponseDto(StudyArticle entity, Boolean available) {
         this.id      = entity.getId();
         this.title   = entity.getTitle();
         this.content = entity.getContent();
@@ -29,5 +31,6 @@ public class StudyResponseDto {
         this.createdAt = entity.getCreatedAt();
         this.updatedAt = entity.getUpdatedAt();
         this.recruitment = entity.getRecruitment();
+        this.available = available;
     }
 }

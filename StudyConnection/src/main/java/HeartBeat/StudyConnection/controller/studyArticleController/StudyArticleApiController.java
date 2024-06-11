@@ -108,9 +108,10 @@ public class StudyArticleApiController {
     @Operation(summary = "특정 스터디 모집글 조회", description = "특정 스터디 모집글 조회 시 사용하는 API")
     public ResponseEntity<StudyResponseDto> findById(@PathVariable Long id){
         StudyArticle studyArticle = studyArticleService.findById(id);
+        Study study = studyService.findByStudyId(id);
 
         return ResponseEntity.ok()
-                .body(new StudyResponseDto(studyArticle));
+                .body(new StudyResponseDto(studyArticle, study.getAvailable()));
     }
 
     // 특정 스터디 모집글 삭제
