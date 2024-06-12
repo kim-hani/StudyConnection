@@ -57,7 +57,6 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         Long studyId = sessionRoomMap.remove(session);
         CLIENTS.remove(session.getId());
 
-        // Save buffered messages
         chatMessageService.saveAllChatMessage(new ArrayList<>(messageBuffer));
         messageBuffer.clear();
     }
@@ -75,7 +74,6 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
         messageBuffer.add(chatMessage);
 
-        // Broadcast message to all clients in the same study
         for (WebSocketSession clientSession : CLIENTS.values()) {
             if (sessionRoomMap.get(clientSession).equals(studyId)) {
                 clientSession.sendMessage(new TextMessage(objectMapper.writeValueAsString(chatMessage)));

@@ -144,6 +144,19 @@ public class StudyArticleApiController {
                     .build();
         }
 
+        // 스터디 게시글 존재할 때
+        // 이니 지원했는지 여부 확인
+        List<StudyApply> studyApplies = studyApplyService.showAllApplicantsId(id);
+        if(studyApplies != null){
+            for(StudyApply studyApply : studyApplies){
+                if(studyApply.getUserId() == request.getUserId()){
+                    return ResponseEntity.badRequest()
+                            .body("이미 신청한 스터디입니다.");
+                }
+            }
+        }
+
+        // 처음 지원할 때
         StudyApply savedApplyUser= studyApplyService.saveApply(request.getUserId(), id);
 
         return ResponseEntity.ok()
