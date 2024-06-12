@@ -13,23 +13,26 @@ public class AddStudyRequestDto {
     private String title;
     private String content;
     private String authorId;
+    private String authorName;
 
     private Boolean recruitment;
     private int limitOfParticipants;
 
     @Builder
-    public AddStudyRequestDto(String title, String content, String author, int limitOfParticipants) {
+    public AddStudyRequestDto(String title, String content, String authorId, int limitOfParticipants, String authorName) {
         this.title = title;
         this.content = content;
-        this.authorId = author;
+        this.authorId = authorId;
         this.limitOfParticipants = limitOfParticipants;
+        this.authorName = authorName;
     }
 
     public StudyArticle toEntity() {
         return StudyArticle.builder()
                 .title(title)
                 .content(content)
-                .author(authorId)
+                .authorId(authorId)
+                .authorName(authorName)
                 .recruitment(true)
                 .limitOfParticipants(limitOfParticipants)
                 .build();

@@ -53,7 +53,8 @@ public class StudyArticleApiController {
             @Parameter(name = "id", description = "스터디 모집글 id (Long 타입)", example = "1"),
             @Parameter(name = "title", description = "스터디 모집글 제목", example = "자바 꽉 잡아요"),
             @Parameter(name = "content", description = "스터디 모집글 내용", example = "자바 스터디 그룹~"),
-            @Parameter(name = "author", description = "스터디 모집글 작성자의 Id", example = "김간단"),
+            @Parameter(name = "authorId", description = "스터디 모집글 작성자의 Id", example = "010-0000-0000"),
+            @Parameter(name = "authorName", description = "스터디 모집글 작성자의 이름", example = "김단국"),
             @Parameter(name= "limit Of Participant",description = "스터디 모집 정원", example = "10")
     })
     public ResponseEntity<Long> save(@RequestBody AddStudyRequestDto requestDto){
@@ -109,6 +110,12 @@ public class StudyArticleApiController {
     public ResponseEntity<StudyResponseDto> findById(@PathVariable Long id){
         StudyArticle studyArticle = studyArticleService.findById(id);
         Study study = studyService.findByStudyId(id);
+
+        if(study == null){
+            // 스터디 확정 전이니까 available 은 true 여도 상관 X
+            return ResponseEntity.ok()
+                    .body(new StudyResponseDto(studyArticle, Boolean.TRUE));
+        }
 
         return ResponseEntity.ok()
                 .body(new StudyResponseDto(studyArticle, study.getAvailable()));
@@ -192,7 +199,7 @@ public class StudyArticleApiController {
         System.out.println("==========================");
         System.out.println("<<<<<<" + searchedArticle.getTitle() + ">>>>>");
         System.out.println("<<<<<<" + searchedArticle.getId() + ">>>>>");
-        System.out.println("<<<<<<" + searchedArticle.getAuthor() + ">>>>>");
+        System.out.println("<<<<<<" + searchedArticle.getAuthorId() + ">>>>>");
         System.out.println("==========================");
         System.out.println();
 

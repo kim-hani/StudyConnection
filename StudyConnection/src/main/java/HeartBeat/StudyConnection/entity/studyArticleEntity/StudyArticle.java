@@ -30,8 +30,11 @@ public class StudyArticle {
     @Column(name = "studyArticle_Id")
     private Long id;        // 게시글 아이디
 
-    @Column(name = "author")
-    private String author;   // 작성자의 ID
+    @Column(name = "author_d")
+    private String authorId;   // 작성자의 아이디
+
+    @Column(name = "author_name")
+    private String authorName;   // 작성자의 아이디
 
     @Column(columnDefinition = "TEXT",nullable = false)
     private String content;
@@ -53,20 +56,16 @@ public class StudyArticle {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id")
-    private User writer;
-
     @OneToMany(mappedBy = "studyArticle", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public StudyArticle(Long id, String author, String content, int limitOfParticipants, Boolean recruitment,
-                        String title, String comment,User writer){
+    public StudyArticle(Long id, String authorId, String content, int limitOfParticipants, Boolean recruitment,
+                        String title, String comment, String authorName){
         this.id = id;
-        this.author = author;
+        this.authorId = authorId;
+        this.authorName = authorName;
         this.content = content;
-        this.writer = writer;
         this.limitOfParticipants = limitOfParticipants;
         this.recruitment = recruitment;
         this.title = title;
@@ -80,6 +79,6 @@ public class StudyArticle {
 
     // 작성자 확인 메서드
     public boolean isAuthor(User user){
-        return this.author.equals(user.getUserId());
+        return this.authorId.equals(user.getUserId());
     }
 }

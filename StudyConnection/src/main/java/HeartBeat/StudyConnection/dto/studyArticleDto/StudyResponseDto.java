@@ -12,9 +12,9 @@ public class StudyResponseDto {
     private final Long id;
     private final String title;
     private final String content;
-    private final String author;
+    private final String authorName;
 
-   private String authorId;
+   private final String authorId;
 
     private final Boolean recruitment; // 모집중인지 여부
 
@@ -29,8 +29,8 @@ public class StudyResponseDto {
         this.id      = entity.getId();
         this.title   = entity.getTitle();
         this.content = entity.getContent();
-        this.author  = entity.getAuthor();
-        this.authorId = entity.getWriter().getUserId();
+        this.authorId  = entity.getAuthorId();
+        this.authorName = entity.getAuthorName();
         this.limitOfParticipants = entity.getLimitOfParticipants();
         this.createdAt = entity.getCreatedAt();
         this.updatedAt = entity.getUpdatedAt();

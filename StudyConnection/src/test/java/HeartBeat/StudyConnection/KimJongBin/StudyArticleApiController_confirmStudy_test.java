@@ -64,11 +64,14 @@ public class StudyArticleApiController_confirmStudy_test {
     public void mockMvcSetUp() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
                 .build();
+        /*
         studyApplyRepository.deleteAll();
         userStudyRepository.deleteAll();
         studyRepository.deleteAll();
         studyArticleRepository.deleteAll();
         userRepository.deleteAll();
+
+         */
     }
 
     @DisplayName("applyToStudy(): 스터디에 참여 신청을 할 수 있다.")

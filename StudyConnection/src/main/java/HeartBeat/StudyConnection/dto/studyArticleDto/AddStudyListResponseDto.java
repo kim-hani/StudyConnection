@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 public class AddStudyListResponseDto {
 
     private Long id;
-    private final String author;
+    private final String authorId;
+    private final String authorName;
 
     private final String content;
 
@@ -28,7 +29,8 @@ public class AddStudyListResponseDto {
 
     public AddStudyListResponseDto(StudyArticle studyArticle) {
         this.id = studyArticle.getId();
-        this.author = studyArticle.getAuthor();
+        this.authorId = studyArticle.getAuthorId();
+        this.authorName = studyArticle.getAuthorName();
         this.content = studyArticle.getContent();
         this.limitOfParticipants = studyArticle.getLimitOfParticipants();
         this.recruitment = studyArticle.getRecruitment();
