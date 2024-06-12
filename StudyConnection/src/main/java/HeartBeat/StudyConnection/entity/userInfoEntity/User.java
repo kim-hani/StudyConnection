@@ -55,10 +55,6 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    @Override
-    public String getUsername() {
-        return this.userId; // userId 반환
-    }
 
     // UserDetails 구현
     @Override // 권한 반환

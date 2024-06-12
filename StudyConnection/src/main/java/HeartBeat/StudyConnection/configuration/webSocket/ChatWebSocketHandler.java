@@ -41,16 +41,11 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
         Long studyId = getStudyIdFromSession(session);
 
-        // 스터디 참여자 인증
-        if (!isUserInStudy(session, studyId)) {
-            session.close(CloseStatus.NOT_ACCEPTABLE);
-            return;
-        }
-
         sessionRoomMap.put(session, studyId);
         CLIENTS.put(session.getId(), session);
 
-        // Load previous messages
+
+        // 이전 기록 로드
         List<ChatMessage> previousMessages = chatMessageService.loadChatMessagesByStudyId(studyId);
         for (ChatMessage message : previousMessages) {
             session.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
