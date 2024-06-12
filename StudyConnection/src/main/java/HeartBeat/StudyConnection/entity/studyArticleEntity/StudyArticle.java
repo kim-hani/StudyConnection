@@ -30,7 +30,7 @@ public class StudyArticle {
     @Column(name = "studyArticle_Id")
     private Long id;        // 게시글 아이디
 
-    @Column(name = "author_d")
+    @Column(name = "author_id")
     private String authorId;   // 작성자의 아이디
 
     @Column(name = "author_name")
