@@ -1,7 +1,7 @@
+<!-- MemberDetail.vue -->
 <template>
   <div class="member-detail section">
-    <h2>{{ member.name }}의 상세 정보</h2>
-    <p>평가 점수: <strong>{{ member.rating }}</strong></p>
+    <h2>{{ member.username }}의 상세 정보</h2>
   </div>
 </template>
 

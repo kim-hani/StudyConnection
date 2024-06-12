@@ -1,11 +1,13 @@
+<!-- StudyMemberList.vue -->
 <template>
   <div class="study-member-list">
     <ul>
       <li v-for="member in members" :key="member.id" class="member-item">
         <div @click="selectMember(member)">
-          {{ member.name }}
+          {{ member.username }}
         </div>
-        <button v-if="showRateButton" @click="openRatingModal(member.id)" class="rate-button">평가하기</button>
+        <button v-if="showRateButton && (member.userId !== userData.userId)"
+                @click="openRatingModal(member)" class="rate-button">평가하기</button>
       </li>
     </ul>
 
@@ -13,10 +15,10 @@
     <div v-if="showRatingModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="closeRatingModal">&times;</span>
-        <h2>회원 평가</h2>
-        <input v-model.number="ratingScore" type="number" min="0" max="5" placeholder="점수 (0-5)" @input="validateScore" />
-        <textarea v-model="ratingContent" placeholder="평가 내용을 입력하세요"></textarea>
-        <button @click="rateMember">제출</button>
+        <h4>{{ ratingMember.username }}님 평가</h4>
+        <input v-model.number="ratingScore" type="number" min="0" max="5" placeholder="점수 (0-5)" @input="validateScore" class="input-field"/>
+        <textarea v-model="ratingContent" placeholder="평가 내용을 입력하세요" class="input-field"></textarea>
+        <button @click="rateMember" class="submit-button">제출</button>
       </div>
     </div>
   </div>
@@ -24,6 +26,7 @@
 
 <script>
 import axios from 'axios';
+import { mapState } from 'vuex';
 
 export default {
   name: 'StudyMemberList',
@@ -36,21 +39,28 @@ export default {
       type: Boolean,
       default: true,
     },
+    studyId: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     return {
       showRatingModal: false,
-      ratingMemberId: null,
+      ratingMember: null, // 평가할 멤버 정보
       ratingScore: '',
       ratingContent: '',
     };
+  },
+  computed: {
+    ...mapState(['userData']), // map `this.getUserId` to `this.$store.getters.getUserId`
   },
   methods: {
     selectMember(member) {
       this.$emit('select-member', member);
     },
-    openRatingModal(memberId) {
-      this.ratingMemberId = memberId;
+    openRatingModal(member) {
+      this.ratingMember = member;
       this.showRatingModal = true;
     },
     closeRatingModal() {
@@ -70,24 +80,21 @@ export default {
         alert("점수는 0과 5 사이여야 합니다.");
         return;
       }
-
-      const studyId = this.$route.params.studyId; // 스터디 ID
       const accessToken = localStorage.getItem('accessToken'); // 로컬스토리지에서 토큰 가져오기
-
       const ratingData = {
-        userId: this.ratingMemberId, // 평가할 대상의 ID
-        studyId: studyId,
+        userId: this.ratingMember.userId, // 평가할 대상의 ID
+        studyId: this.studyId,
         score: this.ratingScore,
-        content: this.ratingContent
+        content: this.ratingContent,
       };
-
+      console.log('서버에 보낼 데이터', ratingData);
       axios.post(
           `${this.$serverUrl}/api/user-ratings`, // API 엔드포인트 URL
           ratingData,
           {
             headers: {
-              'Authorization': `Bearer ${accessToken}` // Authorization 헤더에 토큰 추가
-            }
+              'Authorization': `Bearer ${accessToken}`, // Authorization 헤더에 토큰 추가
+            },
           }
       ).then((response) => {
         console.log(response);
@@ -155,12 +162,24 @@ export default {
 }
 
 .modal-content {
-  background-color: #fefefe;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  max-width: 500px;
-  margin: auto;
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: slide-down 0.3s ease-out;
+}
+
+@keyframes slide-down {
+  from {
+    transform: translateY(-10%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .close {
@@ -168,12 +187,34 @@ export default {
   float: right;
   font-size: 28px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .close:hover,
 .close:focus {
   color: black;
   text-decoration: none;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #218838;
 }
 </style>

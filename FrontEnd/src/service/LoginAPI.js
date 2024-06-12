@@ -3,8 +3,6 @@ import axios from 'axios'
 import { mapState } from 'vuex'
 import store from "@/Vuex/store";
 
-const serverUrl = 'http://13.125.49.195:8080';
-
 const loginAPI = {
     async doLogin(LoginData) {
         const reqData = {
@@ -13,7 +11,7 @@ const loginAPI = {
         };
 
 
-        return axios.post(serverUrl + '/api/login', reqData, {
+        return axios.post(this.$serverUrl + '/api/login', reqData, {
             headers: {
                 'Content-type': 'application/json'
             }
@@ -21,7 +19,7 @@ const loginAPI = {
     },
 
     async doLogout(){
-        return axios.post(serverUrl + '/api/logout');
+        return axios.post(this.$serverUrl + '/api/logout');
     }
 };
 

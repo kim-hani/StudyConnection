@@ -8,6 +8,7 @@
         @go-to-study="goToStudy"
         :selected-study="selectedStudy"
         :showRateButton="false"
+        :currentUserId="getUserId"
     />
 
     <StudyList
@@ -17,7 +18,10 @@
         @go-to-study="goToStudy"
         :selected-study="selectedStudy"
         :showRateButton="true"
+        :currentUserId="getUserId"
     />
+
+    <UserRatingList :user="user" />
   </div>
 </template>
 
@@ -25,6 +29,8 @@
 import UserProfile from '@/components/Profile/UserProfile.vue';
 import StudyList from '@/components/Profile/StudyList.vue';
 import StudyMemberList from '@/components/Profile/StudyMemberList.vue';
+import UserRatingList from '@/components/Profile/UserRatingList.vue';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'MyPage',
@@ -32,6 +38,12 @@ export default {
     UserProfile,
     StudyList,
     StudyMemberList,
+    UserRatingList,
+  },
+  computed: {
+    ...mapGetters([
+      'getUserId', // `this.getUserId`를 `this.$store.getters.getUserId`로 매핑
+    ]),
   },
   data() {
     return {
@@ -40,34 +52,8 @@ export default {
         name: this.$store.state.userData.username,
         rating: 4.5,
       },
-      activeStudies: [
-        {
-          id: 3,
-          name: '프로그래밍 언어 스터디',
-          members: [
-            { id: 1, name: '조성현'},
-            { id: 2, name: '김한이'},
-          ],
-        },
-        {
-          id: 2,
-          name: '스터디 B',
-          members: [
-            { id: 3, name: '박지성'},
-            { id: 4, name: '손흥민'},
-          ],
-        },
-      ],
-      completedStudies: [
-        {
-          id: 4,
-          name: '스터디 C',
-          members: [
-            { id: 5, name: '김영수'},
-            { id: 6, name: '이정희'},
-          ],
-        },
-      ],
+      activeStudies: [],
+      completedStudies: [],
       selectedStudy: null,
       selectedMember: null,
     };
@@ -89,17 +75,17 @@ export default {
     },
 
     getUserStudyInfo(){ // 유저가 참여하고, 참여했던 스터디 정보 가져오기.
-      const userId = this.$route.params.userId;
+      const userId = this.getUserId;
       this.$axios.get(this.$serverUrl + `/api/userinfo/${userId}`)
           .then((res) => {
             console.log(res);
-            this.activeStudies = res.data.availableStudyList;
-            this.email = res.data.email;
+            const { availableStudyList, unavailableStudyList } = res.data;  // 수정된 부분
+            this.activeStudies = availableStudyList;
+            this.completedStudies = unavailableStudyList;
           }).catch((err) => {
-        console.log(err)
-      },)
+        console.log(err);
+      });
     }
-
   },
 };
 </script>

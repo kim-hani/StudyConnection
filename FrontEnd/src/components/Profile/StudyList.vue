@@ -1,14 +1,19 @@
+<!--StudyList.vue-->
 <template>
   <div class="study-list section">
     <h4>{{ title }}</h4>
     <ul>
-      <li v-for="study in studies" :key="study.id" class="study-item" :class="{ selected: study.id === selectedStudy?.id }">
+      <li v-for="study in studies" :key="study.studyId" class="study-item" :class="{ selected: study.studyId === selectedStudy?.studyId }">
         <div @click="selectStudy(study)">
-          {{ study.name }}
+          {{ study.studyName }}
         </div>
-        <button @click="goToStudy(study.id)" class="study-button">게시글로 이동</button>
-        <div v-if="study.id === selectedStudy?.id" class="member-list-box">
-          <StudyMemberList :members="study.members" :showRateButton="showRateButton" @select-member="selectMember" />
+        <button @click="goToStudy(study.studyId)" class="study-button">게시글로 이동</button>
+        <div v-if="study.studyId === selectedStudy?.studyId" class="member-list-box">
+          <StudyMemberList
+              :members="study.participants"
+              :showRateButton="showRateButton"
+              :studyId="study.studyId"
+              @select-member="selectMember" />
         </div>
       </li>
     </ul>
