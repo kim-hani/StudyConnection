@@ -10,5 +10,20 @@ export default {
     [types.SET_ERROR_STATE](state, errorState) {
         state.errorState = errorState;
     },
+    [types.SET_USER_INFO](state, userInfo) {
+        state.userInfo = userInfo;
+    },
+    [types.SET_USER_RATINGS](state, userRatings) {
+        state.userRatings = userRatings;
+    },
+    [types.ADD_RATED_USER](state, payload) {
+        const { userId, studyId } = payload;
+        const ratedUser = state.ratedUsers.find(
+            (rated) => rated.userId === userId && rated.studyId === studyId
+        );
+        if (!ratedUser) {
+            state.ratedUsers.push({ userId, studyId });
+        }
+    },
 }
 
