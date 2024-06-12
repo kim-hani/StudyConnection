@@ -83,6 +83,7 @@ button {
 
   .main-view-wrapper{
     width: 100%;
+    overflow-y: auto;
   }
 
   .main-view-header{

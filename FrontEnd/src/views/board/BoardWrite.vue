@@ -21,7 +21,8 @@ export default {
       RequestBody: {
         title: '',
         content: '',
-        authorId: localStorage.getItem('username'),
+        authorId: localStorage.getItem('userId'),
+        authorName: localStorage.getItem('username'),
         limitOfParticipants: 5
       }
     }

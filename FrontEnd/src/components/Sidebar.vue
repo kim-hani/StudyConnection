@@ -25,7 +25,7 @@
         <span class="material-symbols-outlined">description</span>
         <span class="text">Study Broad</span>
       </router-link>
-      <router-link to="/contact" class="button">
+      <router-link to="/chat" class="button">
         <span class="material-symbols-outlined">chat</span>
         <span class="text">Chat</span>
       </router-link>

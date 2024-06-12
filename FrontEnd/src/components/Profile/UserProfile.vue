@@ -1,3 +1,4 @@
+<!-- UserProfile.vue -->
 <template>
   <div class="user-profile section">
     <h2>{{ username }}의 정보</h2>
