@@ -55,13 +55,14 @@ export default {
       }
     },
     connect() {
-      const serverURL = "http://13.125.49.195:8080/api/chats/16"
+      const serverURL = "http://13.125.49.195:8080/ws/2"
       const accessToken = localStorage.getItem('accessToken');
       let socket = new SockJS(serverURL);
       this.stompClient = Stomp.over(socket);
       console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`)
       this.stompClient.connect(
           {
+            Authorization: `Bearer ${accessToken}`
           },
           frame => {
             // 소켓 연결 성공

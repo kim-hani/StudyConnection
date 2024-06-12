@@ -1,42 +1,19 @@
 <!-- UserProfile.vue -->
 <template>
   <div class="user-profile section">
-    <h2>{{ username }}의 정보</h2>
-    <p>나이: <strong>{{ age }}</strong></p>
-    <p>email: <strong>{{ email }}</strong></p>
-    <p>Rating: <strong>{{ rating }}</strong></p>
+    <h2>{{ userInfo.username }}의 정보</h2>
+    <p>나이: <strong>{{ userInfo.age }}</strong></p>
+    <p>email: <strong>{{ userInfo.email }}</strong></p>
   </div>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
 export default {
   name: 'UserProfile',
-  data() {
-    return {
-     username : '',
-      rating : 3.3,
-      age : 10,
-      email: '',
-    }
+  computed: {
+    ...mapState(['userInfo']),
   },
-  created() {
-    this.getUserInfo();
-  },
-
-  methods: {
-    getUserInfo(){
-      const userId = this.$route.params.userId;
-      this.$axios.get(this.$serverUrl + `/api/userinfo/${userId}`)
-        .then((res) => {
-          this.username = res.data.username;
-          this.rating = res.data.rating;
-          this.age = res.data.age;
-          this.email = res.data.email;
-        }).catch((err) => {
-          console.log(err)
-        },)
-    }
-  }
 };
 </script>
 

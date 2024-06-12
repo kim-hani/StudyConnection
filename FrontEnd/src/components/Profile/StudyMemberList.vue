@@ -4,10 +4,11 @@
     <ul>
       <li v-for="member in members" :key="member.id" class="member-item">
         <div @click="selectMember(member)">
-          {{ member.username }}
+          <strong class="member-name" @click.stop="goToProfile(member.userId)">{{ member.username }}</strong>
         </div>
-        <button v-if="showRateButton && (member.userId !== userData.userId)"
+        <button v-if="showRateButton && (member.userId !== userData.userId) && !isRated(member.userId, studyId)"
                 @click="openRatingModal(member)" class="rate-button">평가하기</button>
+        <button v-if="isRated(member.userId, studyId)" class="rate-done-button">평가완료</button>
       </li>
     </ul>
 
@@ -18,15 +19,14 @@
         <h4>{{ ratingMember.username }}님 평가</h4>
         <input v-model.number="ratingScore" type="number" min="0" max="5" placeholder="점수 (0-5)" @input="validateScore" class="input-field"/>
         <textarea v-model="ratingContent" placeholder="평가 내용을 입력하세요" class="input-field"></textarea>
-        <button @click="rateMember" class="submit-button">제출</button>
+        <button @click="rateMemberAction" class="submit-button">제출</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'StudyMemberList',
@@ -47,15 +47,16 @@ export default {
   data() {
     return {
       showRatingModal: false,
-      ratingMember: null, // 평가할 멤버 정보
+      ratingMember: null,
       ratingScore: '',
       ratingContent: '',
     };
   },
   computed: {
-    ...mapState(['userData']), // map `this.getUserId` to `this.$store.getters.getUserId`
+    ...mapState(['userData', 'ratedUsers']),
   },
   methods: {
+    ...mapActions(['rateMember']),
     selectMember(member) {
       this.$emit('select-member', member);
     },
@@ -75,39 +76,41 @@ export default {
         this.ratingScore = 5;
       }
     },
-    rateMember() {
+    rateMemberAction() {
       if (this.ratingScore < 0 || this.ratingScore > 5) {
         alert("점수는 0과 5 사이여야 합니다.");
         return;
       }
-      const accessToken = localStorage.getItem('accessToken'); // 로컬스토리지에서 토큰 가져오기
       const ratingData = {
-        userId: this.ratingMember.userId, // 평가할 대상의 ID
+        userId: this.ratingMember.userId,
         studyId: this.studyId,
         score: this.ratingScore,
         content: this.ratingContent,
       };
       console.log('서버에 보낼 데이터', ratingData);
-      axios.post(
-          `${this.$serverUrl}/api/user-ratings`, // API 엔드포인트 URL
-          ratingData,
-          {
-            headers: {
-              'Authorization': `Bearer ${accessToken}`, // Authorization 헤더에 토큰 추가
-            },
-          }
-      ).then((response) => {
-        console.log(response);
-        this.closeRatingModal(); // 모달 창 닫기 및 입력란 초기화
-      }).catch((err) => {
-        console.error('평가 저장 에러 발생:', err);
-      });
+      this.rateMember(ratingData)
+          .then(() => {
+            alert('평가가 완료되었습니다.');
+            this.closeRatingModal(); // 모달 창 닫기 및 입력란 초기화
+          })
+          .catch((err) => {
+            alert('평가 저장 에러 발생. 다시 시도해주세요.');
+          });
+    },
+    goToProfile(userId) {
+      console.log(this.$route);
+      this.$router.push({ name: 'MyPage', params: { userId } });
+    },
+    isRated(userId, studyId) {
+      return this.ratedUsers.some(
+          (rated) => rated.userId === userId && rated.studyId === studyId
+      );
     },
   },
 };
 </script>
 
-<style scoped>
+<style lang="scss">
 .study-member-list {
   background: #f9f9f9;
   border-radius: 8px;
@@ -140,7 +143,15 @@ export default {
   border: none;
   border-radius: 4px;
   padding: 5px 10px;
-  cursor: pointer;
+
+}
+
+.rate-done-button {
+  background-color: gray;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
 }
 
 .rate-button:hover {
@@ -216,5 +227,9 @@ export default {
 
 .submit-button:hover {
   background-color: #218838;
+}
+
+.member-name:hover{
+  cursor: pointer;
 }
 </style>

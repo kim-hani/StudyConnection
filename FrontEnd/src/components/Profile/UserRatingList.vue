@@ -1,8 +1,8 @@
 <template>
   <div class="user-rating-list">
-    <h3>{{ user.name }}님이 받은 평가</h3>
-    <div v-if="ratings.length">
-      <div v-for="rating in ratings" :key="rating.studyId" class="rating-item">
+    <h3>{{ userInfo.username }}님이 받은 평가</h3>
+    <div v-if="userRatings.length">
+      <div v-for="rating in userRatings" :key="rating.studyId" class="rating-item">
         <p><strong></strong> {{ rating.studyName }}</p>
         <p><strong>점수:</strong>
           <span v-for="n in rating.score" :key="n">⭐</span>
@@ -17,40 +17,20 @@
 </template>
 
 <script>
-import axios from 'axios';
-import { mapGetters } from 'vuex';
+import {mapActions, mapGetters, mapState} from 'vuex';
 
 export default {
   name: 'UserRatingList',
-  props: {
-    user: {
-      type: Object,
-      required: true,
-    },
-  },
-  data() {
-    return {
-      ratings: [],
-    };
-  },
+
   created() {
-    this.fetchUserRatings();
+    this.fetchUserRatings(this.$route.params.userId);
   },
   computed: {
+    ...mapState(['userRatings', 'userInfo']),
     ...mapGetters(['getUserId']),
   },
   methods: {
-    fetchUserRatings() {
-      const userId = this.$route.params.userId;
-      axios.get(this.$serverUrl + `/api/user-ratings/${userId}`)
-          .then(response => {
-            this.ratings = response.data;
-            console.log('평가 데이터 불러오기 성공', response.data);
-          })
-          .catch(error => {
-            console.error('평가 데이터를 불러오는 중 오류 발생:', error);
-          });
-    },
+    ...mapActions(['fetchUserRatings']),
   },
 };
 </script>
@@ -84,4 +64,6 @@ export default {
   color: gold;
 }
 </style>
+
+
 

@@ -22,11 +22,16 @@
 
 <script>
 import StudyMemberList from '@/components/Profile/StudyMemberList.vue';
+import {mapState} from "vuex";
 
 export default {
   name: 'StudyList',
   components: {
     StudyMemberList,
+  },
+
+  computed: {
+    ...mapState(['userInfo']),
   },
   props: {
     studies: {

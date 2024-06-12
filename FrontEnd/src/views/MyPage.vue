@@ -1,6 +1,6 @@
 <template>
   <div class="my-page">
-    <UserProfile :user="user" />
+    <UserProfile/>
     <StudyList
         :studies="activeStudies"
         title="참여중인 스터디 목록"
@@ -8,7 +8,6 @@
         @go-to-study="goToStudy"
         :selected-study="selectedStudy"
         :showRateButton="false"
-        :currentUserId="getUserId"
     />
 
     <StudyList
@@ -18,10 +17,9 @@
         @go-to-study="goToStudy"
         :selected-study="selectedStudy"
         :showRateButton="true"
-        :currentUserId="getUserId"
     />
 
-    <UserRatingList :user="user" />
+    <UserRatingList/>
   </div>
 </template>
 
@@ -30,7 +28,8 @@ import UserProfile from '@/components/Profile/UserProfile.vue';
 import StudyList from '@/components/Profile/StudyList.vue';
 import StudyMemberList from '@/components/Profile/StudyMemberList.vue';
 import UserRatingList from '@/components/Profile/UserRatingList.vue';
-import { mapGetters } from 'vuex';
+import { mapState, mapActions } from 'vuex';
+import {SET_USER_INFO} from "@/Vuex/mutation_types";
 
 export default {
   name: 'MyPage',
@@ -40,25 +39,23 @@ export default {
     StudyMemberList,
     UserRatingList,
   },
-
+  computed: {
+    ...mapState(['userInfo']),
+  },
   data() {
     return {
-      user: {
-        id: this.$route.params.userId,
-        name: '',
-        rating: 4.5,
-      },
-      activeStudies: [],
-      completedStudies: [],
+      activeStudies: this.$store.state.userInfo.availableStudyList,
+      completedStudies: this.$store.state.userInfo.unavailableStudyList,
       selectedStudy: null,
       selectedMember: null,
     };
   },
-  mounted(){
-    this.getUserStudyInfo();
+  created(){
+    this.getUserInfo(this.$route.params.userId);
   },
 
   methods: {
+    ...mapActions(['getUserInfo']),
     selectStudy(study) {
       this.selectedStudy = study;
       this.selectedMember = null;
@@ -69,21 +66,6 @@ export default {
     goToStudy(studyId) {
       this.$router.push({ path: `/board/${studyId}` });
     },
-
-    getUserStudyInfo(){ // 유저가 참여하고, 참여했던 스터디 정보 가져오기.
-      const userId = this.$route.params.userId;
-      console.log('userId',userId);
-      this.$axios.get(this.$serverUrl + `/api/userinfo/${userId}`)
-          .then((res) => {
-            console.log('getUserStudyInfo',res);
-            const { username, availableStudyList, unavailableStudyList } = res.data;  // 수정된 부분
-            this.user.name = username;
-            this.activeStudies = availableStudyList;
-            this.completedStudies = unavailableStudyList;
-          }).catch((err) => {
-        console.log(err);
-      });
-    }
   },
 };
 </script>
