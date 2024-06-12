@@ -1,5 +1,7 @@
 package HeartBeat.StudyConnection.entity.userInfoEntity;
 
+import HeartBeat.StudyConnection.entity.commentEntity.Comment;
+import HeartBeat.StudyConnection.entity.rating.UserRating;
 import HeartBeat.StudyConnection.entity.studyArticleEntity.UserStudy;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,8 +38,12 @@ public class User implements UserDetails {
     private String email;
 
     // 사용자의 스터디
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE,orphanRemoval = true)
     private Set<UserStudy> userStudies = new HashSet<>();
+
+    @OneToMany(mappedBy =  "user",cascade = CascadeType.REMOVE,orphanRemoval = true)
+    private Set<Comment> comments = new HashSet<>();
+
 
     // 빌더 패턴
     @Builder
