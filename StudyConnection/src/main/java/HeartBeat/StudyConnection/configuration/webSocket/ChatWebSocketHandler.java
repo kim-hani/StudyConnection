@@ -16,6 +16,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import java.io.IOException;
 import java.net.URI;
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -23,74 +24,79 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RequiredArgsConstructor
 @Component
 public class ChatWebSocketHandler extends TextWebSocketHandler {
-    private final Map<String, List<WebSocketSession>> chatRooms = new HashMap<>();
-    private final Map<WebSocketSession, Long> sessionRoomMap = new HashMap<>();
-    private final ArrayList<ChatMessage> messageBuffer = new ArrayList<>();
-
-    private final ObjectMapper objectMapper;
-
+    private static final ConcurrentHashMap<String, WebSocketSession> CLIENTS = new ConcurrentHashMap<>();
+    private final Map<WebSocketSession, Long> sessionRoomMap = new ConcurrentHashMap<>();
+    private final List<ChatMessage> messageBuffer = new ArrayList<>();
     private final ChatMessageService chatMessageService;
-
-    // 해당 채팅방이 어떤 스터디 채팅방인지
-    private Long getStudyIdFromSession(WebSocketSession socketSession) {
-        URI uri = socketSession.getUri();
-        String path = uri.getPath(); // /chat/{studyId}
-        String[] segments = path.split("/");
-        return Long.valueOf(segments[segments.length]);
-    }
-
+    private final ObjectMapper objectMapper;
+    private final StudyService studyService;
 
     @Override
-    public void afterConnectionEstablished(WebSocketSession socketSession) throws Exception{
-        Long studyId = getStudyIdFromSession(socketSession);
-        chatRooms.computeIfAbsent(String.valueOf(studyId), k -> new ArrayList<>()).add(socketSession);
-        sessionRoomMap.put(socketSession, studyId);
+    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 
-        // 이전 메시지 로드 후 클라이언트에게 전송
+        Long studyId = getStudyIdFromSession(session);
+
+        // 스터디 참여자 인증
+        if (!isUserInStudy(session, studyId)) {
+            session.close(CloseStatus.NOT_ACCEPTABLE);
+            return;
+        }
+
+        sessionRoomMap.put(session, studyId);
+        CLIENTS.put(session.getId(), session);
+
+        // Load previous messages
         List<ChatMessage> previousMessages = chatMessageService.loadChatMessagesByStudyId(studyId);
         for (ChatMessage message : previousMessages) {
-            socketSession.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
+            session.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
         }
     }
 
     @Override
-    protected void handleTextMessage(WebSocketSession socketSession, TextMessage message) throws Exception{
-        Long studyId = sessionRoomMap.get(socketSession);
-        List<WebSocketSession> sessions = chatRooms.get(studyId);
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+        Long studyId = sessionRoomMap.remove(session);
+        CLIENTS.remove(session.getId());
+
+        // Save buffered messages
+        chatMessageService.saveAllChatMessage(new ArrayList<>(messageBuffer));
+        messageBuffer.clear();
+    }
+
+    @Override
+    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        Long studyId = sessionRoomMap.get(session);
+        String userId = session.getPrincipal().getName();
 
         ChatMessage chatMessage = objectMapper.readValue(message.getPayload(), ChatMessage.class);
+        chatMessage.setStudyId(studyId);
+        chatMessage.setUserId(userId);
         chatMessage.setDateTime(LocalDateTime.now());
+        chatMessage.setContent(message.getPayload()); // 메시지의 내용 저장
 
-        // 메세지 임시 저장
         messageBuffer.add(chatMessage);
 
-        // 메세지 전송
-        if(sessions != null){
-            for (WebSocketSession session : sessions){
-                session.sendMessage(message);
+        // Broadcast message to all clients in the same study
+        for (WebSocketSession clientSession : CLIENTS.values()) {
+            if (sessionRoomMap.get(clientSession).equals(studyId)) {
+                clientSession.sendMessage(new TextMessage(objectMapper.writeValueAsString(chatMessage)));
             }
         }
     }
 
-    @Override
-    public void afterConnectionClosed(WebSocketSession socketSession, CloseStatus closeStatus) throws Exception {
-        chatMessageService.saveAllChatMessage(messageBuffer);
-
-        Long studyId = sessionRoomMap.remove(socketSession);
-        if (studyId != null) {
-            List<WebSocketSession> sessions = chatRooms.get(studyId);
-            if (sessions != null) {
-                sessions.remove(socketSession);
-                if (sessions.isEmpty()) {
-                    chatRooms.remove(studyId);
-                }
-            }
-        }
+    private Long getStudyIdFromSession(WebSocketSession session) {
+        String uriPath = session.getUri().getPath();
+        String[] segments = uriPath.split("/");
+        return Long.valueOf(segments[segments.length - 1]);
     }
 
+    private boolean isUserInStudy(WebSocketSession session, Long studyId) {
+        Principal user = session.getPrincipal();
+        return user != null && studyService.isUserInStudy(user.getName(), studyId);
+    }
 }
 

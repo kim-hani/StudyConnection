@@ -114,4 +114,16 @@ public class StudyService {
         }
         return userNameIdResponses;
     }
+
+    public boolean isUserInStudy(String userId, Long studyId) {
+        Study searchedStudy = studyRepository.findByStudyId(studyId);
+        Set<UserStudy> userStudies = searchedStudy.getUserStudies();
+
+        for (UserStudy userStudy : userStudies){
+            if(userStudy.getUser().getUserId() == userId){
+                return true;
+            }
+        }
+        return false;
+    }
 }
