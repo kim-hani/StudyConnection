@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     fetchUserRatings() {
-      const userId = this.getUserId;
+      const userId = this.$route.params.userId;
       axios.get(this.$serverUrl + `/api/user-ratings/${userId}`)
           .then(response => {
             this.ratings = response.data;

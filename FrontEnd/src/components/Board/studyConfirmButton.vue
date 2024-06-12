@@ -34,13 +34,7 @@ export default {
   name: 'StudyApplyButton',
   data() {
     return {
-      applicants: [
-        { userId: "010-1234-1234", username: 'user1', birth: '1990-01-01' },
-        { userId: 2, username: 'user2', birth: '2000-11-01' },
-        { userId: 3, username: 'user3', birth: '2002-02-12' },
-        { userId: 4, username: 'user4', birth: '1995-05-05' },
-        { userId: 5, username: 'user5', birth: '1998-08-08' }
-      ],
+      applicants: [],
       members: [],
       studyTitle: '',
       isModalVisible: false,
@@ -49,7 +43,6 @@ export default {
   methods: {
     showModal() {
       const articleId = this.$route.params.id;
-
       this.$axios.get(this.$serverUrl + `/api/study-articles/${articleId}/apply`)
           .then((res) => {
             this.applicants = res.data.applicants;

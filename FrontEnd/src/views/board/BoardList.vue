@@ -13,7 +13,7 @@
       <tr v-for="(row, idx) in list" :key="idx" @click="StudyDetailView(row.id)" class="table-row">
         <td>{{ row.id }}</td>
         <td>{{ row.title }}</td>
-        <td>{{ row.author }}</td>
+        <td>{{ row.authorName }}</td>
         <td>{{ row.createdAt }}</td>
         <td>
           <span :class="{'recruitment-true': row.recruitment === true || row.recruitment === 'true', 'recruitment-false': row.recruitment === false || row.recruitment === 'false'}">

@@ -14,7 +14,7 @@
         <h3 v-else class="status-closed">[모집완료]</h3>
         <h3>제목: {{ title }}</h3>
         <div>
-          <strong class="author">작성자: {{ author }}</strong>
+          <strong class="author" @click="goToProfile(authorId)">작성자: {{ authorName }}</strong>
           <br>
           <span>작성일: {{ createdAt }}</span>
         </div>
@@ -46,7 +46,8 @@ export default {
   data() {
     return {
       title: '',
-      author: '',
+      authorId: '',
+      authorName: '',
       createdAt: '',
       content: '',
       recruitment: false,
@@ -55,7 +56,7 @@ export default {
   computed: {
     ...mapState(['userData']),
     sameAuthor() {
-      return this.userData.username === this.author;
+      return this.userData.userId === this.authorId;
     }
   },
 
@@ -67,9 +68,10 @@ export default {
     fetchArticle() {
       const articleId = this.$route.params.id; // 라우터에서 id 매개변수 추출
       axios.get(`${this.$serverUrl}/api/study-articles/${articleId}`).then((response) => {
-        const { title, author, createdAt, content, recruitment } = response.data;
+        const { title, authorName, authorId, createdAt, content, recruitment } = response.data;
         this.title = title;
-        this.author = author;
+        this.authorName = authorName;
+        this.authorId = authorId;
         this.createdAt = createdAt;
         this.content = content;
         this.recruitment = recruitment;
@@ -110,9 +112,10 @@ export default {
             });
       }
     },
-    goToProfile(authorId) {
-      this.$router.push({ name: 'MyPage', params: { authorId } });
-    },
+
+    goToProfile(userId) {
+      this.$router.push({ name: 'MyPage', params: { userId } });
+    }
   }
 }
 </script>
@@ -147,6 +150,7 @@ export default {
 .author {
   font-size: 1.2em;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .common-buttons {

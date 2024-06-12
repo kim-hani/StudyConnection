@@ -40,16 +40,12 @@ export default {
     StudyMemberList,
     UserRatingList,
   },
-  computed: {
-    ...mapGetters([
-      'getUserId', // `this.getUserId`를 `this.$store.getters.getUserId`로 매핑
-    ]),
-  },
+
   data() {
     return {
       user: {
         id: this.$route.params.userId,
-        name: this.$store.state.userData.username,
+        name: '',
         rating: 4.5,
       },
       activeStudies: [],
@@ -75,11 +71,13 @@ export default {
     },
 
     getUserStudyInfo(){ // 유저가 참여하고, 참여했던 스터디 정보 가져오기.
-      const userId = this.getUserId;
+      const userId = this.$route.params.userId;
+      console.log('userId',userId);
       this.$axios.get(this.$serverUrl + `/api/userinfo/${userId}`)
           .then((res) => {
-            console.log(res);
-            const { availableStudyList, unavailableStudyList } = res.data;  // 수정된 부분
+            console.log('getUserStudyInfo',res);
+            const { username, availableStudyList, unavailableStudyList } = res.data;  // 수정된 부분
+            this.user.name = username;
             this.activeStudies = availableStudyList;
             this.completedStudies = unavailableStudyList;
           }).catch((err) => {
