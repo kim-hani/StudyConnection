@@ -2,6 +2,7 @@ package HeartBeat.StudyConnection.dto.studyArticleDto;
 
 import HeartBeat.StudyConnection.entity.studyArticleEntity.StudyArticle;
 
+import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,7 @@ public class AddStudyRequestDto {
 
     private Boolean recruitment;
     private int limitOfParticipants;
+
 
     @Builder
     public AddStudyRequestDto(String title, String content, String authorId, int limitOfParticipants, String authorName) {

@@ -14,7 +14,7 @@ public class StudyResponseDto {
     private final String content;
     private final String authorName;
 
-   private final String authorId;
+    private final String authorId;
 
     private final Boolean recruitment; // 모집중인지 여부
 
