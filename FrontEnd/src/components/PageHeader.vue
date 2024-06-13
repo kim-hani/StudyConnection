@@ -26,8 +26,4 @@ export default {
     padding: 0;
     display: flex;
   }
-
-  .nav{
-
-  }
 </style>

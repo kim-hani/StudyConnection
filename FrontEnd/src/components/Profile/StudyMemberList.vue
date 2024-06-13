@@ -91,7 +91,7 @@ export default {
       this.rateMember(ratingData)
           .then(() => {
             alert('평가가 완료되었습니다.');
-            this.closeRatingModal(); // 모달 창 닫기 및 입력란 초기화
+            this.closeRatingModal();
           })
           .catch((err) => {
             alert('평가 저장 에러 발생. 다시 시도해주세요.');

@@ -2,7 +2,6 @@
   <aside :class="`${is_expanded ? 'is-expanded' : ''}`">
     <div class="logo">
       <span class="material-symbols-outlined">handshake</span>
-      <!--img :src="logoURL" alt="Vue" /-->
     </div>
 
     <div class="menu-toggle-wrap">

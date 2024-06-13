@@ -1,7 +1,7 @@
 <template>
   <div class="user-rating-list">
     <h3>{{ userInfo.username }}님이 받은 평가</h3>
-    <div v-if="userRatings.length">
+    <div v-if="userRatings.length" class="ratings-grid">
       <div v-for="rating in userRatings" :key="rating.studyId" class="rating-item">
         <p><strong></strong> {{ rating.studyName }}</p>
         <p><strong>점수:</strong>
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapState} from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 
 export default {
   name: 'UserRatingList',
@@ -38,22 +38,35 @@ export default {
 <style scoped>
 .user-rating-list {
   padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-top: 20px;
 }
 
 .user-rating-list h3 {
   margin-bottom: 20px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.5em;
+}
+
+.ratings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
 }
 
 .rating-item {
-  background: #fff;
+  background: #f9f9f9;
   padding: 15px;
   border: 1px solid #ddd;
-  border-radius: 5px;
-  margin-bottom: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.rating-item:hover {
+  transform: translateY(-2px);
 }
 
 .rating-item p {
@@ -61,7 +74,7 @@ export default {
 }
 
 .rating-item span {
-  color: gold;
+  color: #FFD700;
 }
 </style>
 
