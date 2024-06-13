@@ -143,7 +143,7 @@ export default {
   border: none;
   border-radius: 4px;
   padding: 5px 10px;
-
+  cursor: pointer;
 }
 
 .rate-done-button {
