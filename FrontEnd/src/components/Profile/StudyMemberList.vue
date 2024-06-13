@@ -6,9 +6,10 @@
         <div @click="selectMember(member)">
           <strong class="member-name" @click.stop="goToProfile(member.userId)">{{ member.username }}</strong>
         </div>
-        <button v-if="showRateButton && (member.userId !== userData.userId) && !isRated(member.userId, studyId)"
+        <button v-if="showRateButton && (userData.userId === userInfo.userId) &&
+        (member.userId !== userData.userId) && !isRated(member.userId, studyId)"
                 @click="openRatingModal(member)" class="rate-button">평가하기</button>
-        <button v-if="isRated(member.userId, studyId)" class="rate-done-button">평가완료</button>
+        <button v-if="isRated(member.userId, studyId) && (member.userId !== userData.userId)" class="rate-done-button">평가완료</button>
       </li>
     </ul>
 
@@ -53,7 +54,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['userData', 'ratedUsers']),
+    ...mapState(['userData', 'ratedUsers','userInfo']),
   },
   methods: {
     ...mapActions(['rateMember']),
