@@ -11,6 +11,7 @@ import HeartBeat.StudyConnection.dto.ResponseIdDto;
 import HeartBeat.StudyConnection.dto.commentDto.request.RequestCreateCommentDto;
 import HeartBeat.StudyConnection.dto.commentDto.response.SummarizedCommentDto;
 import HeartBeat.StudyConnection.role.UserAuth;
+import HeartBeat.StudyConnection.service.chatRoomService.ChattingRoomService;
 import HeartBeat.StudyConnection.service.commentService.CommentService;
 import HeartBeat.StudyConnection.service.studyArticleService.StudyApplyService;
 import HeartBeat.StudyConnection.service.studyArticleService.StudyArticleService;
@@ -42,7 +43,7 @@ public class StudyArticleApiController {
     private final UserService userService;
     private final CommentService commentService;
     private final StudyService studyService;
-    // private final ChattingRoomService chattingRoomMakeService;
+    private final ChattingRoomService chattingRoomMakeService;
 
 
     // 스터디 모집글 생성
@@ -52,7 +53,8 @@ public class StudyArticleApiController {
             @Parameter(name = "id", description = "스터디 모집글 id (Long 타입)", example = "1"),
             @Parameter(name = "title", description = "스터디 모집글 제목", example = "자바 꽉 잡아요"),
             @Parameter(name = "content", description = "스터디 모집글 내용", example = "자바 스터디 그룹~"),
-            @Parameter(name = "author", description = "스터디 모집글 작성자의 Id", example = "김간단"),
+            @Parameter(name = "authorId", description = "스터디 모집글 작성자의 Id", example = "010-0000-0000"),
+            @Parameter(name = "authorName", description = "스터디 모집글 작성자의 이름", example = "김단국"),
             @Parameter(name= "limit Of Participant",description = "스터디 모집 정원", example = "10")
     })
     public ResponseEntity<Long> save(@RequestBody AddStudyRequestDto requestDto){
@@ -107,9 +109,16 @@ public class StudyArticleApiController {
     @Operation(summary = "특정 스터디 모집글 조회", description = "특정 스터디 모집글 조회 시 사용하는 API")
     public ResponseEntity<StudyResponseDto> findById(@PathVariable Long id){
         StudyArticle studyArticle = studyArticleService.findById(id);
+        Study study = studyService.findByStudyId(id);
+
+        if(study == null){
+            // 스터디 확정 전이니까 available 은 true 여도 상관 X
+            return ResponseEntity.ok()
+                    .body(new StudyResponseDto(studyArticle, Boolean.TRUE));
+        }
 
         return ResponseEntity.ok()
-                .body(new StudyResponseDto(studyArticle));
+                .body(new StudyResponseDto(studyArticle, study.getAvailable()));
     }
 
     // 특정 스터디 모집글 삭제
@@ -127,6 +136,7 @@ public class StudyArticleApiController {
     @Operation(summary = "스터디 가입 신청", description = "글 작성자 이외의 사용자가 스터디 가입 신청")
     public ResponseEntity<String> applyToStudy(@PathVariable Long id, @RequestBody StudyApplyRequestDto request){
 
+        // 스터디 모집글 조회 -> 있는지 유무 확인
         StudyArticle searchedArticle = studyArticleService.findById(id);
 
         if(searchedArticle == null){
@@ -134,6 +144,19 @@ public class StudyArticleApiController {
                     .build();
         }
 
+        // 스터디 게시글 존재할 때
+        // 이니 지원했는지 여부 확인
+        List<StudyApply> studyApplies = studyApplyService.showAllApplicantsId(id);
+        if(studyApplies != null){
+            for(StudyApply studyApply : studyApplies){
+                if(studyApply.getUserId() == request.getUserId()){
+                    return ResponseEntity.badRequest()
+                            .body("이미 신청한 스터디입니다.");
+                }
+            }
+        }
+
+        // 처음 지원할 때
         StudyApply savedApplyUser= studyApplyService.saveApply(request.getUserId(), id);
 
         return ResponseEntity.ok()
@@ -152,13 +175,24 @@ public class StudyArticleApiController {
                     .build();
         }
 
+        // 문제
         List<StudyApply> applies = studyApplyService.showAllApplicantsId(id);
+
+        System.out.println();
+        System.out.println("==========================");
+        for(StudyApply studyApply : applies){
+            System.out.println();
+            System.out.println(studyApply.toString());
+            System.out.println();
+        }
+        System.out.println("==========================");
+        System.out.println();
 
         return ResponseEntity.ok()
                 .body(new StudyApplicantsResponseDto(studyApplyService.toApplyDtoList(applies)));
     }
 
-    // 글 작성자가 확정된 스터디 멤버들의 ID를 보내 스터디 개설을 완료한다.
+    // [확정버튼] 글 작성자가 확정된 스터디 멤버들의 ID를 보내 스터디 개설을 완료한다.
     @PostMapping("/api/study-articles/{id}/study-confirm")
     @Parameters({
             @Parameter(name = "members", description = "스터디 신청자 userId 목록"),
@@ -167,18 +201,32 @@ public class StudyArticleApiController {
     @Operation(summary = "스터디 모집 확정", description = "글 작성자 이외의 사용자가 스터디 가입 신청")
     public ResponseEntity<ConfirmStudyResponseDto> confirmStudy(@PathVariable Long id, @RequestBody ConfirmStudyRequestDto request){
 
+        // 해당 스터디 모집글 조회
         StudyArticle searchedArticle = studyArticleService.findById(id);
-
         if(searchedArticle == null){
             return ResponseEntity.notFound()
                     .build();
         }
 
+        System.out.println();
+        System.out.println("==========================");
+        System.out.println("<<<<<<" + searchedArticle.getTitle() + ">>>>>");
+        System.out.println("<<<<<<" + searchedArticle.getId() + ">>>>>");
+        System.out.println("<<<<<<" + searchedArticle.getAuthorId() + ">>>>>");
+        System.out.println("==========================");
+        System.out.println();
+
+        System.out.println();
+        System.out.println("==========================");
+        System.out.println("<<<<<<" + request.getStudyTitle() + ">>>>>");
+        for(String userId : request.getMembers()){
+            System.out.println(userId);
+        }
+        System.out.println("==========================");
+        System.out.println();
+
         // 확정된 멤버들을 저장할 리스트
         List<User> confirmedUser = new ArrayList<>();
-
-        // 해당 스터디 모집글 조회
-        StudyArticle studyArticle = studyArticleService.findById(id);
 
         // 받은 멤버들의 ID로 User 객체 조회 후 리스트에 저장
         for(String userId : request.getMembers()){
@@ -189,11 +237,11 @@ public class StudyArticleApiController {
         Study confirmedStudy = studyService.saveStudy(request.getStudyTitle(), confirmedUser, id);
 
         // 스터디 모집 마감 -> available 수정
-        studyArticleService.setAvailableToFalse(studyArticle);
+        studyArticleService.updateRecruitmentToFalse(searchedArticle.getId());
 
         // 확정된 스터디 채팅방 생성
         String chatRoomName = "[" + request.getStudyTitle() + "'s chat room]";
-        // chattingRoomMakeService.createChatRoom(chatRoomName, confirmedUser, id);
+        chattingRoomMakeService.createChatRoom(chatRoomName, confirmedUser, id);
 
         return ResponseEntity.ok()
                 .body(ConfirmStudyResponseDto.builder()
@@ -201,6 +249,40 @@ public class StudyArticleApiController {
                         .chattingRoomName(chatRoomName)
                         .membersId(request.getMembers())
                         .build());
+    }
+
+    // 스터디 종료
+    @PutMapping("/api/study-end/{id}")
+    @Parameters({
+            @Parameter(name = "study Id", description = "종료하려는 스터디의 아이디")
+    })
+    @Operation(summary = "스터디 진행이 모두 완료", description = "스터디가 끝남")
+    public ResponseEntity<Void> endStudy(@PathVariable Long id){
+        Study searchedStudy = studyService.findByStudyId(id);
+
+        if(searchedStudy == null){
+            return ResponseEntity.notFound()
+                    .build();
+        }
+
+        studyService.setAvailableToFalse(searchedStudy);
+
+        return ResponseEntity.ok().build();
+    }
+    // 확정된 스터디 검색
+    @GetMapping("/api/study/{id}")
+    @Operation(summary = "확정된 스터디 확인", description = "확정된 스터디 확인")
+    public ResponseEntity<TesStudyRequestDto> showConfirmedStudy(@PathVariable Long id){
+
+        StudyArticle searchedArticle = studyArticleService.findById(id);
+
+        if(searchedArticle == null){
+            return ResponseEntity.notFound()
+                    .build();
+        }
+        Study study = studyService.findByStudyId(id);
+        return ResponseEntity.ok()
+                .body(new TesStudyRequestDto(study));
     }
     //////////////////////////////////////////////////////
 

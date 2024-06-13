@@ -52,7 +52,7 @@ public class UserApiControllerTest {
     public void mockMvcSetUp() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
                 .build();
-        userRepository.deleteAll();
+        // userRepository.deleteAll();
     }
 
     @DisplayName("signup: 사용자가 회원 가입을 할 수 있다.")

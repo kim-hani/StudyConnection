@@ -5,10 +5,7 @@ import HeartBeat.StudyConnection.entity.BaseTimeEntity;
 import HeartBeat.StudyConnection.entity.commentEntity.Comment;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -22,6 +19,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "STUDYARTICLE")
 @EntityListeners(AuditingEntityListener.class)
@@ -33,7 +31,10 @@ public class StudyArticle {
     private Long id;        // 게시글 아이디
 
     @Column(name = "author_id")
-    private String author;   // 작성자의 ID
+    private String authorId;   // 작성자의 아이디
+
+    @Column(name = "author_name")
+    private String authorName;   // 작성자의 아이디
 
     @Column(columnDefinition = "TEXT",nullable = false)
     private String content;
@@ -41,8 +42,8 @@ public class StudyArticle {
     @Column(name = "limit_of_participants")
     private int limitOfParticipants;    // 스터디 정원
 
-    @Column(name = "available")
-    private boolean available;      // 참여 가능 여부
+    @Column(name = "recruitment")
+    private Boolean recruitment = true;      // 참여 가능 여부
 
     @Column(columnDefinition = "TEXT",nullable = false)
     private String title;       // 스터디 이름
@@ -59,13 +60,14 @@ public class StudyArticle {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public StudyArticle(Long id, String author, String content, int limitOfParticipants, boolean available,
-                        String title, String comment){
+    public StudyArticle(Long id, String authorId, String content, int limitOfParticipants, Boolean recruitment,
+                        String title, String comment, String authorName){
         this.id = id;
-        this.author = author;
+        this.authorId = authorId;
+        this.authorName = authorName;
         this.content = content;
         this.limitOfParticipants = limitOfParticipants;
-        this.available = available;
+        this.recruitment = recruitment;
         this.title = title;
     }
 
@@ -75,12 +77,8 @@ public class StudyArticle {
         this.content = content;
     }
 
-    public void setAvailable(boolean bool){
-        this.available = bool;
-    }
-
     // 작성자 확인 메서드
     public boolean isAuthor(User user){
-        return this.author.equals(user.getUserId());
+        return this.authorId.equals(user.getUserId());
     }
 }

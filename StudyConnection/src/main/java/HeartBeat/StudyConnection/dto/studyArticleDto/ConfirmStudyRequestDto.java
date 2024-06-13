@@ -1,5 +1,6 @@
 package HeartBeat.StudyConnection.dto.studyArticleDto;
 
+import HeartBeat.StudyConnection.entity.studyArticleEntity.Study;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

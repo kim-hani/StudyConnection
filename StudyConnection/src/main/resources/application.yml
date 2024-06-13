@@ -21,9 +21,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://ls-e34214e971d6c965bdfcf24e184f58fb033c186a.cx86a8i0yuvz.ap-northeast-2.rds.amazonaws.com:3306/StudyConnection?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://ls-8efea8c6f8d08e3169d629806c26017c3e01528e.cx86a8i0yuvz.ap-northeast-2.rds.amazonaws.com:3306/StudyConnection?serverTimezone=Asia/Seoul
     username: admin
-    password: stdy0519
+    password: capstone0612
 
   # 실제 데이터를 확인하기 위해 H2 콘솔을 활성화
   h2:

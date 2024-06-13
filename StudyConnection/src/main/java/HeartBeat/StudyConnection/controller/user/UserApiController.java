@@ -4,12 +4,15 @@ import HeartBeat.StudyConnection.configuration.jwt.TokenProvider;
 import HeartBeat.StudyConnection.configuration.jwt.entity.RefreshToken;
 import HeartBeat.StudyConnection.configuration.jwt.service.RefreshTokenService;
 import HeartBeat.StudyConnection.configuration.jwt.service.TokenService;
-import HeartBeat.StudyConnection.dto.UserInformationResponse;
+import HeartBeat.StudyConnection.dto.UserWithStudyDto.UserInformationResponse;
+import HeartBeat.StudyConnection.dto.UserWithStudyDto.UserStudiesResponse;
 import HeartBeat.StudyConnection.dto.loginDto.UserLoginRequest;
 import HeartBeat.StudyConnection.dto.loginDto.UserLoginResponse;
 import HeartBeat.StudyConnection.dto.signUpDto.AddUserRequest;
 import HeartBeat.StudyConnection.dto.signUpDto.AddUserResponse;
+import HeartBeat.StudyConnection.entity.studyArticleEntity.Study;
 import HeartBeat.StudyConnection.entity.userInfoEntity.User;
+import HeartBeat.StudyConnection.service.studyArticleService.StudyService;
 import HeartBeat.StudyConnection.service.userInfoService.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,6 +31,8 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -40,6 +45,7 @@ public class UserApiController {
     private final RefreshTokenService refreshTokenService;
     private final TokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
+    private final StudyService studyService;
 
     @PostMapping("/api/login")
     @Operation(summary = "사용자 로그인", description = "로그인 시 사용하는 API")
@@ -151,12 +157,17 @@ public class UserApiController {
                     .build();
         }
 
+        // 사용자의 스터디 찾기
+        Map<String, List<UserStudiesResponse>> studyListMap = studyService.loadUserStudies(userId);
+
         return ResponseEntity.ok()
                 .body(UserInformationResponse.builder()
                         .username(searchUser.getUsername())
                         .age(String.valueOf(thisYear))
                         .email(searchUser.getEmail())
                         .userId(searchUser.getUserId())
+                        .availableStudyList(studyListMap.get("available"))
+                        .unavailableStudyList(studyListMap.get("unavailable"))
                         .build());
     }
 }

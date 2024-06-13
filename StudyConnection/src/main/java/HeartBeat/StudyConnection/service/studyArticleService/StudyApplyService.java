@@ -30,8 +30,15 @@ public class StudyApplyService {
         return savedApply;
     }
 
-    public List<StudyApply> showAllApplicantsId(Long studyId){
-        List<StudyApply> studyApplies = studyApplyRepository.findByStudyArticleId(studyId);
+    public List<StudyApply> showAllApplicantsId(Long studyArticleId){
+        List<StudyApply> studyApplies = studyApplyRepository.findByStudyArticleId(studyArticleId);
+
+        for (StudyApply apply : studyApplies) {
+            if (apply.getUserId() == null) {
+                throw new NullPointerException("User not found for userId: " + apply.getUserId());
+            }
+        }
+
         return studyApplies;
     }
 

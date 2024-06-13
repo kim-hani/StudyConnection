@@ -24,8 +24,8 @@ public class StudyApply {
     private Long studyArticleId;
 
     @Builder
-    public StudyApply(Long id, String userId, Long studyArticleId){
-        this.id = id;
+    public StudyApply( String userId, Long studyArticleId){
+
         this.userId = userId;
         this.studyArticleId = studyArticleId;
     }

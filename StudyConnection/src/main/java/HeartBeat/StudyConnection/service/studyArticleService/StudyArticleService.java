@@ -32,8 +32,11 @@ public class StudyArticleService {
     }
 
     @Transactional
-    public void setAvailableToFalse(StudyArticle article){
-        article.setAvailable(false);
+    public void updateRecruitmentToFalse(Long id) {
+        StudyArticle studyArticle = studyArticleRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
+
+        studyArticle.setRecruitment(Boolean.FALSE);
     }
 
     @Transactional
