@@ -9,7 +9,7 @@
         <button v-if="showRateButton && (userData.userId === userInfo.userId) &&
         (member.userId !== userData.userId) && !isRated(member.userId, studyId)"
                 @click="openRatingModal(member)" class="rate-button">평가하기</button>
-        <button v-if="isRated(member.userId, studyId) && (member.userId !== userData.userId)" class="rate-done-button">평가완료</button>
+        <button v-if="isRated(member.userId, studyId) && (member.userId !== userData.userId) && (userData.userId === userInfo.userId)" class="rate-done-button">평가완료</button>
       </li>
     </ul>
 
