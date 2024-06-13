@@ -1,25 +1,30 @@
 <template>
   <div class="my-page">
-    <UserProfile/>
-    <StudyList
-        :studies="activeStudies"
-        title="참여중인 스터디 목록"
-        @select-study="selectStudy"
-        @go-to-study="goToStudy"
-        :selected-study="selectedStudy"
-        :showRateButton="false"
-    />
+    <UserProfile class="user-profile-section" />
+    <div class="study-lists-container">
+      <div class="study-list-wrapper">
+        <StudyList
+            :studies="activeStudies"
+            title="참여중인 스터디 목록"
+            @select-study="selectStudy"
+            @go-to-study="goToStudy"
+            :selected-study="selectedStudy"
+            :showRateButton="false"
+        />
+      </div>
 
-    <StudyList
-        :studies="completedStudies"
-        title="종료된 스터디 목록"
-        @select-study="selectStudy"
-        @go-to-study="goToStudy"
-        :selected-study="selectedStudy"
-        :showRateButton="true"
-    />
-
-    <UserRatingList/>
+      <div class="study-list-wrapper">
+        <StudyList
+            :studies="completedStudies"
+            title="종료된 스터디 목록"
+            @select-study="selectStudy"
+            @go-to-study="goToStudy"
+            :selected-study="selectedStudy"
+            :showRateButton="true"
+        />
+      </div>
+    </div>
+    <UserRatingList class="user-rating-section" />
   </div>
 </template>
 
@@ -29,7 +34,6 @@ import StudyList from '@/components/Profile/StudyList.vue';
 import StudyMemberList from '@/components/Profile/StudyMemberList.vue';
 import UserRatingList from '@/components/Profile/UserRatingList.vue';
 import { mapState, mapActions } from 'vuex';
-import {SET_USER_INFO} from "@/Vuex/mutation_types";
 
 export default {
   name: 'MyPage',
@@ -50,10 +54,9 @@ export default {
       selectedMember: null,
     };
   },
-  created(){
+  created() {
     this.getUserInfo(this.$route.params.userId);
   },
-
   methods: {
     ...mapActions(['getUserInfo']),
     selectStudy(study) {
@@ -73,7 +76,7 @@ export default {
 <style scoped>
 .my-page {
   padding: 20px;
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
@@ -81,7 +84,26 @@ export default {
   margin-bottom: 10px;
 }
 
-.my-page .section {
+.user-profile-section {
   margin-bottom: 20px;
+  width: 100%;
+}
+
+.study-lists-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.study-list-wrapper {
+  flex: 1;
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.user-rating-section {
+  margin-top: 20px;
 }
 </style>
