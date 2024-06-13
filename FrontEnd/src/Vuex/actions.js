@@ -48,6 +48,7 @@ export default {
         localStorage.removeItem('username');
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
+        localStorage.removeItem('vuex')
         commit(SET_IS_AUTH, false);
         console.log(await loginAPI.doLogout());
     },

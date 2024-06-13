@@ -27,15 +27,6 @@ export default {
       }
     }
   },
-  beforeRouteLeave (to, from, next) {
-    // 사용자에게 확인 메시지를 표시하여 페이지를 벗어나기 전에 확인을 요청
-    const answer = window.confirm('이 페이지를 떠나시겠습니까? 변경 사항이 저장되지 않을 수 있습니다.')
-    if (answer) {
-      next() // 사용자가 확인했으면 라우트 이동을 허용
-    } else {
-      next(false) // 사용자가 취소했으면 라우트 이동을 막음.
-    }
-  },
   methods: {
     BoardSave() {
       if (confirm('저장하시겠습니까?')) {
